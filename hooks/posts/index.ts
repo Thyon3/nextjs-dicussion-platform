@@ -5,3 +5,4 @@ export { default as usePostVote } from "./usePostVote";
 export { default as usePostVoteSync } from "./usePostVoteSync";
 export { default as usePostDeletion } from "./usePostDeletion";
 export { default as usePostsFeed } from "./usePostsFeed";
+export { default as useCreatePost } from "./useCreatePost";

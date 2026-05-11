@@ -14,13 +14,13 @@ import PostLoader from "../loaders/post-loader/PostLoader";
 import PostItem from "./post-item/PostItem";
 
 type PostsProps = {
-  communityData: Community;
+  communityData?: Community;
 };
 
 /**
- * Manages and displays a feed of posts for a specific community.
+ * Manages and displays a feed of posts for a specific community or a global home feed.
  * Handles infinite scrolling, post selection, voting, and deletion by coordinating multiple hooks.
- * @param communityData - The community context for which to load and display posts.
+ * @param communityData - Optional community context for which to load and display posts.
  * @returns A scrollable list of post items or a loading state.
  */
 const Posts: React.FC<PostsProps> = ({ communityData }) => {
@@ -30,15 +30,20 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
   const { onVote } = usePostVote(postStateValue, setPostStateValue);
   const { onDeletePost } = usePostDeletion(setPostStateValue);
   usePostVoteSync(setPostStateValue);
-  const { isAdmin, canPost } = useCommunityPermissions(communityData);
+  
+  // Only check permissions if communityData is provided
+  const { isAdmin, canPost } = useCommunityPermissions(
+    communityData || ({} as Community)
+  );
 
   const { loading, fetchPosts, ref, noMorePosts } = usePostsFeed({
-    communityId: communityData.id,
+    communityId: communityData?.id,
   });
 
   useEffect(() => {
     fetchPosts();
-  }, [communityData]);
+  }, [communityData?.id]);
+
 
   return (
     <>

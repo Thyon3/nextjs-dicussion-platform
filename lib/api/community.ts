@@ -29,6 +29,16 @@ export const leaveCommunity = (userId: string, communityId: string) => {
   });
 };
 
+export const getCommunity = (communityId: string) => {
+  return apiClient(`/communities/${communityId}`);
+};
+
+export const deleteCommunity = (communityId: string) => {
+  return apiClient(`/communities/${communityId}`, {
+    method: 'DELETE',
+  });
+};
+
 export const fetchCommunityAdmins = (communityId: string) => {
   return apiClient(`/communities/${communityId}/admins`);
 };
@@ -36,3 +46,20 @@ export const fetchCommunityAdmins = (communityId: string) => {
 export const fetchCommunityMembers = (communityId: string) => {
   return apiClient(`/communities/${communityId}/members`);
 };
+
+export const updateCommunityImage = (communityId: string, imageURL: string) => {
+  return apiClient('/communities/updateImage', {
+    method: 'POST',
+    body: JSON.stringify({ communityId, imageURL }),
+  });
+};
+
+export const updateCommunityPrivacy = (communityId: string, privacyType: string) => {
+  return apiClient('/communities/updatePrivacy', {
+    method: 'POST',
+    body: JSON.stringify({ communityId, isPrivate: privacyType === 'private' }),
+  });
+};
+
+
+

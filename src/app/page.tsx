@@ -1,34 +1,35 @@
-import Image from "next/image";
+"use client";
 
+import {
+  CreatePostLink,
+  PageContent,
+  PersonalHome,
+  Posts,
+  Recommendations,
+} from "@/components";
+import React from "react";
+import { Stack } from "@chakra-ui/react";
+
+/**
+ * The root page of the application (Home feed).
+ * Displays a two-column layout with the post feed on the left and supplemental cards on the right.
+ * @returns The main entry point for the discussion platform.
+ */
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="underline text-blue-600 hover:text-blue-800"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              the Next.js documentation
-            </a>
-          </p>
-        </div>
-      </main>
-    </div>
+    <PageContent>
+      {/* Left Content: Feed */}
+      <Stack gap={5}>
+        <CreatePostLink />
+        <Posts />
+      </Stack>
+
+      {/* Right Content: Sidebar */}
+      <Stack gap={5}>
+        <Recommendations />
+        <PersonalHome />
+      </Stack>
+    </PageContent>
   );
 }
+

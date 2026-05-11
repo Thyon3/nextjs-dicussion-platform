@@ -55,7 +55,7 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
   const { updateImage, deleteCommunityImage } =
     useCommunityImage(communityData);
   const { updatePrivacyType } = useCommunityPrivacy(communityData);
-  const { deleteCommunity, loading } = useDeleteCommunity(communityData);
+  const { deleteCommunity: callDeleteCommunity, loading } = useDeleteCommunity();
 
   const handlePrivacyTypeChange = (details: { value: string }) => {
     setSelectedPrivacyType(details.value);
@@ -150,10 +150,11 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
                   </Tabs.Content>
                   <Tabs.Content value="danger" p={5}>
                     <DangerZone
-                      deleteCommunity={deleteCommunity}
+                      deleteCommunity={() => callDeleteCommunity(communityData.id)}
                       loading={loading}
                     />
                   </Tabs.Content>
+
                 </Tabs.Root>
               </DialogBody>
             </Box>

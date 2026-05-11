@@ -3,8 +3,8 @@ import { useSetAtom } from "jotai";
 import { useState } from "react";
 import useCustomToast from "../useCustomToast";
 import { Community } from "@/types/community";
-import { updateCommunityImage } from "@/lib/community/updateCommunityImage";
-import { deleteCommunityImage } from "@/lib/community/deleteCommunityImage";
+import { updateCommunityImage } from "@/lib/api/community";
+
 
 /**
  * A custom hook that provides functionality for managing a community's profile image.
@@ -62,7 +62,8 @@ const useCommunityImage = (communityData: Community) => {
 
   const onDeleteCommunityImage = async () => {
     try {
-      await deleteCommunityImage(communityData.id);
+      await updateCommunityImage(communityData.id, "");
+
 
       setCommunityStateValue((prev) => ({
         ...prev,

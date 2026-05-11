@@ -2,8 +2,9 @@ export { default as Layout } from "./layout/Layout";
 export { default as GlobalHooks } from "./layout/GlobalHooks";
 export { default as PageContent } from "./layout/PageContent";
 export { default as Navbar } from "./navbar/Navbar";
-export { default as Sidebar } from "./sidebar/Sidebar";
-export { default as Directory } from "./sidebar/Directory";
+// export { default as Sidebar } from "./sidebar/Sidebar";
+// export { default as Directory } from "./sidebar/Directory";
+
 export { default as CommunityLoader } from "./loaders/CommunityLoader";
 export { default as PostLoader } from "./loaders/post-loader/PostLoader";
 export { default as PostLoaderItem } from "./loaders/post-loader/PostLoaderItem";

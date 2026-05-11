@@ -6,7 +6,7 @@ const SuggestionsHeader: React.FC = () => {
     <Flex
       align="flex-end"
       color="white"
-      p={6px 10px}
+      p="6px 10px"
       height="70px"
       borderTopRadius="lg"
       fontWeight={700}

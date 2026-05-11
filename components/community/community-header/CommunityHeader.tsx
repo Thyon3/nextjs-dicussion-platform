@@ -1,17 +1,17 @@
 import { Community } from "@/types/community";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Button, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import useCommunityState from "@/hooks/community/useCommunityState";
 import useCommunityMembershipActions from "@/hooks/community/useCommunityMembershipActions";
-import { CommunityIcon } from "./CommunityIcon";
+import CommunityIcon from "./CommunityIcon";
 import CommunityName from "./CommunityName";
-import JoinOrLeaveButton from "./JoinOrLeaveButton";
-import CommunitySettings from "./CommunitySettings";
-import CommunityMembersButton from "./CommunityMembersButton";
-import ConfirmationDialog from "@/components/modal/ConfirmationDialog";
-import { auth } from "@/firebase/clientApp";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { HeaderProps } from "./AboutHeaderBar";
+import { useAuth } from "@/hooks/useAuth";
+import { useRouter } from "next/navigation";
+import useCommunityPermissions from "@/hooks/community/useCommunityPermissions";
+
+interface CommunityHeaderProps {
+  communityData: Community;
+}
 
 /**
  * Displays a community header which is responsive.
@@ -19,19 +19,18 @@ import { HeaderProps } from "./AboutHeaderBar";
  * - Community logo and name
  * - Subscribe and unsubscribe buttons
  * - Admin settings button if user is admin
- * @param {communityData} - Community data required to be displayed
- * @returns {React.FC<HeaderProps>} - Header component
  */
-const CommunityHeader: React.FC<HeaderProps> = ({ communityData }) => {
+const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityData }) => {
+  const router = useRouter();
   const { communityStateValue } = useCommunityState();
-  const [user] = useAuthState(auth);
-  const [isJoined] = !!communityStateValue.mySnippets.find(
+  const { user } = useAuth();
+  const isJoined = !!communityStateValue.mySnippets.find(
     (item) => item.communityId === communityData.id
   );
   const [isMembersModalOpen, setMembersModalOpen] = useState(false);
   const [isSettingsModalOpen, setSettingsModalOpen] = useState(false);
   const { onJoinOrLeaveCommunity, loading } = useCommunityMembershipActions();
-  const { canView, canPost } = useCommunityPermissions(communityData);
+  const { isAdmin } = useCommunityPermissions(communityData);
 
   return (
     <Flex
@@ -43,14 +42,16 @@ const CommunityHeader: React.FC<HeaderProps> = ({ communityData }) => {
       height="120px"
       position="relative"
     >
-      <CommunityIcon />
-      <Flex justify="space-between" align="center" color="white">
+      <Box position="absolute" top="-33px" left="15px">
+        <CommunityIcon imageURL={communityData.imageURL} />
+      </Box>
+      <Flex justify="space-between" align="center" color="white" mt={10}>
         <CommunityName id={communityData.id} />
         <Text fontSize="10pt" fontWeight={700}>
           About {communityData.id}
         </Text>
       </Flex>
-      <Flex>
+      <Flex mt={2} gap={2}>
         {isJoined && (
           <Button
             width="100%"
@@ -70,7 +71,7 @@ const CommunityHeader: React.FC<HeaderProps> = ({ communityData }) => {
             View Members
           </Button>
         )}
-        {canView && (
+        {isAdmin && (
           <Button
             width="100%"
             variant="outline"

@@ -6,8 +6,10 @@ import { IoIosCreate } from "react-icons/io";
 import { IoImageOutline } from "react-icons/io5";
 import useCommunityState from "@/hooks/community/useCommunityState";
 import useCommunityPermissions from "@/hooks/community/useCommunityPermissions";
+import { Community } from "@/types/community";
 
 type CreatePostProps = {};
+
 
 /**
  * A call-to-action bar that provides a shortcut to the post creation page.
@@ -18,10 +20,11 @@ const CreatePostLink: React.FC<CreatePostProps> = () => {
   const { onClick } = useCallCreatePost(); // hook for creating a new post
   const { communityStateValue } = useCommunityState();
   const { canPost } = useCommunityPermissions(
-    communityStateValue.currentCommunity
+    communityStateValue.currentCommunity || ({} as Community)
   );
 
   if (communityStateValue.currentCommunity && !canPost) {
+
     return null;
   }
 
@@ -43,7 +46,7 @@ const CreatePostLink: React.FC<CreatePostProps> = () => {
       <Input
         placeholder="Create Post"
         fontSize="10pt"
-        _placeholder={{ color: { base: "gray.500", _dark: "gray.400" }}
+        _placeholder={{ color: { base: "gray.500", _dark: "gray.400" } }}
         _hover={{
           bg: { base: "white", _dark: "gray.700" },
           border: "1px solid",

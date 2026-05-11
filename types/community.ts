@@ -1,16 +1,9 @@
-import { Timestamp } from "firebase/firestore";
-
-/**
- * Firestore community document used to render pages and determine permissions.
- * Tracks ownership, privacy, member count, optional branding, and admin ids.
- * Stored at `communities/{id}`; snippets mirror membership per user.
- */
 export interface Community {
   id: string;
   creatorId: string;
   numberOfMembers: number;
   privacyType: "public" | "restricted" | "private";
-  createdAt?: Timestamp;
+  createdAt?: Date | string;
   imageURL?: string;
   adminIds?: string[];
 }

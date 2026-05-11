@@ -1,11 +1,3 @@
-import { Timestamp } from "firebase/firestore";
-
-/**
- * Shape of a post document stored in Firestore and consumed by the UI.
- * Captures feed fields, vote totals, and optional image metadata.
- * Stored at `posts/{id}` with `createTime` from `serverTimestamp`.
- * @see https://firebase.google.com/docs/firestore/manage-data/add-data#server_timestamp
- */
 export type Post = {
   id?: string;
   communityId: string;
@@ -17,7 +9,7 @@ export type Post = {
   voteStatus: number;
   imageURL?: string;
   communityImageURL?: string;
-  createTime: Timestamp;
+  createTime: Date | string;
 };
 
 /**
@@ -25,8 +17,9 @@ export type Post = {
  * Lives under `users/{uid}/postVotes/{voteId}` to mirror aggregate voteStatus.
  */
 export type PostVote = {
-  id: string;
+  id?: string;
   postId: string;
   communityId: string;
   voteValue: number;
 };
+

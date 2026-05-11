@@ -2,7 +2,6 @@ import { Community } from "@/types/community";
 import useCreatePost from "@/hooks/posts/useCreatePost";
 import useSelectFile from "@/hooks/useSelectFile";
 import { Flex, Icon, Tabs, Text } from "@chakra-ui/react";
-import { User } from "firebase/auth";
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -13,6 +12,7 @@ import PostCreateError from "./PostCreateError";
 import TextInputs from "../post-form/TextInputs";
 import ImageUpload from "../post-form/ImageUpload";
 import { createPostSchema, CreatePostInput } from "@/schema/post";
+import { User } from "@/atoms/userAtom";
 
 type NewPostFormProps = {
   user: User; // parent component checks user so additional checks are not needed
@@ -47,7 +47,7 @@ export type FormTab = {
 
 /**
  * Multi-tab form for creating a new post with text and optional image.
- * Handles form validation, file selection, and submission to Firestore.
+ * Handles form validation, file selection, and submission.
  * @param props - Component properties including authenticated user and community context.
  * @returns A tabbed interface for post creation.
  */
@@ -167,3 +167,4 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
   );
 };
 export default NewPostForm;
+

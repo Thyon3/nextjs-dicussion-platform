@@ -1,10 +1,9 @@
-"use client";
-
-import { auth } from "@/firebase/clientApp";
-import { useCommunitySnippets } from "@/hooks/community/useCommunitySnippets";
-import useSavedPosts from "@/hooks/posts/useSavedPosts";
+import { communityStateAtom } from "@/atoms/communitiesAtom";
+import { postStateAtom } from "@/atoms/postsAtom";
+import { savedPostStateAtom } from "@/atoms/savedPostsAtom";
+import { useAuth } from "@/hooks/useAuth";
+import { useSetAtom } from "jotai";
 import React, { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 /**
  * A headless component that initializes global data based on the user's authentication state.
@@ -12,22 +11,54 @@ import { useAuthState } from "react-firebase-hooks/auth";
  * @returns null, as this component only performs side effects.
  */
 const GlobalHooks: React.FC = () => {
-  useCommunitySnippets();
-  const { fetchSavedPosts, setSavedPostState } = useSavedPosts();
-  const [user] = useAuthState(auth);
+  const { user, loading, checkAuth } = useAuth();
+  const setCommunityState = useSetAtom(communityStateAtom);
+  const setSavedPostState = useSetAtom(savedPostStateAtom);
+  const setPostState = useSetAtom(postStateAtom);
 
   useEffect(() => {
-    if (user) {
-      fetchSavedPosts();
-    } else {
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && user) {
+      // Bootstrap snippets
+      setCommunityState((prev) => ({
+        ...prev,
+        mySnippets: user.communitySnippets || [],
+        snippetFetched: true,
+      }));
+
+      // Bootstrap saved posts
+      setSavedPostState((prev) => ({
+        ...prev,
+        savedPosts: user.savedPosts || [],
+        fetched: true,
+      }));
+
+      // Bootstrap post votes
+      setPostState((prev) => ({
+        ...prev,
+        postVotes: user.postVotes || [],
+      }));
+    } else if (!loading && !user) {
+      // Clear states if not logged in
+      setCommunityState((prev) => ({
+        ...prev,
+        mySnippets: [],
+        snippetFetched: false,
+      }));
       setSavedPostState((prev) => ({
         ...prev,
         savedPosts: [],
         fetched: false,
       }));
+      setPostState((prev) => ({
+        ...prev,
+        postVotes: [],
+      }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [user, loading, setCommunityState, setSavedPostState, setPostState]);
 
   return null;
 };

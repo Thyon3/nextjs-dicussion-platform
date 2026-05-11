@@ -3,7 +3,10 @@ import { Community } from "@/types/community";
 import { Button } from "@chakra-ui/react";
 import useCommunityPermissions from "@/hooks/community/useCommunityPermissions";
 import CommunitySettingsModal from "@/components/modal/community-settings/CommunitySettings";
-import { AdminSectionAboutProps } from "./AdminSectionAbout";
+
+interface AdminSectionAboutProps {
+  communityData: Community;
+}
 
 /**
  * Shows a community settings entry point when the viewer is an admin.
@@ -20,21 +23,24 @@ const AdminSectionAbout: React.FC<AdminSectionAboutProps> = ({
   return (
     <>
       {isAdmin && (
-        <CommunitySettingsModal
-          open={isCommunitySettingsModalOpen}
-          handleClose={() => setCommunitySettingsModalOpen(false)}
-          communityData={communityData}
-        />
-        <Button
-          width="100%"
-          variant="outline"
-          onClick={() => setCommunitySettingsModalOpen(true)}
-        >
-          Community Settings
-        </Button>
+        <>
+          <CommunitySettingsModal
+            open={isCommunitySettingsModalOpen}
+            handleClose={() => setCommunitySettingsModalOpen(false)}
+            communityData={communityData}
+          />
+          <Button
+            width="100%"
+            variant="outline"
+            onClick={() => setCommunitySettingsModalOpen(true)}
+          >
+            Community Settings
+          </Button>
+        </>
       )}
     </>
   );
 };
 
 export default AdminSectionAbout;
+

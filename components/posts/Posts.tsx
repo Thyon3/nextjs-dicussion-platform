@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Community } from "@/types/community";
-import { auth } from "@/firebase/clientApp";
 import useCommunityPermissions from "@/hooks/community/useCommunityPermissions";
 import usePostState from "@/hooks/posts/usePostState";
 import usePostSelection from "@/hooks/posts/usePostSelection";
@@ -10,7 +9,7 @@ import usePostVoteSync from "@/hooks/posts/usePostVoteSync";
 import usePostsFeed from "@/hooks/posts/usePostsFeed";
 import { Box, Spinner, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuth } from "@/hooks/useAuth";
 import PostLoader from "../loaders/post-loader/PostLoader";
 import PostItem from "./post-item/PostItem";
 
@@ -25,7 +24,7 @@ type PostsProps = {
  * @returns A scrollable list of post items or a loading state.
  */
 const Posts: React.FC<PostsProps> = ({ communityData }) => {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const { postStateValue, setPostStateValue } = usePostState();
   const { onSelectPost } = usePostSelection(setPostStateValue);
   const { onVote } = usePostVote(postStateValue, setPostStateValue);
@@ -38,7 +37,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
   });
 
   useEffect(() => {
-    fetchPosts(true);
+    fetchPosts();
   }, [communityData]);
 
   return (
@@ -54,7 +53,7 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
             <PostItem
               key={item.id}
               post={item}
-              userIsCreator={user?.uid === item.creatorId}
+              userIsCreator={user?.id === item.creatorId}
               userIsAdmin={isAdmin}
               userVoteValue={
                 postStateValue.postVotes.find((vote) => vote.postId === item.id)
@@ -87,3 +86,4 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
   );
 };
 export default Posts;
+

@@ -1,23 +1,22 @@
 import React from "react";
 import { Text } from "@chakra-ui/react";
-import { AuthError } from "firebase/auth";
-import { FIREBASE_ERRORS } from "@/firebase/errors";
 
 interface ErrorMessageProps {
-  error: AuthError | undefined;
+  error: { message: string } | undefined;
 }
 
 /**
- * Maps Firebase auth errors to friendly strings in the OAuth block.
- * @param error - Firebase auth error from the provider attempt.
+ * Displays error messages in the auth block.
+ * @param error - Error object containing a message string.
  * @returns Text element when an error exists, otherwise null.
  */
 const AuthenticationErrorMessage: React.FC<ErrorMessageProps> = ({ error }) => {
   return error ? (
     <Text textAlign="center" color="red" fontSize="10pt" fontWeight="800">
-      {FIREBASE_ERRORS[error.message as keyof typeof FIREBASE_ERRORS]}
+      {error.message}
     </Text>
   ) : null;
 };
 
 export default AuthenticationErrorMessage;
+

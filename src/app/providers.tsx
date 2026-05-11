@@ -1,9 +1,9 @@
 "use client";
 
-import { theme } from "@/chakra/theme";
+import theme from "@/chakra/theme";
 import Layout from "@/components/layout/Layout";
 import { ColorModeProvider } from "@/components/ui/color-mode";
-import { Toaster } from "@/components/ui/toaster";
+import { ToasterProvider } from "@/components/ui/toaster";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Provider as JotaiProvider } from "jotai";
 import { useEffect, useState } from "react";
@@ -28,9 +28,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <EmotionRegistry>
         <ChakraProvider value={theme}>
           <ColorModeProvider>
-            <Layout>{children}</Layout>
+            <ToasterProvider>
+              <Layout>{children}</Layout>
+            </ToasterProvider>
           </ColorModeProvider>
-          {mounted && <Toaster />}
         </ChakraProvider>
       </EmotionRegistry>
     </JotaiProvider>

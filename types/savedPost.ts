@@ -3,9 +3,10 @@
  * Lives at `users/{uid}/savedPosts/{postId}` and powers the saved posts modal.
  */
 export type SavedPost = {
-  id: string;
+  id?: string;
   postId: string;
   communityId: string;
   postTitle: string;
   communityImageURL?: string;
 };
+

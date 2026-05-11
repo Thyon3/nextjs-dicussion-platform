@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { IconButton, Icon } from "@chakra-ui/react";
 import useCommunityPermissions from "@/hooks/community/useCommunityPermissions";
 import { useParams } from "next/navigation";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase/clientApp";
+import { useAuth } from "@/hooks/useAuth";
 import { FiSettings } from "react-icons/fi";
 import CommunitySettingsModal from "../../modal/community-settings/CommunitySettings";
 import { Community } from "@/types/community";
@@ -22,7 +21,7 @@ const CommunitySettings: React.FC<CommunitySettingsProps> = ({
 }) => {
   const params = useParams();
   const communityId = params?.communityId;
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [isCommunitySettingsModalOpen, setCommunitySettingsModalOpen] =
     useState(false);
   const { isAdmin } = useCommunityPermissions(communityData);
@@ -30,22 +29,25 @@ const CommunitySettings: React.FC<CommunitySettingsProps> = ({
   return (
     <>
       {isAdmin && (
-        <CommunitySettingsModal
-          open={isCommunitySettingsModalOpen}
-          handleClose={() => setCommunitySettingsModalOpen(false)}
-          communityData={communityData}
-        />
-        <IconButton
-          aria-label="Community settings"
-          variant="ghost"
-          fontSize={20}
-          onClick={() => setCommunitySettingsModalOpen(true)}
-        >
-          <Icon as={FiSettings} />
-        </IconButton>
+        <>
+          <CommunitySettingsModal
+            open={isCommunitySettingsModalOpen}
+            handleClose={() => setCommunitySettingsModalOpen(false)}
+            communityData={communityData}
+          />
+          <IconButton
+            aria-label="Community settings"
+            variant="ghost"
+            fontSize={20}
+            onClick={() => setCommunitySettingsModalOpen(true)}
+          >
+            <Icon as={FiSettings} />
+          </IconButton>
+        </>
       )}
     </>
   );
 };
 
 export default CommunitySettings;
+

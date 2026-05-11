@@ -19,7 +19,9 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { CommunityMember } from "@/types/communityMember";
+import { Community } from "@/types/community";
 import useCommunityMembers from "@/hooks/community/useCommunityMembers";
+
 import { LuTrash } from "react-icons/lu";
 import { useAtomValue } from "jotai";
 import useCommunityPermissions from "@/hooks/community/useCommunityPermissions";
@@ -50,8 +52,9 @@ const CommunityMembersModal: React.FC<CommunityMembersModalProps> = ({
   const memberCount = members?.length ?? 0;
   const communityStateValue = useAtomValue(communityStateAtom);
   const { isAdmin } = useCommunityPermissions(
-    communityStateValue.currentCommunity
+    communityStateValue.currentCommunity || ({} as Community)
   );
+
   const { removeMember, loading: removeLoading } = useRemoveCommunityMember();
   const [memberToRemove, setMemberToRemove] = useState<string | null>(null);
 

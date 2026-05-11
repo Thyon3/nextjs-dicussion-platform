@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { communityStateAtom } from "@/atoms/communitiesAtom";
 import { Community } from "@/types/community";
-import { auth } from "@/firebase/clientApp";
 import { useSetAtom } from "jotai";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuth } from "../useAuth";
 import useCustomToast from "../useCustomToast";
-import { joinCommunity } from "@/lib/community/joinCommunity";
+import { joinCommunity } from "@/lib/api/community";
 
 /**
  * A custom hook that provides functionality for a user to join a community.
@@ -14,7 +13,7 @@ import { joinCommunity } from "@/lib/community/joinCommunity";
  * @returns An object containing `joinCommunity` function, loading state, and error state.
  */
 const useJoinCommunity = () => {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const setCommunityStateValue = useSetAtom(communityStateAtom);
   const showToast = useCustomToast();
   const [loading, setLoading] = useState(false);
@@ -25,11 +24,11 @@ const useJoinCommunity = () => {
     setLoading(true);
     try {
       const newSnippet = await joinCommunity(
-        user.uid,
+        user.id,
         communityData.id,
         communityData.imageURL || "",
-        user.uid === communityData.creatorId ||
-          (communityData.adminIds?.includes(user.uid || "") ?? false)
+        user.id === communityData.creatorId ||
+          (communityData.adminIds?.includes(user.id || "") ?? false)
       );
 
       setCommunityStateValue((prev) => ({
@@ -64,3 +63,4 @@ const useJoinCommunity = () => {
 };
 
 export default useJoinCommunity;
+

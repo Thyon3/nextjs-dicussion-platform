@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { User } from "firebase/auth";
 import useCustomToast from "@/hooks/useCustomToast";
-import { createPost } from "@/lib/posts/createPost";
+import { createPost } from "@/lib/api/posts";
 import useCommunityState from "../community/useCommunityState";
-import { checkCommunityPermission } from "@/lib/community/communityPermissions";
+import { checkCommunityPermission } from "@/lib/api/communityPermissions";
+import { User } from "@/atoms/userAtom";
 
 /**
  * A custom hook that provides functionality for creating a new post.
@@ -48,13 +48,14 @@ const useCreatePost = () => {
     }
 
     try {
-      await createPost(
-        user,
+      await createPost({
+        userId: user.id,
+        username: user.displayName || user.email.split("@")[0],
         communityId,
         communityImageURL,
         postData,
         selectedFile
-      );
+      });
 
       router.back();
       showToast({
@@ -83,3 +84,4 @@ const useCreatePost = () => {
 };
 
 export default useCreatePost;
+

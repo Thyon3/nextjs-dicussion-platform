@@ -1,6 +1,6 @@
 import React from "react";
 import { Flex, Text, Icon } from "@chakra-ui/react";
-import { HiOutlineDotsHorizontal } from "react-icons/hi2";
+import { HiEllipsisHorizontal } from "react-icons/hi2";
 
 interface AboutHeaderBarProps {
   communityName: string;
@@ -24,9 +24,10 @@ const AboutHeaderBar: React.FC<AboutHeaderBarProps> = ({ communityName }) => {
       <Text fontSize="10pt" fontWeight={700}>
         About {communityName}
       </Text>
-      <Icon as={HiOutlineDotsHorizontal} />
+      <Icon as={HiEllipsisHorizontal} />
     </Flex>
   );
 };
 
 export default AboutHeaderBar;
+

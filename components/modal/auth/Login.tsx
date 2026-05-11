@@ -1,15 +1,13 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useSetAtom } from "jotai";
-import React from "react";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authModalStateAtom } from "../../../atoms/authModalAtom";
-import { auth } from "../../../firebase/clientApp";
-import { FIREBASE_ERRORS } from "../../../firebase/errors";
 import InputField from "./InputField";
-import { PasswordInput } from "@/components/ui/password-input";
 import { loginSchema, LoginInput } from "@/schema/auth";
+import { login as loginApi } from "@/lib/api/auth";
+import { useAuth } from "@/hooks/useAuth";
 
 type LoginProps = {};
 
@@ -23,12 +21,12 @@ type LoginProps = {};
  * Buttons for resetting password and signing up are present.
  * Clicking these buttons would change the modal to the appropriate view.
  * @returns {React.FC} - Login component
- * @see https://github.com/CSFrequency/react-firebase-hooks/tree/master/auth
  */
 const Login: React.FC<LoginProps> = () => {
   const setAuthModalState = useSetAtom(authModalStateAtom); // Set global state
-  const [signInWithEmailAndPassword, user, loading, error] =
-    useSignInWithEmailAndPassword(auth);
+  const { checkAuth } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const {
     register,
@@ -39,8 +37,22 @@ const Login: React.FC<LoginProps> = () => {
     mode: "onChange",
   });
 
-  const onSubmit = (data: LoginInput) => {
-    signInWithEmailAndPassword(data.email, data.password);
+  const onSubmit = async (data: LoginInput) => {
+    setLoading(true);
+    setError("");
+    try {
+      await loginApi({
+        email: data.email,
+        password: data.password,
+      });
+      await checkAuth(); // Update global auth state
+      setAuthModalState((prev) => ({ ...prev, open: false }));
+    } catch (err: any) {
+      console.error("Login error:", err);
+      setError(err.message || "Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,9 +63,11 @@ const Login: React.FC<LoginProps> = () => {
           {errors.email.message}
         </Text>
       )}
-      <PasswordInput
+      <InputField
         placeholder="Password"
-        rootProps={{ mb: 2, mt: 2 }}
+        type="password"
+        mb={2}
+        mt={2}
         fontSize="10pt"
         bg={{ base: "gray.50", _dark: "gray.800" }}
         borderColor={{ base: "gray.200", _dark: "gray.600" }}
@@ -76,15 +90,17 @@ const Login: React.FC<LoginProps> = () => {
           {errors.password.message}
         </Text>
       )}
-      <Text
-        textAlign="center"
-        color={{ base: "red.500", _dark: "red.400" }}
-        fontSize="10pt"
-        fontWeight="800"
-        mt={2}
-      >
-        {FIREBASE_ERRORS[error?.code as keyof typeof FIREBASE_ERRORS]}
-      </Text>
+      {error && (
+        <Text
+          textAlign="center"
+          color={{ base: "red.500", _dark: "red.400" }}
+          fontSize="10pt"
+          fontWeight="800"
+          mt={2}
+        >
+          {error}
+        </Text>
+      )}
       <Button
         width="100%"
         height="36px"
@@ -94,8 +110,6 @@ const Login: React.FC<LoginProps> = () => {
         loading={loading}
         disabled={!isValid}
       >
-        {" "}
-        {/* When form is submitted, execute onSubmit function */}
         Log In
       </Button>
       <Flex fontSize="9pt" justifyContent="center" mb={2}>
@@ -137,3 +151,5 @@ const Login: React.FC<LoginProps> = () => {
 };
 
 export default Login;
+
+

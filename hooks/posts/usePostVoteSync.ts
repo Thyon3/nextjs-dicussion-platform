@@ -1,10 +1,9 @@
 import { communityStateAtom } from "@/atoms/communitiesAtom";
 import { useAtomValue } from "jotai";
 import React, { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase/clientApp";
 import { Post, PostVote } from "@/types/post";
-import { getCommunityPostVotes as getCommunityPostVotesLib } from "@/lib/posts/getCommunityPostVotes";
+import { getCommunityPostVotes as getCommunityPostVotesApi } from "@/lib/api/posts";
+import { useAuth } from "../useAuth";
 
 type SetPostState = React.Dispatch<
   React.SetStateAction<{
@@ -21,16 +20,20 @@ type SetPostState = React.Dispatch<
  * @returns This hook does not return any values; it performs synchronization as a side effect.
  */
 const usePostVoteSync = (setPostStateValue: SetPostState) => {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const currentCommunity = useAtomValue(communityStateAtom).currentCommunity;
 
   const getCommunityPostVotes = async (communityId: string) => {
     if (!user) return;
-    const postVotes = await getCommunityPostVotesLib(user.uid, communityId);
-    setPostStateValue((prev) => ({
-      ...prev,
-      postVotes: postVotes as PostVote[],
-    }));
+    try {
+      const response = await getCommunityPostVotesApi(user.id, communityId);
+      setPostStateValue((prev) => ({
+        ...prev,
+        postVotes: response.postVotes as PostVote[],
+      }));
+    } catch (error) {
+      console.error("Error fetching community post votes", error);
+    }
   };
 
   useEffect(() => {
@@ -51,3 +54,4 @@ const usePostVoteSync = (setPostStateValue: SetPostState) => {
 };
 
 export default usePostVoteSync;
+

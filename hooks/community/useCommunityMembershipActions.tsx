@@ -1,7 +1,6 @@
 import { authModalStateAtom } from "@/atoms/authModalAtom";
 import { useSetAtom } from "jotai";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "@/firebase/clientApp";
+import { useAuth } from "../useAuth";
 import useJoinCommunity from "./useJoinCommunity";
 import useLeaveCommunity from "./useLeaveCommunity";
 import { Community } from "@/types/community";
@@ -13,7 +12,7 @@ import { Community } from "@/types/community";
  * @returns An object containing `onJoinOrLeaveCommunity` handler and a combined loading state.
  */
 const useCommunityMembershipActions = () => {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const setAuthModalState = useSetAtom(authModalStateAtom);
   const { joinCommunity, joinLoading } = useJoinCommunity();
   const { leaveCommunity, leaveLoading } = useLeaveCommunity();
@@ -41,3 +40,4 @@ const useCommunityMembershipActions = () => {
 };
 
 export default useCommunityMembershipActions;
+

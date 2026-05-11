@@ -1,48 +1,24 @@
 import { authModalStateAtom } from "@/atoms/authModalAtom";
 import { savedPostStateAtom } from "@/atoms/savedPostsAtom";
-import { auth } from "@/firebase/clientApp";
 import { Post } from "@/types/post";
 import { useAtom, useSetAtom } from "jotai";
-import { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useState } from "react";
 import useCustomToast from "../useCustomToast";
-import { getSavedPosts as getSavedPostsLib } from "@/lib/posts/getSavedPosts";
-import { savePost } from "@/lib/posts/savePost";
-import { unsavePost } from "@/lib/posts/unsavePost";
+import { savePost, unsavePost } from "@/lib/api/posts";
+import { useAuth } from "../useAuth";
 
 /**
  * A custom hook that manages user's saved posts.
- * It provides functionality for fetching saved posts, toggling saved status of a post,
+ * It provides functionality for toggling saved status of a post,
  * and removing posts from saved collection.
  * @returns An object containing saved posts state, loading state, and associated handlers.
  */
 const useSavedPosts = () => {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [savedPostState, setSavedPostState] = useAtom(savedPostStateAtom);
   const setAuthModalState = useSetAtom(authModalStateAtom);
   const [loading, setLoading] = useState(false);
   const showToast = useCustomToast();
-
-  const fetchSavedPosts = async () => {
-    if (!user) return;
-    setLoading(true);
-    try {
-      const savedPosts = await getSavedPostsLib(user.uid);
-
-      setSavedPostState((prev) => ({
-        ...prev,
-        savedPosts,
-      }));
-    } catch (error: any) {
-      console.log("fetchSavedPosts error", error);
-      showToast({
-        title: "Error fetching saved posts",
-        description: error.message,
-        status: "error",
-      });
-    }
-    setLoading(false);
-  };
 
   const onSavePost = async (post: Post) => {
     if (!user) {
@@ -56,7 +32,10 @@ const useSavedPosts = () => {
       );
 
       if (isSaved) {
-        await unsavePost(user.uid, post.id!);
+        await unsavePost({
+          userId: user.id,
+          postId: post.id!,
+        });
         setSavedPostState((prev) => ({
           ...prev,
           savedPosts: prev.savedPosts.filter((item) => item.postId !== post.id),
@@ -66,7 +45,21 @@ const useSavedPosts = () => {
           status: "success",
         });
       } else {
-        const newSavedPost = await savePost(user.uid, post);
+        await savePost({
+          userId: user.id,
+          postId: post.id!,
+          communityId: post.communityId,
+          postTitle: post.title,
+          communityImageURL: post.communityImageURL || "",
+        });
+        
+        const newSavedPost = {
+          postId: post.id!,
+          communityId: post.communityId,
+          postTitle: post.title,
+          communityImageURL: post.communityImageURL || "",
+        };
+
         setSavedPostState((prev) => ({
           ...prev,
           savedPosts: [...prev.savedPosts, newSavedPost],
@@ -89,7 +82,10 @@ const useSavedPosts = () => {
   const onRemoveSavedPost = async (postId: string) => {
     if (!user) return;
     try {
-      await unsavePost(user.uid, postId);
+      await unsavePost({
+        userId: user.id,
+        postId,
+      });
       setSavedPostState((prev) => ({
         ...prev,
         savedPosts: prev.savedPosts.filter((item) => item.postId !== postId),
@@ -118,9 +114,9 @@ const useSavedPosts = () => {
     onSavePost,
     onRemoveSavedPost,
     isPostSaved,
-    fetchSavedPosts,
     loading,
   };
 };
 
 export default useSavedPosts;
+

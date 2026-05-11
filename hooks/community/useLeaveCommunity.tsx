@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { communityStateAtom } from "@/atoms/communitiesAtom";
-import { auth } from "@/firebase/clientApp";
 import { useSetAtom } from "jotai";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuth } from "../useAuth";
 import useCustomToast from "../useCustomToast";
-import { leaveCommunity } from "@/lib/community/leaveCommunity";
+import { leaveCommunity } from "@/lib/api/community";
 
 /**
  * A custom hook that provides functionality for a user to leave a community.
@@ -13,7 +12,7 @@ import { leaveCommunity } from "@/lib/community/leaveCommunity";
  * @returns An object containing `leaveCommunity` function, loading state, and error state.
  */
 const useLeaveCommunity = () => {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const setCommunityStateValue = useSetAtom(communityStateAtom);
   const showToast = useCustomToast();
   const [loading, setLoading] = useState(false);
@@ -23,7 +22,7 @@ const useLeaveCommunity = () => {
     if (!user) return;
     setLoading(true);
     try {
-      await leaveCommunity(user.uid, communityId);
+      await leaveCommunity(user.id, communityId);
 
       setCommunityStateValue((prev) => ({
         ...prev,
@@ -59,3 +58,4 @@ const useLeaveCommunity = () => {
 };
 
 export default useLeaveCommunity;
+

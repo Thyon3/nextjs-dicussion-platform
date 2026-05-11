@@ -2,7 +2,6 @@
 
 /* eslint-disable react-hooks/exhaustive-deps */
 import { authModalStateAtom } from "@/atoms/authModalAtom";
-import { auth } from "@/firebase/clientApp";
 import {
   DialogBackdrop,
   DialogBody,
@@ -17,32 +16,21 @@ import {
 } from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import React, { useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useAuth } from "@/hooks/useAuth";
 import AuthInputs from "./AuthInputs";
 import ResetPassword from "./ResetPassword";
-import OAuthButtons from "./oauth-buttons/OAuthButtons";
 
 /**
  * Auth modal that switches between login, signup, and reset views based on atom state.
- * Auto-closes when Firebase auth yields a user.
+ * Auto-closes when auth yields a user.
  * @returns Dialog shell with auth form or reset password flow.
- * @see https://chakra-ui.com/docs/components/dialog
  */
 const AuthModal: React.FC = () => {
   const [modalState, setModalState] = useAtom(authModalStateAtom);
-  /**
-   * Keeps track of whether a user is authenticated via Firebase.
-   * It returns to `user` details, if it fails then `null` is stored.
-   * While communicating with Firebase, `loading` (boolean) is set to `true` and
-   * once communication is complete it is set to `false`.
-   * `error` is null until an error takes place while communicating with Firebase.
-   */
-  const [user, loading, error] = useAuthState(auth);
+  const { user } = useAuth();
 
   /**
    * If a user is authenticated, modal will automatically close.
-   * This is used after signing up or logging in as once as user is authenticated,
-   * the modal does not need to be open.
    */
   useEffect(() => {
     if (user) handleClose();
@@ -92,8 +80,6 @@ const AuthModal: React.FC = () => {
               {/* If user is trying to authenticate (log in or sign up) */}
               {modalState.view === "login" || modalState.view === "signup" ? (
                 <>
-                  <OAuthButtons />
-                  <Separator />
                   <AuthInputs />
                 </>
               ) : (
@@ -109,3 +95,4 @@ const AuthModal: React.FC = () => {
 };
 
 export default AuthModal;
+

@@ -1,19 +1,16 @@
 import { Button, Flex, Icon, Image, Input, Text } from "@chakra-ui/react";
 import { useSetAtom } from "jotai";
 import React, { useState } from "react";
-import { useSendPasswordResetEmail } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BsDot } from "react-icons/bs";
 import { authModalStateAtom } from "../../../atoms/authModalAtom";
-import { auth } from "../../../firebase/clientApp";
 import { resetPasswordSchema, ResetPasswordInput } from "@/schema/auth";
 
 const ResetPassword: React.FC = () => {
   const setAuthModalState = useSetAtom(authModalStateAtom);
   const [success, setSuccess] = useState(false);
-  const [sendPasswordResetEmail, sending, error] =
-    useSendPasswordResetEmail(auth);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -25,8 +22,12 @@ const ResetPassword: React.FC = () => {
   });
 
   const onSubmit = async (data: ResetPasswordInput) => {
-    await sendPasswordResetEmail(data.email);
-    setSuccess(true);
+    setLoading(true);
+    // TODO: Implement backend password reset
+    setTimeout(() => {
+      setSuccess(true);
+      setLoading(false);
+    }, 1000);
   };
 
   return (
@@ -36,7 +37,10 @@ const ResetPassword: React.FC = () => {
         Reset your password
       </Text>
       {success ? (
-        <Text mb={4}>Check your email</Text>
+        <Text mb={4} textAlign="center">
+          If an account exists for {/* data.email would be better here */} this email, 
+          you will receive a reset link shortly. (Note: Backend implementation pending)
+        </Text>
       ) : (
         <>
           <Text fontSize="sm" textAlign="center" mb={2}>
@@ -69,20 +73,13 @@ const ResetPassword: React.FC = () => {
                 {errors.email.message}
               </Text>
             )}
-            <Text
-              textAlign="center"
-              fontSize="10pt"
-              color={{ base: "red.500", _dark: "red.400" }}
-            >
-              {error?.message}
-            </Text>
             <Button
               width="100%"
               height="36px"
               mb={2}
               mt={2}
               type="submit"
-              loading={sending}
+              loading={loading}
               disabled={!isValid}
             >
               Reset Password
@@ -124,3 +121,4 @@ const ResetPassword: React.FC = () => {
 };
 
 export default ResetPassword;
+

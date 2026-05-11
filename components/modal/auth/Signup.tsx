@@ -1,20 +1,19 @@
 import { Button, Flex, Text } from "@chakra-ui/react";
 import { useSetAtom } from "jotai";
-import React from "react";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { authModalStateAtom } from "../../../atoms/authModalAtom";
-import { auth } from "../../../firebase/clientApp";
-import { FIREBASE_ERRORS } from "../../../firebase/errors";
 import InputField from "./InputField";
-import { PasswordInput } from "@/components/ui/password-input";
 import { signUpSchema, SignUpInput } from "@/schema/auth";
+import { register as registerApi } from "@/lib/api/auth";
+import { useAuth } from "@/hooks/useAuth";
 
 const SignUp = () => {
   const setAuthModalState = useSetAtom(authModalStateAtom);
-  const [createUserWithEmailAndPassword, user, loading, userError] =
-    useCreateUserWithEmailAndPassword(auth);
+  const { checkAuth } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const {
     register,
@@ -25,8 +24,23 @@ const SignUp = () => {
     mode: "onChange",
   });
 
-  const onSubmit = (data: SignUpInput) => {
-    createUserWithEmailAndPassword(data.email, data.password);
+  const onSubmit = async (data: SignUpInput) => {
+    setLoading(true);
+    setError("");
+    try {
+      await registerApi({
+        email: data.email,
+        password: data.password,
+        displayName: data.email.split("@")[0],
+      });
+      await checkAuth(); // Update global auth state
+      setAuthModalState({ open: false, view: "login" });
+    } catch (err: any) {
+      console.error("Signup error:", err);
+      setError(err.message || "An error occurred during signup");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -37,9 +51,11 @@ const SignUp = () => {
           {errors.email.message}
         </Text>
       )}
-      <PasswordInput
+      <InputField
         placeholder="Password"
-        rootProps={{ mb: 2, mt: 2 }}
+        type="password"
+        mb={2}
+        mt={2}
         fontSize="10pt"
         bg={{ base: "gray.50", _dark: "gray.800" }}
         borderColor={{ base: "gray.200", _dark: "gray.600" }}
@@ -62,9 +78,11 @@ const SignUp = () => {
           {errors.password.message}
         </Text>
       )}
-      <PasswordInput
+      <InputField
         placeholder="Confirm Password"
-        rootProps={{ mb: 2, mt: 2 }}
+        type="password"
+        mb={2}
+        mt={2}
         fontSize="10pt"
         bg={{ base: "gray.50", _dark: "gray.800" }}
         borderColor={{ base: "gray.200", _dark: "gray.600" }}
@@ -87,16 +105,17 @@ const SignUp = () => {
           {errors.confirmPassword.message}
         </Text>
       )}
-      <Text
-        textAlign="center"
-        color={{ base: "red.500", _dark: "red.400" }}
-        fontSize="10pt"
-        fontWeight="800"
-        mt={2}
-      >
-        {userError &&
-          FIREBASE_ERRORS[userError?.code as keyof typeof FIREBASE_ERRORS]}
-      </Text>
+      {error && (
+        <Text
+          textAlign="center"
+          color={{ base: "red.500", _dark: "red.400" }}
+          fontSize="10pt"
+          fontWeight="800"
+          mt={2}
+        >
+          {error}
+        </Text>
+      )}
       <Button
         width="100%"
         height="36px"
@@ -129,3 +148,5 @@ const SignUp = () => {
 };
 
 export default SignUp;
+
+

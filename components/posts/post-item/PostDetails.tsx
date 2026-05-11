@@ -20,7 +20,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({
   post,
 }) => {
   const topText: string = `By ${post.creatorUsername} ${moment(
-    new Date(post.createTime.seconds * 1000)
+    post.createTime
   ).fromNow()}`;
 
   return (
@@ -70,3 +70,4 @@ const PostDetails: React.FC<PostDetailsProps> = ({
 };
 
 export default PostDetails;
+

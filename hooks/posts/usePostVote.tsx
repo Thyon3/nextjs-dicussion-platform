@@ -1,16 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { authModalStateAtom } from "@/atoms/authModalAtom";
-import { auth } from "@/firebase/clientApp";
 import { useSetAtom } from "jotai";
-import { useAuthState } from "react-firebase-hooks/auth";
 import useCustomToast from "../useCustomToast";
 import React from "react";
 import { Post, PostVote } from "@/types/post";
-import { handlePostVote } from "@/lib/posts/handlePostVote";
-import { getPostVotes as getPostVotesLib } from "@/lib/posts/getPostVotes";
-import { getPost as getPostLib } from "@/lib/posts/getPost";
-import useCommunityState from "../community/useCommunityState";
-import { getCommunityData } from "@/lib/community/getCommunityData";
+import { votePost, getPostById } from "@/lib/api/posts";
+import { useAuth } from "../useAuth";
 
 type SetPostState = React.Dispatch<
   React.SetStateAction<{
@@ -22,11 +17,7 @@ type SetPostState = React.Dispatch<
 
 /**
  * A custom hook that manages voting logic for posts.
- * It handles permission checks for restricted communities, processes upvotes and downvotes,
- * and synchronizes local post state with backend voting results.
- * @param postStateValue - The current state of posts and their associated votes.
- * @param setPostStateValue - A state setter function to update the global post state.
- * @returns An object containing functions for voting, loading votes, and fetching post data.
+ * It processes upvotes and downvotes, and synchronizes local post state with backend voting results.
  */
 const usePostVote = (
   postStateValue: {
@@ -36,10 +27,9 @@ const usePostVote = (
   },
   setPostStateValue: SetPostState
 ) => {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const setAuthModalState = useSetAtom(authModalStateAtom);
   const showToast = useCustomToast();
-  const { communityStateValue } = useCommunityState();
 
   const onVote = async (
     event: React.MouseEvent<SVGElement, MouseEvent>,
@@ -49,116 +39,56 @@ const usePostVote = (
   ) => {
     event.stopPropagation();
 
-    if (!user?.uid) {
+    if (!user) {
       setAuthModalState({ open: true, view: "login" });
       return;
     }
 
-    // Check permissions
-    const isMember = !!communityStateValue.mySnippets.find(
-      (snippet) => snippet.communityId === communityId
-    );
-
-    if (!isMember) {
-      let community = communityStateValue.currentCommunity;
-
-      if (!community || community.id !== communityId) {
-        try {
-          community = await getCommunityData(communityId);
-        } catch (error) {
-          console.log(
-            "Error fetching community data for vote permission",
-            error
-          );
-        }
-      }
-
-      if (
-        community &&
-        (community.privacyType === "restricted" ||
-          community.privacyType === "private")
-      ) {
-        showToast({
-          title: "Restricted Community",
-          description: "You must be a member to vote in this community.",
-          status: "error",
-        });
-        return;
-      }
-    }
-
     try {
-      const existingVote = postStateValue.postVotes.find(
-        (v) => v.postId === post.id
-      );
-
-      const { voteChange, newVote, voteIdToDelete } = await handlePostVote(
-        user.uid,
-        post,
-        vote,
+      const { voteChange, updatedVote } = await votePost({
+        userId: user.id,
+        postId: post.id!,
+        voteValue: vote,
         communityId,
-        existingVote
-      );
+      });
 
-      let updatedPostVotes = [...postStateValue.postVotes];
+      // Update local state
       const updatedPost = { ...post, voteStatus: post.voteStatus + voteChange };
       const updatedPosts = [...postStateValue.posts];
+      const postIndex = postStateValue.posts.findIndex((p) => p.id === post.id);
+      
+      if (postIndex !== -1) {
+        updatedPosts[postIndex] = updatedPost;
+      }
 
-      if (voteIdToDelete) {
-        updatedPostVotes = updatedPostVotes.filter(
-          (v) => v.id !== voteIdToDelete
-        );
-      } else if (newVote) {
-        if (existingVote) {
-          const voteIndexPosition = postStateValue.postVotes.findIndex(
-            (v) => v.id === existingVote.id
-          );
-          updatedPostVotes[voteIndexPosition] = newVote;
+      let updatedPostVotes = [...postStateValue.postVotes];
+      const voteIndex = updatedPostVotes.findIndex((v) => v.postId === post.id);
+
+      if (updatedVote) {
+        if (voteIndex !== -1) {
+          updatedPostVotes[voteIndex] = updatedVote;
         } else {
-          updatedPostVotes = [...updatedPostVotes, newVote];
+          updatedPostVotes.push(updatedVote);
+        }
+      } else {
+        // Vote was removed
+        if (voteIndex !== -1) {
+          updatedPostVotes.splice(voteIndex, 1);
         }
       }
 
-      const postIndexPosition = postStateValue.posts.findIndex(
-        (item) => item.id === post.id
-      );
-      updatedPosts[postIndexPosition] = updatedPost;
       setPostStateValue((prev) => ({
         ...prev,
         posts: updatedPosts,
         postVotes: updatedPostVotes,
+        selectedPost: prev.selectedPost?.id === post.id ? updatedPost : prev.selectedPost,
       }));
 
-      if (postStateValue.selectedPost) {
-        setPostStateValue((prev) => ({
-          ...prev,
-          selectedPost: updatedPost,
-        }));
-      }
-    } catch (error) {
+    } catch (error: any) {
       console.log("Error: onVote", error);
       showToast({
         title: "Could not Vote",
-        description: "There was an error voting on post",
-        status: "error",
-      });
-    }
-  };
-
-  const getPostVotes = async (postIds: string[]) => {
-    if (!user || !postIds.length) return;
-    try {
-      const postVotes = await getPostVotesLib(user.uid, postIds);
-
-      setPostStateValue((prev) => ({
-        ...prev,
-        postVotes: postVotes as PostVote[],
-      }));
-    } catch (error) {
-      console.log("Error: getPostVotes", error);
-      showToast({
-        title: "Could not Get Post Votes",
-        description: "There was an error while getting your post votes",
+        description: error.message || "There was an error voting on post",
         status: "error",
       });
     }
@@ -166,13 +96,13 @@ const usePostVote = (
 
   const getPost = async (postId: string) => {
     try {
-      const post = await getPostLib(postId);
-      if (post) {
+      const response = await getPostById(postId);
+      if (response.post) {
         setPostStateValue((prev) => ({
           ...prev,
-          selectedPost: post,
+          selectedPost: response.post,
         }));
-        return post;
+        return response.post;
       }
       return null;
     } catch (error) {
@@ -181,7 +111,8 @@ const usePostVote = (
     }
   };
 
-  return { onVote, getPostVotes, getPost };
+  return { onVote, getPost };
 };
 
 export default usePostVote;
+

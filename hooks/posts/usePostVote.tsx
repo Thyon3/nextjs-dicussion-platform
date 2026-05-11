@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { authModalStateAtom } from "@/atoms/authModalAtom";
 import { useSetAtom } from "jotai";
 import useCustomToast from "../useCustomToast";
 import React from "react";
 import { Post, PostVote } from "@/types/post";
 import { votePost, getPostById } from "@/lib/api/posts";
 import { useAuth } from "../useAuth";
+import { useAuthStore } from "@/src/features/auth";
 
 type SetPostState = React.Dispatch<
   React.SetStateAction<{
@@ -28,7 +28,7 @@ const usePostVote = (
   setPostStateValue: SetPostState
 ) => {
   const { user } = useAuth();
-  const setAuthModalState = useSetAtom(authModalStateAtom);
+  const openModal = useAuthStore((s) => s.openModal);
   const showToast = useCustomToast();
 
   const onVote = async (
@@ -40,7 +40,7 @@ const usePostVote = (
     event.stopPropagation();
 
     if (!user) {
-      setAuthModalState({ open: true, view: "login" });
+      openModal('login');
       return;
     }
 

@@ -1,9 +1,8 @@
-import { authModalStateAtom } from "@/atoms/authModalAtom";
-import { useSetAtom } from "jotai";
 import { useAuth } from "../useAuth";
 import useJoinCommunity from "./useJoinCommunity";
 import useLeaveCommunity from "./useLeaveCommunity";
 import { Community } from "@/types/community";
+import { useAuthStore } from "@/src/features/auth";
 
 /**
  * A custom hook that centralizes logic for joining and leaving communities.
@@ -13,7 +12,7 @@ import { Community } from "@/types/community";
  */
 const useCommunityMembershipActions = () => {
   const { user } = useAuth();
-  const setAuthModalState = useSetAtom(authModalStateAtom);
+  const openModal = useAuthStore((s) => s.openModal);
   const { joinCommunity, joinLoading } = useJoinCommunity();
   const { leaveCommunity, leaveLoading } = useLeaveCommunity();
 
@@ -22,7 +21,7 @@ const useCommunityMembershipActions = () => {
     isJoined: boolean
   ) => {
     if (!user) {
-      setAuthModalState({ open: true, view: "login" });
+      openModal('login');
       return;
     }
 

@@ -1,11 +1,11 @@
-import { authModalStateAtom } from "@/atoms/authModalAtom";
 import { savedPostStateAtom } from "@/atoms/savedPostsAtom";
 import { Post } from "@/types/post";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { useState } from "react";
 import useCustomToast from "../useCustomToast";
 import { savePost, unsavePost } from "@/lib/api/posts";
 import { useAuth } from "../useAuth";
+import { useAuthStore } from "@/src/features/auth";
 
 /**
  * A custom hook that manages user's saved posts.
@@ -16,13 +16,13 @@ import { useAuth } from "../useAuth";
 const useSavedPosts = () => {
   const { user } = useAuth();
   const [savedPostState, setSavedPostState] = useAtom(savedPostStateAtom);
-  const setAuthModalState = useSetAtom(authModalStateAtom);
+  const openModal = useAuthStore((s) => s.openModal);
   const [loading, setLoading] = useState(false);
   const showToast = useCustomToast();
 
   const onSavePost = async (post: Post) => {
     if (!user) {
-      setAuthModalState({ open: true, view: "login" });
+      openModal('login');
       return;
     }
 

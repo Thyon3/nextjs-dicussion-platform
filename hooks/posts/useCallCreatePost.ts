@@ -1,18 +1,18 @@
-import { authModalStateAtom } from "@/atoms/authModalAtom";
 import { communityStateAtom } from "@/atoms/communitiesAtom";
 import { useAuth } from "@/hooks/useAuth";
-import { useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue } from "jotai";
 import { useParams, useRouter } from "next/navigation";
+import { useAuthStore } from "@/src/features/auth";
 
 const useCallCreatePost = () => {
   const router = useRouter();
   const { user } = useAuth();
-  const setAuthModalState = useSetAtom(authModalStateAtom);
+  const openModal = useAuthStore((s) => s.openModal);
   const communityStateValue = useAtomValue(communityStateAtom);
 
   const onClick = () => {
     if (!user) {
-      setAuthModalState({ open: true, view: "login" });
+      openModal('login');
       return;
     }
 

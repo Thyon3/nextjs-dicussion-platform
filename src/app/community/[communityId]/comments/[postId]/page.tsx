@@ -1,45 +1,40 @@
-"use client";
+'use client';
 
-import { About, PageContent, PostItem } from "@/components";
-import usePostState from "@/hooks/posts/usePostState";
-import usePostVote from "@/hooks/posts/usePostVote";
-import usePostDeletion from "@/hooks/posts/usePostDeletion";
-import { getPostById } from "@/lib/api/posts";
-import { getCommunity } from "@/lib/api/community";
-import { Community } from "@/types/community";
-import { Post } from "@/types/post";
-import { useParams, useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { PageContent } from '@/components';
+import PostItem from '@/components/posts/post-item/PostItem';
+import { Post } from '@/src/features/posts/types';
+import { getPostById, votePost, deletePost } from '@/src/features/posts/api/postApi';
+import { getCommunityData } from '@/lib/api/community';
+import { Community } from '@/types/community';
+import About from '@/components/community/about/About';
+import Recommendations from '@/components/community/recommendations/Recommendations';
+import CommentSection from '@/src/features/comments/components/CommentSection';
+import { useAuth } from '@/hooks/useAuth';
+import useCommunityState from '@/hooks/community/useCommunityState';
 
-const PostPage: React.FC = () => {
-  const { communityId, postId } = useParams();
+const PostDetailPage: React.FC = () => {
+  const { postId, communityId } = useParams() as { postId: string; communityId: string };
   const { user } = useAuth();
-  const { postStateValue, setPostStateValue } = usePostState();
+  const { communityStateValue } = useCommunityState();
+  
+  const [post, setPost] = useState<Post | null>(null);
   const [communityData, setCommunityData] = useState<Community | null>(null);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
-  const { onVote } = usePostVote(postStateValue, setPostStateValue);
-  const { onDeletePost } = usePostDeletion(setPostStateValue);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const [post, community] = await Promise.all([
-          getPostById(postId as string),
-          getCommunity(communityId as string),
+        const [postRes, communityRes] = await Promise.all([
+          getPostById(postId),
+          getCommunityData(communityId)
         ]);
-        
-        setPostStateValue((prev) => ({
-          ...prev,
-          selectedPost: post as Post,
-          posts: [post as Post],
-        }));
-        setCommunityData(community);
-      } catch (err) {
-        console.error("Error fetching post data", err);
+        setPost(postRes);
+        setCommunityData(communityRes);
+      } catch (error) {
+        console.error("Error fetching post detail data", error);
       } finally {
         setLoading(false);
       }
@@ -48,37 +43,61 @@ const PostPage: React.FC = () => {
     if (postId && communityId) {
       fetchData();
     }
-  }, [postId, communityId, setPostStateValue]);
+  }, [postId, communityId]);
+
+  const onVote = async (event: React.MouseEvent, post: Post, vote: number, communityId: string) => {
+    // Re-use existing vote logic if possible or implement here
+    // For now, let's just update local state if we want real-time feel
+  };
+
+  const onDeletePost = async (post: Post) => {
+    try {
+      await deletePost(post.id!);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
 
   return (
-    <PageContent>
-      {/* Left Content */}
-      <div className="flex flex-col gap-5">
-        {loading ? (
-          <div className="animate-pulse flex flex-col gap-5">
-            <div className="h-[200px] bg-white/5 rounded-[12px]" />
-          </div>
-        ) : postStateValue.selectedPost ? (
-          <PostItem
-            post={postStateValue.selectedPost}
-            userIsCreator={user?.id === postStateValue.selectedPost.creatorId}
-            onVote={onVote}
-            onDeletePost={onDeletePost}
-            userVoteValue={
-                postStateValue.postVotes.find((vote) => vote.postId === postStateValue.selectedPost?.id)
-                  ?.voteValue
-              }
-          />
-        ) : null}
-        {/* TODO: Add Comments Component here */}
-      </div>
+    <div className="flex justify-center w-full min-h-screen pt-5 pb-10 px-4">
+      <div className="flex w-full max-w-[1080px] gap-6">
+        {/* ── Left: Post & Comments ──────────────────────── */}
+        <div className="flex flex-col flex-1 min-w-0">
+          {loading ? (
+             <div className="bg-[#1A1D23] rounded-[4px] p-10 flex justify-center">
+               <div className="w-8 h-8 border-4 border-white/20 border-t-[#FF5722] rounded-full animate-spin" />
+             </div>
+          ) : post ? (
+            <>
+              <PostItem
+                post={post}
+                userIsCreator={user?.id === post.creatorId}
+                onVote={onVote}
+                onDeletePost={onDeletePost}
+                userVoteValue={0}
+              />
+              
+              <div className="bg-[#1A1D23] rounded-[4px] p-4 lg:p-6 mt-4">
+                 <CommentSection 
+                   postId={post.id!} 
+                   communityId={post.communityId} 
+                   postTitle={post.title} 
+                 />
+              </div>
+            </>
+          ) : (
+            <div className="text-white text-center py-20">Post not found</div>
+          )}
+        </div>
 
-      {/* Right Content */}
-      <div className="flex flex-col gap-5">
-        {communityData && <About communityData={communityData} />}
+        {/* ── Right: Community Info Sidebar ────────────────── */}
+        <div className="hidden lg:flex flex-col w-[312px] shrink-0 gap-5">
+          {communityData && <About communityData={communityData} />}
+        </div>
       </div>
-    </PageContent>
+    </div>
   );
 };
 
-export default PostPage;
+export default PostDetailPage;

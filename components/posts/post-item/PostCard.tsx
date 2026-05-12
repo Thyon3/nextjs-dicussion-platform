@@ -56,13 +56,13 @@ const PostCard: React.FC<PostCardProps> = ({
 
   return (
     <div
-      className={`flex bg-[#1A1D23] border border-white/10 rounded-[4px] transition-all hover:border-white/30 ${
-        singlePostPage ? "cursor-default" : "cursor-pointer"
+      className={`flex bg-[#1A1D23] rounded-[4px] transition-all ${
+        singlePostPage ? "cursor-default" : "cursor-pointer hover:bg-white/5"
       }`}
       onClick={() => onSelectPost && onSelectPost(post)}
     >
       {/* ── Vote Rail ────────────────────────────────────── */}
-      <div className="flex flex-col items-center py-2 px-2 w-[40px] shrink-0 bg-[#161719] rounded-l-[4px]">
+      <div className="flex flex-col items-center py-2 px-2 w-[40px] shrink-0 rounded-l-[4px]">
         <button
           className={`p-1 rounded transition-colors hover:bg-white/10 ${
             userVoteValue === 1 ? "text-[#FF4500]" : "text-gray-400 hover:text-[#FF4500]"
@@ -177,7 +177,11 @@ const PostCard: React.FC<PostCardProps> = ({
         {/* ── Action Bar ───────────────────────────────────── */}
         <div className="flex items-center gap-1 mt-0.5 -ml-1 flex-wrap">
           {/* Comments */}
-          <ActionBtn icon={<FaRegCommentAlt size={14} />} label="Comments" onClick={(e) => e.stopPropagation()} />
+          <ActionBtn 
+            icon={<FaRegCommentAlt size={14} />} 
+            label={`${post.numberOfComments || 0} ${post.numberOfComments === 1 ? 'Comment' : 'Comments'}`} 
+            onClick={(e) => e.stopPropagation()} 
+          />
 
           {/* Share */}
           <ActionBtn icon={<FiShare2 size={15} />} label="Share" onClick={onShare} />

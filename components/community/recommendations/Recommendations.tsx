@@ -1,6 +1,7 @@
 import useCommunitiesFeed from "@/hooks/community/useCommunitiesFeed";
 import useCommunityState from "@/hooks/community/useCommunityState";
 import useCommunityMembershipActions from "@/hooks/community/useCommunityMembershipActions";
+import { useAuth } from "@/hooks/useAuth";
 import React from "react";
 import RecommendationRow from "./RecommendationRow";
 import SuggestionsHeader from "./SuggestionsHeader";
@@ -9,6 +10,7 @@ const Recommendations: React.FC = () => {
   const { communityStateValue } = useCommunityState();
   const { onJoinOrLeaveCommunity } = useCommunityMembershipActions();
   const { communities, loading } = useCommunitiesFeed({ limit: 5 });
+  const { user } = useAuth();
 
   return (
     <div className="flex flex-col bg-[#1A1D23] rounded-[12px] border border-white/10 overflow-hidden">
@@ -28,9 +30,10 @@ const Recommendations: React.FC = () => {
         ) : (
           <>
             {communities.map((item, index) => {
-              const isJoined = !!communityStateValue.mySnippets.find(
-                (snippet) => snippet.communityId === item.id
-              );
+              const isJoined =
+                !!communityStateValue.mySnippets.find(
+                  (snippet) => snippet.communityId === item.id
+                ) || item.creatorId === user?.id;
               return (
                 <RecommendationRow
                   key={item.id}

@@ -6,6 +6,8 @@ import { BiPoll } from 'react-icons/bi';
 import { useAuth } from '@/src/features/auth';
 import { useCreatePost } from '../hooks/useCreatePost';
 import { PostType, TabItem } from '../types';
+import { Community } from '@/types/community';
+import CommunitySelector from './CommunitySelector';
 
 const tabs: TabItem[] = [
   { title: 'Post', type: 'text', icon: IoDocumentText },
@@ -15,17 +17,27 @@ const tabs: TabItem[] = [
 ];
 
 interface CreatePostFormProps {
-  communityId: string;
+  communityId?: string;
   communityImageURL?: string;
 }
 
-const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCommunityId, communityImageURL: initialCommunityImageURL }) => {
+const CreatePostForm: React.FC<CreatePostFormProps> = ({
+  communityId: initialCommunityId,
+  communityImageURL: initialCommunityImageURL,
+}) => {
   const { user } = useAuth();
-  const [selectedCommunityId, setSelectedCommunityId] = useState(initialCommunityId || '');
-  const [selectedCommunityImageURL, setSelectedCommunityImageURL] = useState(initialCommunityImageURL || '');
 
-  const { submitPost, loading, error } = useCreatePost(selectedCommunityId, selectedCommunityImageURL);
-  
+  const [selectedCommunity, setSelectedCommunity] = useState<Community | null>(
+    initialCommunityId
+      ? ({ id: initialCommunityId, imageURL: initialCommunityImageURL } as Community)
+      : null
+  );
+
+  const { submitPost, loading, error } = useCreatePost(
+    selectedCommunity?.id ?? '',
+    selectedCommunity?.imageURL ?? ''
+  );
+
   const [selectedTab, setSelectedTab] = useState<PostType>('text');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -36,7 +48,7 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
 
   const isFormValid = () => {
     if (!title.trim()) return false;
-    if (!selectedCommunityId) return false; // community is required
+    if (!selectedCommunity?.id) return false; // community is always required
     if (selectedTab === 'image' && !file) return false;
     if (selectedTab === 'link' && !linkURL.trim()) return false;
     return true;
@@ -55,49 +67,20 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
     await submitPost(title, selectedTab, body, file || undefined, linkURL);
   };
 
-  const handleCommunitySelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const cid = e.target.value;
-    setSelectedCommunityId(cid);
-    if (user?.communitySnippets) {
-      const snippet = user.communitySnippets.find(s => s.communityId === cid);
-      if (snippet) setSelectedCommunityImageURL(snippet.imageURL || '');
-    }
-  };
-
   return (
     <div className="flex flex-col gap-4 w-full">
-      {/* Community Selector — always shown when not pre-set by page context */}
+      {/* Community Selector — only shown when not pre-set by a community page context */}
       {!initialCommunityId && (
-        <div className="flex flex-col gap-1">
-          <label className="text-[12px] font-bold text-gray-400 uppercase tracking-wider">
-            Choose a community <span className="text-red-500">*</span>
-          </label>
-          {user?.communitySnippets?.length ? (
-            <select
-              className={`w-full max-w-[360px] bg-[#1A1D23] text-white border rounded-md h-[42px] px-3 focus:outline-none transition-colors ${
-                !selectedCommunityId
-                  ? 'border-red-500/50 focus:border-red-500'
-                  : 'border-white/10 focus:border-[#FF5722]'
-              }`}
-              value={selectedCommunityId}
-              onChange={handleCommunitySelect}
-            >
-              <option value="" disabled>Select a community…</option>
-              {user.communitySnippets.map((snippet) => (
-                <option key={snippet.communityId} value={snippet.communityId}>
-                  r/{snippet.communityId}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <p className="text-[13px] text-gray-500">
-              You haven&apos;t joined any communities yet.{' '}
-              <a href="/communities" className="text-[#FF5722] hover:underline">Browse communities</a>
+        <div className="flex flex-col gap-1.5">
+          <CommunitySelector
+            selectedCommunityId={selectedCommunity?.id ?? ''}
+            onSelect={(community) => setSelectedCommunity(community)}
+          />
+          {!selectedCommunity && (
+            <p className="text-[11px] text-red-400 pl-1">
+              A community is required to post.
             </p>
           )}
-          {!selectedCommunityId && user?.communitySnippets?.length ? (
-            <p className="text-[11px] text-red-400">A community is required to post.</p>
-          ) : null}
         </div>
       )}
 
@@ -108,10 +91,10 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
             <button
               key={tab.type}
               className={`flex-1 flex items-center justify-center py-3 font-bold text-[14px] transition-all border-b-2 border-r border-white/10 last:border-r-0 ${
-                selectedTab === tab.type 
-                  ? "text-[#FF5722] border-b-[#FF5722] bg-white/5" 
-                  : "text-gray-500 border-b-transparent hover:bg-white/5"
-              } ${tab.type === 'poll' ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                selectedTab === tab.type
+                  ? 'text-[#FF5722] border-b-[#FF5722] bg-white/5'
+                  : 'text-gray-500 border-b-transparent hover:bg-white/5'
+              } ${tab.type === 'poll' ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
               onClick={() => tab.type !== 'poll' && setSelectedTab(tab.type)}
               disabled={tab.type === 'poll'}
             >
@@ -122,7 +105,7 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
         </div>
 
         <div className="p-4 flex flex-col gap-4">
-          {/* Title Input */}
+          {/* Title */}
           <div className="relative">
             <input
               placeholder="Title"
@@ -136,7 +119,7 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
             </span>
           </div>
 
-          {/* Dynamic Content Area */}
+          {/* Image / Video upload */}
           {selectedTab === 'image' && (
             <div className="flex justify-center items-center min-h-[250px] border border-dashed border-white/20 rounded-md relative bg-white/5">
               {filePreview ? (
@@ -148,10 +131,7 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
                   )}
                   <button
                     className="absolute top-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-[12px] hover:bg-black/80 transition-colors"
-                    onClick={() => {
-                      setFile(null);
-                      setFilePreview('');
-                    }}
+                    onClick={() => { setFile(null); setFilePreview(''); }}
                   >
                     Remove
                   </button>
@@ -159,7 +139,7 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
               ) : (
                 <div className="flex flex-col items-center gap-4">
                   <p className="text-gray-500 font-medium">Drag and drop images or</p>
-                  <button 
+                  <button
                     className="px-6 py-2 border border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all"
                     onClick={() => fileInputRef.current?.click()}
                   >
@@ -177,6 +157,7 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
             </div>
           )}
 
+          {/* Link */}
           {selectedTab === 'link' && (
             <input
               placeholder="URL"
@@ -186,19 +167,15 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
             />
           )}
 
-          {/* Description Area */}
+          {/* Body */}
           <textarea
-            placeholder={selectedTab === 'text' ? "Text (optional)" : "Description (optional)"}
+            placeholder={selectedTab === 'text' ? 'Text (optional)' : 'Description (optional)'}
             className="w-full bg-transparent border border-white/10 rounded-md min-h-[150px] p-4 text-[14px] text-white focus:outline-none focus:border-white/30 transition-all resize-none"
             value={body}
             onChange={(e) => setBody(e.target.value)}
           />
 
-          {error && (
-            <p className="text-red-500 text-[14px] font-semibold">
-              {error}
-            </p>
-          )}
+          {error && <p className="text-red-500 text-[14px] font-semibold">{error}</p>}
 
           {/* Footer Actions */}
           <div className="flex justify-end items-center pt-2 gap-3">
@@ -207,9 +184,9 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
             </button>
             <button
               className={`px-8 py-1.5 text-white text-[14px] font-bold rounded-full transition-all ${
-                !isFormValid() || loading 
-                  ? "bg-gray-600 cursor-not-allowed" 
-                  : "bg-[#FF5722] hover:bg-[#E64A19]"
+                !isFormValid() || loading
+                  ? 'bg-gray-600 cursor-not-allowed'
+                  : 'bg-[#FF5722] hover:bg-[#E64A19]'
               }`}
               onClick={handleSubmit}
               disabled={!isFormValid() || loading}

@@ -6,12 +6,14 @@ import { Community } from "@/types/community";
 import React, { useEffect, useState } from "react";
 import useCommunityMembershipActions from "@/hooks/community/useCommunityMembershipActions";
 import useCommunityState from "@/hooks/community/useCommunityState";
+import { useAuth } from "@/hooks/useAuth";
 
 const CommunitiesPage: React.FC = () => {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState(false);
   const { onJoinOrLeaveCommunity } = useCommunityMembershipActions();
   const { communityStateValue } = useCommunityState();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchCommunities = async () => {
@@ -44,9 +46,10 @@ const CommunitiesPage: React.FC = () => {
           ) : (
             <div className="flex flex-col gap-3">
               {communities.map((item, index) => {
-                const isJoined = !!communityStateValue.mySnippets.find(
+              const isJoined =
+                !!communityStateValue.mySnippets.find(
                   (snippet) => snippet.communityId === item.id
-                );
+                ) || item.creatorId === user?.id;
                 return (
                   <RecommendationRow
                     key={item.id}

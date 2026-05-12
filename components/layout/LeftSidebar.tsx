@@ -17,15 +17,17 @@ import {
   IoChevronUpOutline,
 } from "react-icons/io5";
 import { IoPeopleCircleOutline } from "react-icons/io5";
-import useUserCommunities from "@/hooks/community/useUserCommunities";
 import { useAuth } from "@/hooks/useAuth";
+import useCommunityState from "@/hooks/community/useCommunityState";
 
 const SKELETON_COUNT = 4;
 
 const LeftSidebar: React.FC = () => {
   const pathname = usePathname();
   const { user } = useAuth();
-  const { joinedCommunities, loading } = useUserCommunities();
+  // Read directly from Jotai atom — updates instantly on join/leave with no reload needed
+  const { communityStateValue } = useCommunityState();
+  const joinedCommunities = communityStateValue.mySnippets;
   const [showAllCommunities, setShowAllCommunities] = useState(false);
 
   const visibleCommunities = showAllCommunities
@@ -83,20 +85,6 @@ const LeftSidebar: React.FC = () => {
           <p className="px-2 py-3 text-[12px] text-gray-600 italic">
             Log in to see your communities
           </p>
-        ) : loading ? (
-          <div className="flex flex-col gap-2 py-1">
-            {Array(SKELETON_COUNT)
-              .fill(0)
-              .map((_, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-3 px-3 py-2 animate-pulse"
-                >
-                  <div className="w-6 h-6 rounded-full bg-white/10 shrink-0" />
-                  <div className="h-3 bg-white/10 rounded flex-1" />
-                </div>
-              ))}
-          </div>
         ) : joinedCommunities.length === 0 ? (
           <p className="px-2 py-3 text-[12px] text-gray-600 italic">
             You haven&apos;t joined any communities yet

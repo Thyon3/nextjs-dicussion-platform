@@ -1,9 +1,32 @@
 import { apiClient } from '@/src/shared/lib/apiClient';
+import { CreatePostDTO, Post } from '../types';
 
-export async function createPost(postData: any) {
-  return apiClient('/posts/create', {
+export async function uploadToCloudinary(file: File, resourceType: 'image' | 'video' = 'image'): Promise<string> {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET || 'discussion_platform');
+
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'demo';
+  const url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
+  const response = await fetch(url, {
     method: 'POST',
-    body: JSON.stringify(postData),
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Upload failed');
+  }
+
+  const data = await response.json();
+  return data.secure_url;
+}
+
+export async function createPost(dto: CreatePostDTO): Promise<Post> {
+  return apiClient<Post>('/posts/create', {
+    method: 'POST',
+    body: JSON.stringify(dto),
   });
 }
 

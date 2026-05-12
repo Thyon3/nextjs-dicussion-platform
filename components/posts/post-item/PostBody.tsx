@@ -22,7 +22,9 @@ const PostBody: React.FC<PostBodyProps> = ({
 }) => {
   return (
     <>
-      <Text fontSize="12pt">{post.body.split(" ").slice(0, 30).join(" ")}</Text>
+      {post.body && (
+        <Text fontSize="12pt">{post.body.split(" ").slice(0, 30).join(" ")}</Text>
+      )}
       {post.imageURL && (
         <Flex justify="center" align="center">
           {loadingImage && (
@@ -39,6 +41,22 @@ const PostBody: React.FC<PostBodyProps> = ({
             onLoad={() => setLoadingImage(false)}
             shadow="md"
           />
+        </Flex>
+      )}
+      {post.videoURL && (
+        <Flex justify="center" align="center" mt={4}>
+          <video 
+            src={post.videoURL} 
+            controls 
+            style={{ maxHeight: '450px', maxWidth: '100%', borderRadius: '10px' }} 
+          />
+        </Flex>
+      )}
+      {post.linkURL && (
+        <Flex mt={2}>
+          <Text as="a" href={post.linkURL} target="_blank" color="blue.500" _hover={{ textDecoration: 'underline' }}>
+            {post.linkURL}
+          </Text>
         </Flex>
       )}
     </>

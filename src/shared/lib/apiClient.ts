@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie';
+
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 export class ApiError extends Error {
@@ -12,20 +14,26 @@ export class ApiError extends Error {
 }
 
 function getToken(): string | null {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('authToken');
+  const cookieToken = Cookies.get('authToken');
+  if (cookieToken) return cookieToken;
+
+  if (typeof window !== 'undefined') {
+    const localToken = localStorage.getItem('authToken');
+    if (localToken) {
+      setToken(localToken);
+      localStorage.removeItem('authToken');
+      return localToken;
+    }
+  }
+  return null;
 }
 
 export function setToken(token: string): void {
-  if (typeof window !== 'undefined') {
-    localStorage.setItem('authToken', token);
-  }
+  Cookies.set('authToken', token, { expires: 7, path: '/' });
 }
 
 export function clearToken(): void {
-  if (typeof window !== 'undefined') {
-    localStorage.removeItem('authToken');
-  }
+  Cookies.remove('authToken', { path: '/' });
 }
 
 export async function apiClient<T = unknown>(

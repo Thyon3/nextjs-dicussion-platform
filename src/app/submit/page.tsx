@@ -4,13 +4,9 @@ import React from 'react';
 import { Box, Flex, Text, Stack } from '@chakra-ui/react';
 import { PageContent } from '@/components';
 import CreatePostForm from '@/src/features/posts/components/CreatePostForm';
-import { useParams } from 'next/navigation';
-import AboutCommunity from '@/components/community/about/AboutCommunity';
 import useCommunityState from '@/hooks/community/useCommunityState';
 
-export default function SubmitPostPage() {
-  const params = useParams();
-  const communityId = params.communityId as string;
+export default function GlobalSubmitPostPage() {
   const { communityStateValue } = useCommunityState();
 
   return (
@@ -23,10 +19,9 @@ export default function SubmitPostPage() {
           </Text>
         </Flex>
         
-        {/* If we are at /submit without a communityId, we might need a community selector.
-            For now, we assume this is under /community/[communityId]/submit */}
+        {/* We pass the current community id if available from the global state */}
         <CreatePostForm 
-          communityId={communityId || communityStateValue.currentCommunity?.id || ''} 
+          communityId={communityStateValue.currentCommunity?.id || ''} 
           communityImageURL={communityStateValue.currentCommunity?.imageURL} 
         />
       </Box>

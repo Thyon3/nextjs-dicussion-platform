@@ -4,10 +4,13 @@ export type Post = {
   creatorId: string;
   creatorUsername: string;
   title: string;
-  body: string;
+  body?: string;
+  postType?: 'text' | 'image' | 'video' | 'link';
   numberOfComments: number;
   voteStatus: number;
   imageURL?: string;
+  videoURL?: string;
+  linkURL?: string;
   communityImageURL?: string;
   createTime: Date | string;
 };

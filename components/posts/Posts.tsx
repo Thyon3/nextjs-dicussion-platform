@@ -7,7 +7,6 @@ import usePostVote from "@/hooks/posts/usePostVote";
 import usePostDeletion from "@/hooks/posts/usePostDeletion";
 import usePostVoteSync from "@/hooks/posts/usePostVoteSync";
 import usePostsFeed from "@/hooks/posts/usePostsFeed";
-import { Box, Spinner, Stack, Text } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import PostLoader from "../loaders/post-loader/PostLoader";
@@ -17,12 +16,6 @@ type PostsProps = {
   communityData?: Community;
 };
 
-/**
- * Manages and displays a feed of posts for a specific community or a global home feed.
- * Handles infinite scrolling, post selection, voting, and deletion by coordinating multiple hooks.
- * @param communityData - Optional community context for which to load and display posts.
- * @returns A scrollable list of post items or a loading state.
- */
 const Posts: React.FC<PostsProps> = ({ communityData }) => {
   const { user } = useAuth();
   const { postStateValue, setPostStateValue } = usePostState();
@@ -31,7 +24,6 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
   const { onDeletePost } = usePostDeletion(setPostStateValue);
   usePostVoteSync(setPostStateValue);
   
-  // Only check permissions if communityData is provided
   const { isAdmin, canPost } = useCommunityPermissions(
     communityData || ({} as Community)
   );
@@ -44,51 +36,47 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
     fetchPosts();
   }, [communityData?.id]);
 
-
   return (
-    <>
-      {/* If loading is true and it's initial load (no posts yet), display post loader component */}
+    <div className="flex flex-col gap-4">
       {loading && postStateValue.posts.length === 0 ? (
         <PostLoader />
       ) : (
-        // If posts are available, display post item components
-        <Stack gap={3}>
-          {/* For each post (item) iteratively create a post card component */}
-          {postStateValue.posts.map((item) => (
-            <PostItem
-              key={item.id}
-              post={item}
-              userIsCreator={user?.id === item.creatorId}
-              userIsAdmin={isAdmin}
-              userVoteValue={
-                postStateValue.postVotes.find((vote) => vote.postId === item.id)
-                  ?.voteValue
-              }
-              onVote={onVote}
-              onSelectPost={onSelectPost}
-              onDeletePost={onDeletePost}
-              votingDisabled={!canPost}
-            />
-          ))}
+        <>
+          <div className="flex flex-col gap-4">
+            {postStateValue.posts.map((item) => (
+              <PostItem
+                key={item.id}
+                post={item}
+                userIsCreator={user?.id === item.creatorId}
+                userIsAdmin={isAdmin}
+                userVoteValue={
+                  postStateValue.postVotes.find((vote) => vote.postId === item.id)
+                    ?.voteValue
+                }
+                onVote={onVote}
+                onSelectPost={onSelectPost}
+                onDeletePost={onDeletePost}
+                votingDisabled={!canPost}
+              />
+            ))}
+          </div>
           {!noMorePosts ? (
-            <Box
+            <div
               ref={ref}
-              height="20px"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
+              className="h-[20px] flex justify-center items-center"
             >
-              {loading && <Spinner size="sm" />}
-            </Box>
+              {loading && (
+                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              )}
+            </div>
           ) : (
-            <Text textAlign="center" p={2} fontSize="sm" color="gray.500">
+            <p className="text-center p-4 text-[10pt] text-gray-500">
               No more posts
-            </Text>
+            </p>
           )}
-        </Stack>
+        </>
       )}
-    </>
+    </div>
   );
 };
 export default Posts;
-

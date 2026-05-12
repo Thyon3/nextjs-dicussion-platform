@@ -3,15 +3,11 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Flex, Text } from '@chakra-ui/react';
 import { registerSchema, type RegisterFormValues } from '../validators';
 import { useAuth, useAuthModal } from '../hooks/useAuth';
 import { ApiError } from '@/src/shared/lib/apiClient';
 import InputField from './InputField';
 
-/**
- * Register form — handles new user sign-up, connects to the Zustand auth store.
- */
 const RegisterForm: React.FC = () => {
   const { register: registerUser } = useAuth();
   const { setModalView } = useAuthModal();
@@ -36,7 +32,6 @@ const RegisterForm: React.FC = () => {
         password: data.password,
         displayName: data.displayName || data.email.split('@')[0],
       });
-      // modal auto-closes via store action
     } catch (err) {
       if (err instanceof ApiError) {
         setServerError(err.message);
@@ -49,76 +44,75 @@ const RegisterForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <InputField placeholder="Display Name (optional)" type="text" mb={2} {...register('displayName')} />
-      {errors.displayName && (
-        <Text color="red.500" fontSize="10pt" mt={1}>
-          {errors.displayName.message}
-        </Text>
-      )}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <InputField placeholder="Display Name (optional)" type="text" {...register('displayName')} />
+        {errors.displayName && (
+          <p className="text-red-500 text-[9pt] mt-1 font-semibold">
+            {errors.displayName.message}
+          </p>
+        )}
+      </div>
 
-      <InputField placeholder="Email" type="email" mb={2} {...register('email')} />
-      {errors.email && (
-        <Text color="red.500" fontSize="10pt" mt={1}>
-          {errors.email.message}
-        </Text>
-      )}
+      <div>
+        <InputField placeholder="Email" type="email" {...register('email')} />
+        {errors.email && (
+          <p className="text-red-500 text-[9pt] mt-1 font-semibold">
+            {errors.email.message}
+          </p>
+        )}
+      </div>
 
-      <InputField placeholder="Password" type="password" mt={2} mb={2} {...register('password')} />
-      {errors.password && (
-        <Text color="red.500" fontSize="10pt" mt={1}>
-          {errors.password.message}
-        </Text>
-      )}
+      <div>
+        <InputField placeholder="Password" type="password" {...register('password')} />
+        {errors.password && (
+          <p className="text-red-500 text-[9pt] mt-1 font-semibold">
+            {errors.password.message}
+          </p>
+        )}
+      </div>
 
-      <InputField
-        placeholder="Confirm Password"
-        type="password"
-        mt={2}
-        mb={2}
-        {...register('confirmPassword')}
-      />
-      {errors.confirmPassword && (
-        <Text color="red.500" fontSize="10pt" mt={1}>
-          {errors.confirmPassword.message}
-        </Text>
-      )}
+      <div>
+        <InputField
+          placeholder="Confirm Password"
+          type="password"
+          {...register('confirmPassword')}
+        />
+        {errors.confirmPassword && (
+          <p className="text-red-500 text-[9pt] mt-1 font-semibold">
+            {errors.confirmPassword.message}
+          </p>
+        )}
+      </div>
 
       {serverError && (
-        <Text
-          textAlign="center"
-          color={{ base: 'red.500', _dark: 'red.400' }}
-          fontSize="10pt"
-          fontWeight="800"
-          mt={2}
-        >
+        <p className="text-center text-red-400 text-[10pt] font-bold">
           {serverError}
-        </Text>
+        </p>
       )}
 
-      <Button
-        width="100%"
-        height="36px"
-        mt={2}
-        mb={2}
+      <button
         type="submit"
-        loading={isLoading}
-        disabled={!isValid}
+        disabled={!isValid || isLoading}
+        className={`w-full h-[40px] rounded-full text-white font-bold transition-all ${
+          !isValid || isLoading
+            ? "bg-gray-600 cursor-not-allowed"
+            : "bg-[#FF5722] hover:bg-[#E64A19]"
+        }`}
       >
-        Sign Up
-      </Button>
+        {isLoading ? "Signing up..." : "Sign Up"}
+      </button>
 
-      <Flex fontSize="9pt" justifyContent="center">
-        <Text mr={1}>Already a member?</Text>
-        <Text
-          color={{ base: 'red.500', _dark: 'red.400' }}
-          fontWeight={700}
-          cursor="pointer"
+      <div className="flex justify-center text-[9pt] text-gray-400 gap-1 pt-2">
+        <span>Already a member?</span>
+        <button
+          type="button"
+          className="text-[#FF5722] font-bold hover:underline"
           onClick={() => setModalView('login')}
         >
           Log In
-        </Text>
-      </Flex>
+        </button>
+      </div>
     </form>
   );
 };

@@ -1,33 +1,19 @@
 import React from "react";
-import { Flex, Text, Icon } from "@chakra-ui/react";
 import { HiEllipsisHorizontal } from "react-icons/hi2";
 
 interface AboutHeaderBarProps {
   communityName: string;
 }
 
-/**
- * Header bar for the community about card.
- * @param communityName - Community id to display.
- * @returns Banner with title and action icon placeholder.
- */
 const AboutHeaderBar: React.FC<AboutHeaderBarProps> = ({ communityName }) => {
   return (
-    <Flex
-      justify="space-between"
-      align="center"
-      bg={{ base: "red.500", _dark: "red.600" }}
-      color="white"
-      p={3}
-      borderRadius="10px 10px 0px 0px"
-    >
-      <Text fontSize="10pt" fontWeight={700}>
+    <div className="flex justify-between items-center bg-[#FF5722] text-white p-3 rounded-t-[10px]">
+      <span className="text-[10pt] font-bold">
         About {communityName}
-      </Text>
-      <Icon as={HiEllipsisHorizontal} />
-    </Flex>
+      </span>
+      <HiEllipsisHorizontal className="text-[14pt]" />
+    </div>
   );
 };
 
 export default AboutHeaderBar;
-

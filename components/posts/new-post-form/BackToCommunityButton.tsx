@@ -1,5 +1,4 @@
 import React from "react";
-import { Button, Icon } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import { MdOutlineArrowBackIos } from "react-icons/md";
 
@@ -7,11 +6,6 @@ interface BackToCommunityButtonProps {
   communityId?: string;
 }
 
-/**
- * Button that navigates back to the community page from the new post form.
- * @param communityId - Target community id for the route.
- * @returns Outline button with back icon.
- */
 const BackToCommunityButton: React.FC<BackToCommunityButtonProps> = ({
   communityId,
 }) => {
@@ -19,18 +13,13 @@ const BackToCommunityButton: React.FC<BackToCommunityButtonProps> = ({
   const communityLink = `/community/${communityId}`;
 
   return (
-    <Button
-      variant="outline"
-      mt={4}
-      ml={4}
-      mr={4}
-      justifyContent="left"
-      width="fit-content"
+    <button
+      className="flex items-center w-fit px-4 h-[36px] mt-4 mx-4 text-[14px] font-bold text-white border border-white/30 rounded-full hover:bg-white/10 transition-all gap-2"
       onClick={() => router.push(communityLink)}
     >
-      <Icon as={MdOutlineArrowBackIos} mr={2} />
-      {`Back to ${communityId}`}
-    </Button>
+      <MdOutlineArrowBackIos size={14} />
+      <span>{`Back to r/${communityId}`}</span>
+    </button>
   );
 };
 

@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Box, Flex, Text, Stack } from '@chakra-ui/react';
 import { PageContent } from '@/components';
 import CreatePostForm from '@/src/features/posts/components/CreatePostForm';
 import useCommunityState from '@/hooks/community/useCommunityState';
@@ -12,41 +11,40 @@ export default function GlobalSubmitPostPage() {
   return (
     <PageContent>
       {/* Left Content */}
-      <Box flex={1}>
-        <Flex borderBottom="1px solid" borderColor="whiteAlpha.200" pb={4} mb={4} mt={6}>
-          <Text fontSize="18px" fontWeight={600}>
+      <div className="flex-1">
+        <div className="flex border-b border-white/10 pb-4 mb-4 mt-6">
+          <h2 className="text-[18px] font-semibold text-white">
             Create a post
-          </Text>
-        </Flex>
+          </h2>
+        </div>
         
-        {/* We pass the current community id if available from the global state */}
         <CreatePostForm 
           communityId={communityStateValue.currentCommunity?.id || ''} 
           communityImageURL={communityStateValue.currentCommunity?.imageURL} 
         />
-      </Box>
+      </div>
 
       {/* Right Content - Sidebar */}
-      <Box display={{ base: 'none', md: 'block' }}>
-        <Stack gap={4} mt={14}>
-          <Box bg={{ base: 'white', _dark: '#1a1a1b' }} p={3} borderRadius={4} border="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }}>
-            <Flex align="center" gap={2} mb={2}>
-              <img src="/images/redditPersonalHome.png" alt="posting rules" height="40px" style={{ borderRadius: '4px' }}/>
-              <Text fontWeight={600} fontSize="14px">Posting to Reddit</Text>
-            </Flex>
-            <Stack gap={2} fontSize="12px" fontWeight={500} borderTop="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pt={2}>
-              <Text borderBottom="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pb={2}>1. Remember the human</Text>
-              <Text borderBottom="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pb={2}>2. Behave like you would in real life</Text>
-              <Text borderBottom="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pb={2}>3. Look for the original source of content</Text>
-              <Text borderBottom="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pb={2}>4. Search for duplicates before posting</Text>
-              <Text pb={2}>5. Read the community's rules</Text>
-            </Stack>
-          </Box>
-          <Text fontSize="12px" color="gray.500" fontWeight={500} textAlign="center">
-            Please be mindful of reddit's content policy and practice good reddiquette.
-          </Text>
-        </Stack>
-      </Box>
+      <div className="hidden md:block">
+        <div className="flex flex-col gap-4 mt-14">
+          <div className="bg-[#1A1D23] p-4 rounded-[12px] border border-white/10">
+            <div className="flex items-center gap-2 mb-3">
+              <img src="/images/redditPersonalHome.png" alt="posting rules" className="h-[40px] rounded-md"/>
+              <span className="font-bold text-white text-[14px]">Posting to Circus</span>
+            </div>
+            <div className="flex flex-col gap-3 text-[12px] font-medium text-gray-400 pt-3 border-t border-white/10">
+              <p className="border-b border-white/5 pb-2">1. Remember the human</p>
+              <p className="border-b border-white/5 pb-2">2. Behave like you would in real life</p>
+              <p className="border-b border-white/5 pb-2">3. Look for the original source of content</p>
+              <p className="border-b border-white/5 pb-2">4. Search for duplicates before posting</p>
+              <p>5. Read the community's rules</p>
+            </div>
+          </div>
+          <p className="text-[12px] text-gray-500 font-medium text-center">
+            Please be mindful of Circus's content policy and practice good etiquette.
+          </p>
+        </div>
+      </div>
     </PageContent>
   );
 }

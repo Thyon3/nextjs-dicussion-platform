@@ -1,39 +1,24 @@
-import { Box, Skeleton, SkeletonText } from "@chakra-ui/react";
 import React from "react";
 
 type PostLoaderItemProps = {
   height: string;
 };
 
-/**
- * Displays a post loader item of the given height.
- * @param {string} height - height of post loader item
- * @returns
- */
 const PostLoaderItem: React.FC<PostLoaderItemProps> = ({ height }) => {
   return (
-    <Box
-      padding="10px 10px"
-      boxShadow="lg"
-      bg={{ base: "white", _dark: "gray.800" }}
-      borderRadius={10}
-      shadow="md"
-    >
-      <SkeletonText
-        borderRadius={10}
-        mt="4"
-        noOfLines={1}
-        width="40%"
-        rootProps={{ gap: 4 }}
+    <div className="p-4 bg-[#1A1D23] rounded-[12px] border border-white/10 shadow-md flex flex-col gap-4 animate-pulse">
+      <div className="h-4 bg-white/5 rounded-full w-[40%]" />
+      <div className="space-y-3">
+        <div className="h-3 bg-white/5 rounded-full w-full" />
+        <div className="h-3 bg-white/5 rounded-full w-[90%]" />
+        <div className="h-3 bg-white/5 rounded-full w-[95%]" />
+        <div className="h-3 bg-white/5 rounded-full w-[80%]" />
+      </div>
+      <div 
+        className="bg-white/5 rounded-[12px]" 
+        style={{ height }}
       />
-      <SkeletonText
-        borderRadius={10}
-        mt="4"
-        noOfLines={4}
-        rootProps={{ gap: 4 }}
-      />
-      <Skeleton borderRadius={10} mt="4" height={height} />
-    </Box>
+    </div>
   );
 };
 

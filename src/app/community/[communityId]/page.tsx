@@ -12,14 +12,8 @@ import { getCommunity } from "@/lib/api/community";
 import { Community } from "@/types/community";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Stack } from "@chakra-ui/react";
 import CommunityLoader from "@/components/loaders/CommunityLoader";
 
-/**
- * Community page displaying header, post feed, and about card.
- * Fetches community data based on route parameters and handles not-found states.
- * @returns The community-specific view with all relevant contextual information.
- */
 const CommunityPage: React.FC = () => {
   const { communityId } = useParams();
   const [communityData, setCommunityData] = useState<Community | null>(null);
@@ -59,15 +53,15 @@ const CommunityPage: React.FC = () => {
       <CommunityHeader communityData={communityData} />
       <PageContent>
         {/* Left Content */}
-        <Stack gap={5}>
+        <div className="flex flex-col gap-5">
           <CreatePostLink />
           <Posts communityData={communityData} />
-        </Stack>
+        </div>
 
         {/* Right Content */}
-        <Stack gap={5}>
+        <div className="flex flex-col gap-5">
           <About communityData={communityData} />
-        </Stack>
+        </div>
       </PageContent>
     </>
   );

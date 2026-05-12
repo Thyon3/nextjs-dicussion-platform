@@ -1,7 +1,6 @@
 import { Community } from "@/types/community";
 import useCreatePost from "@/hooks/posts/useCreatePost";
 import useSelectFile from "@/hooks/useSelectFile";
-import { Flex, Icon, Tabs, Text } from "@chakra-ui/react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,16 +14,12 @@ import { createPostSchema, CreatePostInput } from "@/schema/post";
 import { User } from "@/atoms/userAtom";
 
 type NewPostFormProps = {
-  user: User; // parent component checks user so additional checks are not needed
+  user: User;
   communityImageURL?: string;
   currentCommunity?: Community;
 };
 
-/**
- * Configuration for post creation tabs.
- * Defines title and icon for each section of post form.
- */
-const formTabs: FormTab[] = [
+const formTabs = [
   {
     title: "Post",
     icon: IoDocumentText,
@@ -35,22 +30,6 @@ const formTabs: FormTab[] = [
   },
 ];
 
-/**
- * Represents a single tab in post creation form.
- * @param title - The display name of tab.
- * @param icon - The icon component to display.
- */
-export type FormTab = {
-  title: string;
-  icon: typeof Icon.arguments;
-};
-
-/**
- * Multi-tab form for creating a new post with text and optional image.
- * Handles form validation, file selection, and submission.
- * @param props - Component properties including authenticated user and community context.
- * @returns A tabbed interface for post creation.
- */
 const NewPostForm: React.FC<NewPostFormProps> = ({
   user,
   communityImageURL,
@@ -58,7 +37,7 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
 }) => {
   const router = useRouter();
   const params = useParams();
-  const [selectedTab, setSelectedTab] = useState(formTabs[0].title); // formTabs[0] = Post
+  const [selectedTab, setSelectedTab] = useState(formTabs[0].title);
   const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile(
     3000,
     3000
@@ -78,11 +57,6 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
     mode: "onChange",
   });
 
-  /**
-   * Orchestrates post creation process.
-   * Validates community context, uploads any selected image, and saves post document.
-   * @param data - Validated form data containing title and body.
-   */
   const onCreatePost = async (data: CreatePostInput) => {
     const communityId = params?.communityId as string;
     await handleCreatePost(
@@ -95,76 +69,54 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
   };
 
   return (
-    <Flex
-      direction="column"
-      bg={{ base: "white", _dark: "gray.800" }}
-      borderRadius={10}
-      mt={2}
-      shadow="md"
-    >
-      <Tabs.Root
-        value={selectedTab}
-        onValueChange={(e: { value: string }) => setSelectedTab(e.value)}
-        width="100%"
-        variant="plain"
-      >
-        <Tabs.List width="100%" gap={2} p={2}>
-          {formTabs.map((item) => (
-            <Tabs.Trigger
-              key={item.title}
-              value={item.title}
-              flexGrow={1}
-              width={0}
-              p="14px 0px"
-              height="52px"
-              cursor="pointer"
-              fontWeight={800}
-              fontSize="16pt"
-              borderWidth="1px"
-              borderRadius={10}
-              shadow="md"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              _hover={{
-                bg: { base: "gray.50", _dark: "gray.700" },
-                boxShadow: "sm",
-              }}
-              color={{ base: "gray.500", _dark: "gray.400" }}
-              borderColor={{ base: "gray.200", _dark: "gray.600" }}
-              _selected={{
-                color: { base: "red.500", _dark: "red.400" },
-                borderColor: { base: "red.500", _dark: "red.400" },
-              }}
-            >
-              <Flex align="center" height="20px" mr={2}>
-                <Icon as={item.icon} />
-              </Flex>
-              <Text fontSize="10pt">{item.title}</Text>
-            </Tabs.Trigger>
-          ))}
-        </Tabs.List>
+    <div className="flex flex-col bg-[#1A1D23] rounded-[16px] border border-white/10 mt-2 shadow-xl overflow-hidden">
+      {/* Tabs Header */}
+      <div className="flex p-2 gap-2 border-b border-white/5">
+        {formTabs.map((item) => (
+          <button
+            key={item.title}
+            className={`flex-1 flex items-center justify-center h-[52px] gap-2 rounded-[10px] font-bold text-[14px] transition-all ${
+              selectedTab === item.title
+                ? "text-[#FF5722] border-b-2 border-[#FF5722] bg-white/5"
+                : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
+            }`}
+            onClick={() => setSelectedTab(item.title)}
+          >
+            <item.icon size={20} />
+            <span>{item.title}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="p-4 flex flex-col gap-4">
         <BackToCommunityButton communityId={currentCommunity?.id} />
-        <Tabs.Content value="Post" p={4}>
-          <TextInputs
-            register={register}
-            errors={errors}
-            handleCreatePost={handleSubmit(onCreatePost)}
-            loading={loading}
-          />
-        </Tabs.Content>
-        <Tabs.Content value="Images" p={4}>
-          <ImageUpload
-            selectedFile={selectedFile}
-            onSelectImage={onSelectFile}
-            setSelectedTab={setSelectedTab}
-            setSelectedFile={setSelectedFile}
-          />
-        </Tabs.Content>
-      </Tabs.Root>
+        
+        {selectedTab === "Post" && (
+          <div className="animate-in fade-in duration-300">
+            <TextInputs
+              register={register}
+              errors={errors}
+              handleCreatePost={handleSubmit(onCreatePost)}
+              loading={loading}
+            />
+          </div>
+        )}
+
+        {selectedTab === "Images" && (
+          <div className="animate-in fade-in duration-300">
+            <ImageUpload
+              selectedFile={selectedFile}
+              onSelectImage={onSelectFile}
+              setSelectedTab={setSelectedTab}
+              setSelectedFile={setSelectedFile}
+            />
+          </div>
+        )}
+      </div>
+
       <PostCreateError error={error} />
-    </Flex>
+    </div>
   );
 };
-export default NewPostForm;
 
+export default NewPostForm;

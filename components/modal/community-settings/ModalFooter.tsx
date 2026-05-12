@@ -1,4 +1,3 @@
-import { Button, DialogFooter, Stack } from "@chakra-ui/react";
 import React from "react";
 
 type ModalFooterProps = {
@@ -6,31 +5,22 @@ type ModalFooterProps = {
   onSave: () => void;
 };
 
-/**
- * Footer component for Community Settings Modal with Cancel and Save buttons
- */
 const ModalFooter: React.FC<ModalFooterProps> = ({ onCancel, onSave }) => {
   return (
-    <DialogFooter
-      bg={{ base: "gray.100", _dark: "gray.700" }}
-      borderRadius="0px 0px 10px 10px"
-    >
-      <Stack direction="row" justifyContent="space-between" width="100%">
-        <Button
-          width="100%"
-          variant="outline"
-          height="30px"
-          mr={3}
-          onClick={onCancel}
-          flex={1}
-        >
-          Cancel
-        </Button>
-        <Button width="100%" height="30px" onClick={onSave} flex={1}>
-          Save
-        </Button>
-      </Stack>
-    </DialogFooter>
+    <div className="flex justify-between items-center p-6 bg-white/5 border-t border-white/10 rounded-b-[10px] gap-3">
+      <button
+        className="flex-1 h-[32px] text-[14px] font-bold text-white border border-white/30 rounded-full hover:bg-white/10 transition-all"
+        onClick={onCancel}
+      >
+        Cancel
+      </button>
+      <button
+        className="flex-1 h-[32px] text-[14px] font-bold text-white bg-[#FF5722] rounded-full hover:bg-[#E64A19] transition-all"
+        onClick={onSave}
+      >
+        Save
+      </button>
+    </div>
   );
 };
 

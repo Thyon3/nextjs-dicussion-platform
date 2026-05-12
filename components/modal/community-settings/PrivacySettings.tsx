@@ -1,5 +1,4 @@
 import { Community } from "@/types/community";
-import { Box, Flex, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { FiCheck } from "react-icons/fi";
 
@@ -27,9 +26,6 @@ const PRIVACY_TYPES = [
   },
 ];
 
-/**
- * Component for managing community privacy settings
- */
 const PrivacySettings: React.FC<PrivacySettingsProps> = ({
   currentCommunity,
   selectedPrivacyType,
@@ -39,54 +35,41 @@ const PrivacySettings: React.FC<PrivacySettingsProps> = ({
     selectedPrivacyType || currentCommunity?.privacyType || "public";
 
   return (
-    <Stack>
-      <Text fontWeight={600} fontSize="12pt">
+    <div className="flex flex-col gap-4">
+      <h3 className="text-[12pt] font-bold text-white">
         Community Type
-      </Text>
-      <Stack gap={2}>
+      </h3>
+      <div className="flex flex-col gap-3">
         {PRIVACY_TYPES.map((type) => {
           const isSelected = currentType === type.value;
           return (
-            <Box
+            <div
               key={type.value}
-              p={3}
-              border="1px solid"
-              borderColor={isSelected ? "red.500" : "gray.200"}
-              borderRadius="xl"
-              cursor="pointer"
+              className={`p-4 rounded-[12px] border cursor-pointer transition-all ${
+                isSelected 
+                  ? "border-[#FF5722] bg-white/5" 
+                  : "border-white/10 hover:border-white/30"
+              }`}
               onClick={() => handlePrivacyTypeChange({ value: type.value })}
-              bg={
-                isSelected
-                  ? { base: "red.50", _dark: "red.900" }
-                  : "transparent"
-              }
-              _hover={{
-                borderColor: "red.300",
-              }}
             >
-              <Flex justify="space-between" align="center">
-                <Box>
-                  <Text fontWeight={500} fontSize="10pt">
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col">
+                  <span className="text-[14px] font-bold text-white">
                     {type.label}
-                  </Text>
-                  <Text
-                    fontSize="8pt"
-                    color={{ base: "gray.500", _dark: "gray.400" }}
-                  >
+                  </span>
+                  <span className="text-[12px] text-gray-500">
                     {type.description}
-                  </Text>
-                </Box>
+                  </span>
+                </div>
                 {isSelected && (
-                  <Box color="red.500">
-                    <FiCheck size={20} />
-                  </Box>
+                  <FiCheck className="text-[#FF5722] text-xl" />
                 )}
-              </Flex>
-            </Box>
+              </div>
+            </div>
           );
         })}
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

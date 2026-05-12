@@ -3,16 +3,11 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button, Flex, Text } from '@chakra-ui/react';
 import { loginSchema, type LoginFormValues } from '../validators';
 import { useAuth, useAuthModal } from '../hooks/useAuth';
 import { ApiError } from '@/src/shared/lib/apiClient';
 import InputField from './InputField';
 
-/**
- * Login form — handles credential submission, shows validation errors,
- * and updates global auth state on success.
- */
 const LoginForm: React.FC = () => {
   const { login } = useAuth();
   const { setModalView } = useAuthModal();
@@ -33,7 +28,6 @@ const LoginForm: React.FC = () => {
     setServerError('');
     try {
       await login({ email: data.email, password: data.password });
-      // modal auto-closes via store action
     } catch (err) {
       if (err instanceof ApiError) {
         setServerError(err.message);
@@ -46,74 +40,70 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <InputField placeholder="Email" type="email" {...register('email')} />
-      {errors.email && (
-        <Text color="red.500" fontSize="10pt" mt={1}>
-          {errors.email.message}
-        </Text>
-      )}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <InputField placeholder="Email" type="email" {...register('email')} />
+        {errors.email && (
+          <p className="text-red-500 text-[9pt] mt-1 font-semibold">
+            {errors.email.message}
+          </p>
+        )}
+      </div>
 
-      <InputField
-        placeholder="Password"
-        type="password"
-        mt={2}
-        mb={2}
-        {...register('password')}
-      />
-      {errors.password && (
-        <Text color="red.500" fontSize="10pt" mt={1}>
-          {errors.password.message}
-        </Text>
-      )}
+      <div>
+        <InputField
+          placeholder="Password"
+          type="password"
+          {...register('password')}
+        />
+        {errors.password && (
+          <p className="text-red-500 text-[9pt] mt-1 font-semibold">
+            {errors.password.message}
+          </p>
+        )}
+      </div>
 
       {serverError && (
-        <Text
-          textAlign="center"
-          color={{ base: 'red.500', _dark: 'red.400' }}
-          fontSize="10pt"
-          fontWeight="800"
-          mt={2}
-        >
+        <p className="text-center text-red-400 text-[10pt] font-bold">
           {serverError}
-        </Text>
+        </p>
       )}
 
-      <Button
-        width="100%"
-        height="36px"
-        mt={2}
-        mb={2}
+      <button
         type="submit"
-        loading={isLoading}
-        disabled={!isValid}
+        disabled={!isValid || isLoading}
+        className={`w-full h-[40px] rounded-full text-white font-bold transition-all ${
+          !isValid || isLoading
+            ? "bg-gray-600 cursor-not-allowed"
+            : "bg-[#FF5722] hover:bg-[#E64A19]"
+        }`}
       >
-        Log In
-      </Button>
+        {isLoading ? "Logging in..." : "Log In"}
+      </button>
 
-      <Flex fontSize="9pt" justifyContent="center" mb={2}>
-        <Text fontSize="9pt" mr={1}>Forgot your password?</Text>
-        <Text
-          color={{ base: 'red.500', _dark: 'red.400' }}
-          fontWeight={700}
-          cursor="pointer"
-          onClick={() => setModalView('resetPassword')}
-        >
-          Reset Password
-        </Text>
-      </Flex>
+      <div className="flex flex-col gap-2 pt-2">
+        <div className="flex justify-center text-[9pt] text-gray-400 gap-1">
+          <span>Forgot your password?</span>
+          <button
+            type="button"
+            className="text-[#FF5722] font-bold hover:underline"
+            onClick={() => setModalView('resetPassword')}
+          >
+            Reset Password
+          </button>
+        </div>
 
-      <Flex fontSize="9pt" justifyContent="center">
-        <Text mr={1}>New here?</Text>
-        <Text
-          color={{ base: 'red.500', _dark: 'red.400' }}
-          fontWeight={700}
-          cursor="pointer"
-          onClick={() => setModalView('signup')}
-        >
-          Sign Up
-        </Text>
-      </Flex>
+        <div className="flex justify-center text-[9pt] text-gray-400 gap-1">
+          <span>New here?</span>
+          <button
+            type="button"
+            className="text-[#FF5722] font-bold hover:underline"
+            onClick={() => setModalView('signup')}
+          >
+            Sign Up
+          </button>
+        </div>
+      </div>
     </form>
   );
 };

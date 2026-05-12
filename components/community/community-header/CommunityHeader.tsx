@@ -1,13 +1,12 @@
 import { Community } from "@/types/community";
-import { Box, Flex, Button, Text, Icon, Image } from "@chakra-ui/react";
 import React, { useState } from "react";
 import useCommunityState from "@/hooks/community/useCommunityState";
 import useCommunityMembershipActions from "@/hooks/community/useCommunityMembershipActions";
-import CommunityIcon from "./CommunityIcon";
 import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import useCommunityPermissions from "@/hooks/community/useCommunityPermissions";
 import { FaReddit } from "react-icons/fa";
+import CommunitySettings from "@/components/modal/community-settings/CommunitySettings";
 
 interface CommunityHeaderProps {
   communityData: Community;
@@ -20,103 +19,89 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityData }) => {
   const isJoined = !!communityStateValue.mySnippets.find(
     (item) => item.communityId === communityData.id
   );
-  const [isMembersModalOpen, setMembersModalOpen] = useState(false);
   const [isSettingsModalOpen, setSettingsModalOpen] = useState(false);
   const { onJoinOrLeaveCommunity, loading } = useCommunityMembershipActions();
   const { isAdmin } = useCommunityPermissions(communityData);
 
   return (
-    <Flex direction="column" width="100%" height="auto">
+    <div className="flex flex-col w-full">
       {/* Banner Section */}
-      <Box 
-        height="146px" 
-        bg={communityData.bannerURL ? "transparent" : "blue.500"}
-        backgroundImage={communityData.bannerURL ? `url(${communityData.bannerURL})` : "none"}
-        backgroundSize="cover"
-        backgroundPosition="center"
+      <div 
+        className={`h-[146px] w-full ${communityData.bannerURL ? "" : "bg-blue-500"}`}
+        style={{
+          backgroundImage: communityData.bannerURL ? `url(${communityData.bannerURL})` : "none",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
       />
       
       {/* Profile Info Section */}
-      <Flex 
-        justify="center" 
-        bg={{ base: "white", _dark: "#1a1a1b" }} 
-        flexGrow={1}
-      >
-        <Flex width="95%" maxWidth="1000px" pb={4}>
+      <div className="flex justify-center bg-[#1A1D23] flex-grow">
+        <div className="flex w-[95%] max-w-[1000px] pb-4">
           {/* Overlapping Icon */}
-          <Box mt="-20px" mr={4}>
+          <div className="mt-[-20px] mr-4">
             {communityData.imageURL ? (
-              <Image 
+              <img 
                 src={communityData.imageURL} 
                 alt="Community Logo" 
-                boxSize="84px"
-                borderRadius="full"
-                border="4px solid"
-                borderColor={{ base: "white", _dark: "#1a1a1b" }}
-                objectFit="cover"
+                className="w-[84px] h-[84px] rounded-full border-[4px] border-[#1A1D23] object-cover bg-white"
               />
             ) : (
-              <Icon 
-                as={FaReddit} 
-                fontSize="84px" 
-                color="blue.500" 
-                border="4px solid"
-                borderColor={{ base: "white", _dark: "#1a1a1b" }}
-                borderRadius="50%"
-                bg={{ base: "white", _dark: "#1a1a1b" }}
-              />
+              <div className="w-[84px] h-[84px] rounded-full border-[4px] border-[#1A1D23] bg-white flex items-center justify-center">
+                <FaReddit className="text-[60px] text-blue-500" />
+              </div>
             )}
-          </Box>
+          </div>
           
           {/* Community Name & Actions */}
-          <Flex flex={1} justify="space-between" align="center" mt={2}>
-            <Flex direction="column">
-              <Text fontSize="28px" fontWeight={700}>
+          <div className="flex flex-1 justify-between items-center mt-2">
+            <div className="flex flex-col">
+              <h1 className="text-[28px] font-bold text-white">
                 {communityData.name || communityData.id}
-              </Text>
-              <Text fontSize="14px" fontWeight={600} color="gray.500">
+              </h1>
+              <p className="text-[14px] font-semibold text-gray-400">
                 r/{communityData.id}
-              </Text>
-            </Flex>
+              </p>
+            </div>
             
-            <Flex gap={3}>
-              <Button
-                variant={isJoined ? "outline" : "solid"}
-                height="32px"
-                px={6}
-                borderRadius="full"
+            <div className="flex gap-3">
+              <button
+                className={`h-[32px] px-6 rounded-full font-bold transition-all ${
+                  isJoined 
+                  ? "bg-transparent text-white border border-white/30 hover:bg-white/10" 
+                  : "bg-white text-black hover:bg-gray-200"
+                } ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 onClick={() => onJoinOrLeaveCommunity(communityData, isJoined)}
-                isLoading={loading}
+                disabled={loading}
               >
                 {isJoined ? "Joined" : "Join"}
-              </Button>
+              </button>
               {isJoined && (
-                <Button
-                  variant="outline"
-                  height="32px"
-                  px={6}
-                  borderRadius="full"
+                <button
+                  className="h-[32px] px-6 rounded-full font-bold border border-white/30 text-white hover:bg-white/10 transition-all"
                   onClick={() => router.push(`/community/${communityData.id}/submit`)}
                 >
                   Create Post
-                </Button>
+                </button>
               )}
               {isAdmin && (
-                <Button
-                  variant="outline"
-                  height="32px"
-                  px={6}
-                  borderRadius="full"
+                <button
+                  className="h-[32px] px-6 rounded-full font-bold border border-white/30 text-white hover:bg-white/10 transition-all"
                   onClick={() => setSettingsModalOpen(true)}
                 >
                   Mod Tools
-                </Button>
+                </button>
               )}
-            </Flex>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
+            </div>
+          </div>
+        </div>
+      </div>
+      <CommunitySettings
+        open={isSettingsModalOpen}
+        handleClose={() => setSettingsModalOpen(false)}
+        communityData={communityData}
+      />
+    </div>
   );
 };
 

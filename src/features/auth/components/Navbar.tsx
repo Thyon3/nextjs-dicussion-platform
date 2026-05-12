@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { Flex, Image, Text, Button, Input, Box, IconButton, Icon } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useAuth, useAuthModal, AuthModal } from '@/src/features/auth';
 import { IoSearchOutline, IoNotificationsOutline } from 'react-icons/io5';
@@ -11,157 +10,78 @@ const Navbar: React.FC = () => {
   const { openModal } = useAuthModal();
 
   return (
-    <Flex
-      bg="#0B0E11"
-      height="56px"
-      padding="0px 24px"
-      justifyContent="space-between"
-      align="center"
-      borderBottom="1px solid"
-      borderColor="whiteAlpha.100"
-      position="sticky"
-      top={0}
-      zIndex={10}
-    >
+    <nav className="bg-[#0B0E11] h-[56px] px-6 flex justify-between items-center border-b border-white/10 sticky top-0 z-[100]">
       {/* Left Section: Logo & Links */}
-      <Flex align="center" gap={8}>
-        <Link href="/">
-          <Flex align="center" cursor="pointer">
-            <Image src="/images/logo.svg" height="28px" alt="Circus Logo" fallbackSrc="https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png" />
-            <Text
-              fontWeight={700}
-              fontSize="16pt"
-              ml={2}
-              color="white"
-              letterSpacing="-0.5px"
-            >
-              Circus
-            </Text>
-          </Flex>
+      <div className="flex items-center gap-8">
+        <Link href="/" className="flex items-center cursor-pointer">
+          <img src="/images/logo.svg" className="h-[28px]" alt="Circus Logo" />
+          <span className="font-bold text-[16pt] ml-2 text-white tracking-tighter">
+            Circus
+          </span>
         </Link>
 
         <Link href="/communities">
-          <Box position="relative">
-            <Text 
-              fontWeight={600} 
-              fontSize="11pt" 
-              color="white" 
-              cursor="pointer"
-              _after={{
-                content: '""',
-                position: 'absolute',
-                bottom: '-18px',
-                left: 0,
-                width: '100%',
-                height: '2px',
-                bg: '#FF5722'
-              }}
-            >
+          <div className="relative group">
+            <span className="font-semibold text-[11pt] text-white cursor-pointer transition-colors hover:text-white/80">
               Communities
-            </Text>
-          </Box>
+            </span>
+            <div className="absolute -bottom-[18px] left-0 w-full h-[2px] bg-[#FF5722]" />
+          </div>
         </Link>
-      </Flex>
+      </div>
 
       {/* Center Section: Search Bar */}
-      <Flex flex={1} maxW="600px" mx={8} position="relative" align="center">
-        <Box
-          position="absolute"
-          left={4}
-          zIndex={1}
-          display="flex"
-          alignItems="center"
-          pointerEvents="none"
-        >
-          <Icon as={IoSearchOutline} color="gray.400" fontSize="20px" />
-        </Box>
-        <Input
+      <div className="flex-1 max-w-[600px] mx-8 relative flex items-center">
+        <div className="absolute left-4 z-10 flex items-center pointer-events-none">
+          <IoSearchOutline className="text-gray-400 text-[20px]" />
+        </div>
+        <input
           placeholder="Search communities..."
-          fontSize="10pt"
-          bg="whiteAlpha.100"
-          border="1px solid"
-          borderColor="transparent"
-          _placeholder={{ color: 'gray.500' }}
-          _hover={{
-            bg: 'whiteAlpha.200',
-            borderColor: 'whiteAlpha.300'
-          }}
-          _focus={{
-            outline: 'none',
-            bg: 'whiteAlpha.200',
-            borderColor: '#FF5722'
-          }}
-          borderRadius="full"
-          height="38px"
-          paddingLeft="44px"
+          className="w-full text-[10pt] bg-white/10 text-white h-[38px] rounded-full pl-11 pr-4 border border-transparent placeholder:text-gray-500 hover:bg-white/20 hover:border-white/30 focus:outline-none focus:bg-white/20 focus:border-[#FF5722] transition-all"
         />
-      </Flex>
+      </div>
 
       {/* Right Section: Actions */}
-      <Flex align="center" gap={4}>
-        <IconButton
+      <div className="flex items-center gap-4">
+        <button
           aria-label="Notifications"
-          icon={<IoNotificationsOutline size={22} />}
-          variant="ghost"
-          color="white"
-          _hover={{ bg: 'whiteAlpha.200' }}
-        />
+          className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+        >
+          <IoNotificationsOutline size={22} />
+        </button>
 
         {user ? (
-          <Flex align="center" gap={3}>
-            <Text
-              fontSize="9pt"
-              fontWeight={700}
-              color="white"
-              display={{ base: 'none', lg: 'block' }}
-            >
+          <div className="flex items-center gap-3">
+            <span className="text-[9pt] font-bold text-white hidden lg:block">
               {user.displayName || user.email?.split('@')[0]}
-            </Text>
-            <Button
-              variant="outline"
-              height="36px"
-              borderRadius="full"
-              fontSize="10pt"
-              fontWeight={700}
-              color="white"
-              borderColor="whiteAlpha.300"
-              _hover={{ bg: 'whiteAlpha.100' }}
+            </span>
+            <button
+              className="h-[36px] px-4 rounded-full text-[10pt] font-bold text-white border border-white/30 hover:bg-white/10 transition-colors"
               onClick={logout}
             >
               Log Out
-            </Button>
-          </Flex>
+            </button>
+          </div>
         ) : (
-          <Flex gap={3}>
-            <Button
-              variant="ghost"
-              color="white"
-              fontSize="10pt"
-              fontWeight={700}
-              _hover={{ bg: 'whiteAlpha.100' }}
+          <div className="flex gap-3">
+            <button
+              className="px-4 py-2 text-white text-[10pt] font-bold hover:bg-white/10 rounded-full transition-colors"
               onClick={() => openModal('login')}
             >
               Log In
-            </Button>
-            <Button
-              bg="#FF5722"
-              color="white"
-              height="36px"
-              px={6}
-              borderRadius="full"
-              fontSize="10pt"
-              fontWeight={700}
-              _hover={{ bg: '#E64A19' }}
+            </button>
+            <button
+              className="bg-[#FF5722] text-white h-[36px] px-6 rounded-full text-[10pt] font-bold hover:bg-[#E64A19] transition-colors"
               onClick={() => openModal('signup')}
             >
               Sign Up
-            </Button>
-          </Flex>
+            </button>
+          </div>
         )}
-      </Flex>
+      </div>
 
       <AuthModal />
-    </Flex>
+    </nav>
   );
 };
 

@@ -1,12 +1,11 @@
 import React from "react";
-import { Icon, Text } from "@chakra-ui/react";
 import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
 import { Post } from "@/types/post";
 
 type VoteSectionProps = {
   userVoteValue?: number;
   onVote: (
-    event: React.MouseEvent<SVGElement, MouseEvent>,
+    event: React.MouseEvent<any, MouseEvent>,
     post: Post,
     vote: number,
     communityId: string
@@ -23,44 +22,37 @@ const VoteSection: React.FC<VoteSectionProps> = ({
 }) => {
   return (
     <>
-      <Icon
-        as={IoChevronUpOutline}
-        color={userVoteValue === 1 ? "#FF4500" : "gray.400"}
-        fontSize={22}
-        cursor={votingDisabled ? "not-allowed" : "pointer"}
-        _hover={votingDisabled ? undefined : { color: "#FF4500", bg: "whiteAlpha.100" }}
-        borderRadius="md"
-        transition="all 0.2s"
+      <button
+        className={`p-1 rounded-md transition-all ${
+          userVoteValue === 1 ? "text-[#FF4500]" : "text-gray-400 hover:text-[#FF4500] hover:bg-white/10"
+        } ${votingDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
         onClick={(event) =>
           !votingDisabled && onVote(event, post, 1, post.communityId)
         }
-      />
-      <Text 
-        fontSize="10pt" 
-        fontWeight={700}
-        color={
+      >
+        <IoChevronUpOutline className="text-[22px]" />
+      </button>
+      <span
+        className={`text-[10pt] font-bold my-1 ${
           userVoteValue === 1 
-          ? "#FF4500" 
+          ? "text-[#FF4500]" 
           : userVoteValue === -1 
           ? "#7193FF" 
-          : "white"
-        }
-        my={1}
+          : "text-white"
+        }`}
       >
         {post.voteStatus || 0}
-      </Text>
-      <Icon
-        as={IoChevronDownOutline}
-        color={userVoteValue === -1 ? "#7193FF" : "gray.400"}
-        _hover={votingDisabled ? undefined : { color: "#7193FF", bg: "whiteAlpha.100" }}
-        fontSize={22}
-        cursor={votingDisabled ? "not-allowed" : "pointer"}
-        borderRadius="md"
-        transition="all 0.2s"
+      </span>
+      <button
+        className={`p-1 rounded-md transition-all ${
+          userVoteValue === -1 ? "text-[#7193FF]" : "text-gray-400 hover:text-[#7193FF] hover:bg-white/10"
+        } ${votingDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
         onClick={(event) =>
           !votingDisabled && onVote(event, post, -1, post.communityId)
         }
-      />
+      >
+        <IoChevronDownOutline className="text-[22px]" />
+      </button>
     </>
   );
 };

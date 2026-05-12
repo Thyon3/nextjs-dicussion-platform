@@ -1,50 +1,30 @@
 import useCommunitiesFeed from "@/hooks/community/useCommunitiesFeed";
 import useCommunityState from "@/hooks/community/useCommunityState";
 import useCommunityMembershipActions from "@/hooks/community/useCommunityMembershipActions";
-import { useRouter } from "next/navigation";
-import {
-  Box,
-  Button,
-  Flex,
-  Skeleton,
-  SkeletonCircle,
-  Stack,
-} from "@chakra-ui/react";
 import React from "react";
 import RecommendationRow from "./RecommendationRow";
 import SuggestionsHeader from "./SuggestionsHeader";
 
-/**
- * Displays the top 5 communities with most members.
- * @returns {React.FC} - recommendations component.
- */
 const Recommendations: React.FC = () => {
   const { communityStateValue } = useCommunityState();
   const { onJoinOrLeaveCommunity } = useCommunityMembershipActions();
   const { communities, loading } = useCommunitiesFeed({ limit: 5 });
 
   return (
-    <Flex
-      direction="column"
-      bg="#1A1D23"
-      borderRadius={12}
-      border="1px solid"
-      borderColor="whiteAlpha.100"
-      overflow="hidden"
-    >
+    <div className="flex flex-col bg-[#1A1D23] rounded-[12px] border border-white/10 overflow-hidden">
       <SuggestionsHeader />
-      <Flex direction="column" p="4px">
+      <div className="flex flex-col p-1">
         {loading ? (
-          <Stack mt={2} p={3}>
+          <div className="mt-2 p-3 space-y-3">
             {Array(5)
               .fill(0)
               .map((_, index) => (
-                <Flex key={index} align="center" gap={3} mb={2}>
-                  <SkeletonCircle size="24px" />
-                  <Skeleton height="15px" flex={1} />
-                </Flex>
+                <div key={index} className="flex items-center gap-3 animate-pulse">
+                  <div className="w-6 h-6 bg-white/10 rounded-full" />
+                  <div className="h-4 bg-white/10 rounded flex-1" />
+                </div>
               ))}
-          </Stack>
+          </div>
         ) : (
           <>
             {communities.map((item, index) => {
@@ -61,24 +41,17 @@ const Recommendations: React.FC = () => {
                 />
               );
             })}
-            <Box p="12px">
-              <Button
-                width="100%"
-                height="32px"
-                bg="whiteAlpha.100"
-                color="white"
-                borderRadius="full"
-                fontSize="10pt"
-                fontWeight={700}
-                _hover={{ bg: "whiteAlpha.200" }}
+            <div className="p-3">
+              <button
+                className="w-full h-[32px] bg-white/10 text-white rounded-full text-[10pt] font-bold hover:bg-white/20 transition-colors"
               >
                 View All
-              </Button>
-            </Box>
+              </button>
+            </div>
           </>
         )}
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };
 

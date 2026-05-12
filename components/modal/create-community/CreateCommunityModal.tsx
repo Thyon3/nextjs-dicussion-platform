@@ -1,25 +1,10 @@
 import { useCreateCommunity } from "@/hooks/community/useCreateCommunity";
-import {
-  Box,
-  Button,
-  DialogBackdrop,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogPositioner,
-  DialogRoot,
-  DialogTitle,
-  Separator,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
-import React, { FC } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BsFillEyeFill, BsFillPersonFill } from "react-icons/bs";
 import { HiLockClosed } from "react-icons/hi";
+import { IoClose } from "react-icons/io5";
 import CommunityTypeOptions from "./CommunityTypeOptions";
 import CommunityNameSection from "./CommunityNameSection";
 import {
@@ -53,12 +38,6 @@ type CreateCommunityModalProps = {
   handleClose: () => void;
 };
 
-/**
- * Modal for creating a new community with name validation and privacy selection.
- * @param open - Whether modal is visible.
- * @param handleClose - Callback to close modal.
- * @returns Dialog with community creation form.
- */
 const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   open,
   handleClose,
@@ -90,86 +69,83 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
     }
   };
 
+  if (!open) return null;
+
   return (
-    <DialogRoot
-      open={open}
-      onOpenChange={({ open }: { open: boolean }) => {
-        if (!open) handleClose();
-      }}
-    >
-      <DialogBackdrop bg="rgba(0, 0, 0, 0.4)" backdropFilter="blur(6px)" />
-      <DialogPositioner>
-        <DialogContent borderRadius={10}>
-          <DialogHeader
-            display="flex"
-            flexDirection="column"
-            padding={3}
-            textAlign="center"
+    <div className="fixed inset-0 z-[1500] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        onClick={handleClose}
+      />
+      
+      {/* Modal Content */}
+      <div className="relative bg-[#1A1D23] w-full max-w-[500px] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+        <div className="flex items-center justify-between p-6 pb-4">
+          <h2 className="text-xl font-bold text-white">Create Community</h2>
+          <button 
+            onClick={handleClose}
+            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
           >
-            <DialogTitle>Create Community</DialogTitle>
-          </DialogHeader>
-          <Box pl={3} pr={3}>
-            <DialogCloseTrigger position="absolute" top={2} right={2} />
-            <DialogBody
-              display="flex"
-              flexDirection="column"
-              padding="10px 0px"
-            >
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <CommunityNameSection
-                  charRemaining={charRemaining}
-                  error={errors.name?.message}
-                  register={register("name")}
-                />
-                <Separator mt={3} />
-                <Box mt={4} mb={4}>
-                  <Text fontWeight={600} fontSize={15}>
-                    Community Type
-                  </Text>
+            <IoClose size={24} />
+          </button>
+        </div>
 
-                  <CommunityTypeOptions
-                    options={COMMUNITY_TYPE_OPTIONS}
-                    communityType={communityType}
-                    onCommunityTypeChange={(value) =>
-                      setValue("type", value as any)
-                    }
-                  />
-                </Box>
-                {createError && (
-                  <Text fontSize="10pt" color="red.500" fontWeight={600} mt={2} textAlign="center">
-                    {createError}
-                  </Text>
-                )}
-              </form>
-            </DialogBody>
-          </Box>
+        <div className="px-6 pb-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+            <CommunityNameSection
+              charRemaining={charRemaining}
+              error={errors.name?.message}
+              register={register("name")}
+            />
+            
+            <div className="h-[1px] bg-white/10 w-full" />
 
-          <DialogFooter
-            bg={{ base: "gray.100", _dark: "gray.700" }}
-            borderRadius="0px 0px 10px 10px"
+            <div>
+              <p className="text-[15px] font-bold text-white mb-3">
+                Community Type
+              </p>
+              <CommunityTypeOptions
+                options={COMMUNITY_TYPE_OPTIONS}
+                communityType={communityType}
+                onCommunityTypeChange={(value) =>
+                  setValue("type", value as any)
+                }
+              />
+            </div>
+
+            {createError && (
+              <p className="text-center text-red-400 text-[10pt] font-bold">
+                {createError}
+              </p>
+            )}
+          </form>
+        </div>
+
+        <div className="flex justify-end gap-3 p-6 bg-white/5 border-t border-white/10">
+          <button
+            className="px-6 py-1.5 text-white text-[14px] font-bold border border-white/30 rounded-full hover:bg-white/10 transition-all"
+            onClick={handleClose}
+            disabled={loading}
           >
-            <Stack direction="row" gap={3} width="100%">
-              <Button
-                variant="outline"
-                height="30px"
-                flex={1}
-                onClick={handleClose}
-              >
-                Cancel
-              </Button>
-              <Button
-                height="30px"
-                flex={1}
-                onClick={handleSubmit(onSubmit)}
-                loading={loading}
-              >
-                Create Community
-              </Button>
-            </Stack>
-          </DialogFooter>
-        </DialogContent>
-      </DialogPositioner>
-    </DialogRoot>
+            Cancel
+          </button>
+          <button
+            className={`px-8 py-1.5 text-white text-[14px] font-bold rounded-full transition-all ${
+              loading 
+                ? "bg-gray-600 cursor-not-allowed" 
+                : "bg-[#FF5722] hover:bg-[#E64A19]"
+            }`}
+            onClick={handleSubmit(onSubmit)}
+            disabled={loading}
+          >
+            {loading ? (
+              <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+            ) : 'Create Community'}
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

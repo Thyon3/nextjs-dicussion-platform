@@ -1,4 +1,3 @@
-import { Button, Flex, Input, Stack, Text, Textarea } from "@chakra-ui/react";
 import React from "react";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { CreatePostInput } from "@/schema/post";
@@ -10,15 +9,6 @@ type TextInputsProps = {
   loading: boolean;
 };
 
-/**
- * Input fields for post title and body text.
- * Integrates with React Hook Form for validation and state management.
- * @param register - Function to register inputs with React Hook Form.
- * @param errors - Object containing form validation errors.
- * @param handleCreatePost - Callback to trigger post submission.
- * @param loading - Whether post is currently being submitted.
- * @returns A stack of input fields and a submit button.
- */
 const TextInputs: React.FC<TextInputsProps> = ({
   register,
   errors,
@@ -26,68 +16,43 @@ const TextInputs: React.FC<TextInputsProps> = ({
   loading,
 }) => {
   return (
-    <Stack gap={3} width="100%">
-      {/* Title of post */}
-      <Input
-        placeholder="Title"
-        fontSize="10pt"
-        borderRadius={10}
-        bg={{ base: "gray.50", _dark: "gray.800" }}
-        borderColor={{ base: "gray.200", _dark: "gray.600" }}
-        _placeholder={{ color: "gray.500" }}
-        _hover={{
-          bg: { base: "white", _dark: "gray.700" },
-          border: "1px solid",
-          borderColor: { base: "red.500", _dark: "red.400" },
-        }}
-        _focus={{
-          outline: "none",
-          bg: { base: "white", _dark: "gray.700" },
-          border: "1px solid",
-          borderColor: { base: "red.500", _dark: "red.400" },
-        }}
-        {...register("title")}
-      />
-      {errors.title && (
-        <Text color="red.500" fontSize="10pt">
-          {errors.title.message}
-        </Text>
-      )}
-      {/* Body of post */}
-      <Textarea
+    <div className="flex flex-col gap-3 w-full">
+      <div className="flex flex-col gap-1">
+        <input
+          placeholder="Title"
+          className="w-full h-[40px] px-4 text-[14px] text-white bg-[#1A1D23] border border-white/10 rounded-[10px] focus:outline-none focus:border-[#FF5722] transition-all placeholder:text-gray-500 hover:border-white/30"
+          {...register("title")}
+        />
+        {errors.title && (
+          <p className="text-red-500 text-[12px] font-semibold px-2">
+            {errors.title.message}
+          </p>
+        )}
+      </div>
+
+      <textarea
         placeholder="Text (Optional)"
-        fontSize="10pt"
-        height="120px"
-        borderRadius={10}
-        bg={{ base: "gray.50", _dark: "gray.800" }}
-        borderColor={{ base: "gray.200", _dark: "gray.600" }}
-        _placeholder={{ color: "gray.500" }}
-        _hover={{
-          bg: { base: "white", _dark: "gray.700" },
-          border: "1px solid",
-          borderColor: { base: "red.500", _dark: "red.400" },
-        }}
-        _focus={{
-          outline: "none",
-          bg: { base: "white", _dark: "gray.700" },
-          border: "1px solid",
-          borderColor: { base: "red.500", _dark: "red.400" },
-        }}
+        className="w-full min-h-[120px] p-4 text-[14px] text-white bg-[#1A1D23] border border-white/10 rounded-[10px] focus:outline-none focus:border-[#FF5722] transition-all placeholder:text-gray-500 hover:border-white/30 resize-none"
         {...register("body")}
       />
-      <Flex justify="flex-end">
-        {/* Button for creating a new post */}
-        <Button
-          height="34px"
-          padding="0px 30px"
-          loading={loading}
+
+      <div className="flex justify-end pt-2">
+        <button
+          className={`h-[34px] px-8 text-[14px] font-bold text-white rounded-full transition-all shadow-md ${
+            loading 
+              ? "bg-gray-600 cursor-not-allowed" 
+              : "bg-[#FF5722] hover:bg-[#E64A19]"
+          }`}
           onClick={handleCreatePost}
-          shadow="md"
+          disabled={loading}
         >
-          Post
-        </Button>
-      </Flex>
-    </Stack>
+          {loading ? (
+            <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto" />
+          ) : "Post"}
+        </button>
+      </div>
+    </div>
   );
 };
+
 export default TextInputs;

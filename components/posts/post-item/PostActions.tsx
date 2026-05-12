@@ -1,8 +1,8 @@
 import React from "react";
-import { Clipboard, Button, Icon, Stack, Text } from "@chakra-ui/react";
 import { FiShare2 } from "react-icons/fi";
 import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
 import { LuTrash } from "react-icons/lu";
+import { FaRegCommentAlt } from "react-icons/fa";
 
 interface PostActionsProps {
   handleDelete: (
@@ -17,20 +17,6 @@ interface PostActionsProps {
   showToast: (options: any) => void;
 }
 
-/**
- * Action bar for post cards with share, save, and delete controls.
- * @param handleDelete - Delete handler (stops propagation internally).
- * @param loadingDelete - Whether deletion is in progress.
- * @param userIsCreator - Flag to allow delete.
- * @param userIsAdmin - Flag to allow delete via moderation.
- * @param postLink - Canonical link used for sharing.
- * @param handleSave - Save/unsave handler.
- * @param isSaved - Whether post is saved by the viewer.
- * @param showToast - Toast helper to display copy feedback.
- * @returns Button stack for post interactions.
- */
-import { FaRegCommentAlt } from "react-icons/fa";
-
 const PostActions: React.FC<PostActionsProps> = ({
   handleDelete,
   loadingDelete,
@@ -40,92 +26,56 @@ const PostActions: React.FC<PostActionsProps> = ({
   handleSave,
   isSaved,
   showToast,
-}) => (
-  <Stack
-    ml={1}
-    mb={1}
-    color="gray.500"
-    fontWeight={700}
-    direction="row"
-    gap={1}
-    p={2}
-  >
-    <Button
-      variant="ghost"
-      height="32px"
-      borderRadius="md"
-      _hover={{ bg: "whiteAlpha.100", color: "white" }}
-      gap={2}
-      px={3}
-    >
-      <Icon as={FaRegCommentAlt} fontSize={16} />
-      <Text fontSize="9pt">Comments</Text>
-    </Button>
+}) => {
+  const copyToClipboard = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    navigator.clipboard.writeText(postLink);
+    showToast({
+      title: "Link Copied",
+      description: "Link to the post has been saved to your clipboard",
+      status: "info",
+    });
+  };
 
-    <Clipboard.Root
-      value={postLink}
-      onStatusChange={(details: any) => {
-        if (details.copied) {
-          showToast({
-            title: "Link Copied",
-            description: "Link to the post has been saved to your clipboard",
-            status: "info",
-          });
-        }
-      }}
-    >
-      <Button
-        as={Clipboard.Trigger as any}
-        variant="ghost"
-        height="32px"
-        borderRadius="md"
-        _hover={{ bg: "whiteAlpha.100", color: "white" }}
-        gap={2}
-        px={3}
-        onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-          event.stopPropagation();
-        }}
+  return (
+    <div className="flex flex-row gap-1 p-2 ml-1 mb-1 font-bold text-gray-500">
+      <button
+        className="flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-white/10 hover:text-white transition-all text-[9pt]"
       >
-        <Icon as={FiShare2} fontSize={18} />
-        <Text fontSize="9pt">Share</Text>
-      </Button>
-    </Clipboard.Root>
+        <FaRegCommentAlt className="text-[16px]" />
+        <span>Comments</span>
+      </button>
 
-    <Button
-      variant="ghost"
-      height="32px"
-      borderRadius="md"
-      _hover={{ bg: "whiteAlpha.100", color: "white" }}
-      gap={2}
-      px={3}
-      onClick={handleSave}
-    >
-      <Icon
-        as={isSaved ? BsBookmarkFill : BsBookmark}
-        fontSize={18}
-        color={isSaved ? "#FF8A65" : "inherit"}
-      />
-      <Text fontSize="9pt" color={isSaved ? "#FF8A65" : "inherit"}>
-        {isSaved ? "Saved" : "Save"}
-      </Text>
-    </Button>
-
-    {(userIsCreator || userIsAdmin) && (
-      <Button
-        variant="ghost"
-        height="32px"
-        borderRadius="md"
-        _hover={{ bg: "red.900", color: "red.200" }}
-        gap={2}
-        px={3}
-        onClick={handleDelete}
-        loading={loadingDelete}
+      <button
+        className="flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-white/10 hover:text-white transition-all text-[9pt]"
+        onClick={copyToClipboard}
       >
-        <Icon as={LuTrash} fontSize={18} />
-        <Text fontSize="9pt">Delete</Text>
-      </Button>
-    )}
-  </Stack>
-);
+        <FiShare2 className="text-[18px]" />
+        <span>Share</span>
+      </button>
+
+      <button
+        className={`flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-white/10 transition-all text-[9pt] ${
+          isSaved ? "text-[#FF8A65]" : "hover:text-white"
+        }`}
+        onClick={handleSave}
+      >
+        {isSaved ? <BsBookmarkFill className="text-[18px]" /> : <BsBookmark className="text-[18px]" />}
+        <span>{isSaved ? "Saved" : "Save"}</span>
+      </button>
+
+      {(userIsCreator || userIsAdmin) && (
+        <button
+          className="flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-red-900/50 hover:text-red-200 transition-all text-[9pt]"
+          onClick={handleDelete}
+          disabled={loadingDelete}
+        >
+          <LuTrash className="text-[18px]" />
+          <span>{loadingDelete ? "Deleting..." : "Delete"}</span>
+        </button>
+      )}
+    </div>
+  );
+};
 
 export default PostActions;

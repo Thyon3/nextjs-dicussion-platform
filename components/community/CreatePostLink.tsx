@@ -1,5 +1,4 @@
 import useCallCreatePost from "@/hooks/posts/useCallCreatePost";
-import { Flex, Icon, Input } from "@chakra-ui/react";
 import React from "react";
 import { BsLink45Deg } from "react-icons/bs";
 import { FaReddit } from "react-icons/fa";
@@ -11,12 +10,6 @@ import { Community } from "@/types/community";
 
 type CreatePostProps = {};
 
-
-/**
- * A call-to-action bar that provides a shortcut to the post creation page.
- * Automatically handles authentication checks and community-specific posting permissions.
- * @returns A styled input-like component that triggers navigation or the auth modal.
- */
 const CreatePostLink: React.FC<CreatePostProps> = () => {
   const { onClick } = useCallCreatePost();
   const { communityStateValue } = useCommunityState();
@@ -30,65 +23,22 @@ const CreatePostLink: React.FC<CreatePostProps> = () => {
   }
 
   return (
-    <Flex
-      align="center"
-      bg="#1A1D23"
-      height="56px"
-      borderRadius={12}
-      border="1px solid"
-      borderColor="whiteAlpha.100"
-      p={3}
-      mb={4}
-    >
-      <Flex 
-        bg="gray.600" 
-        height="36px" 
-        width="36px" 
-        borderRadius="full" 
-        align="center" 
-        justify="center" 
-        mr={3}
-      >
-        <Icon as={FaReddit} fontSize={22} color="whiteAlpha.800" />
-      </Flex>
-      <Input
+    <div className="flex items-center bg-[#1A1D23] h-[56px] rounded-[12px] border border-white/10 p-3 mb-4">
+      <div className="bg-gray-600 h-[36px] w-[36px] rounded-full flex items-center justify-center mr-3 shrink-0">
+        <FaReddit className="text-[22px] text-white/80" />
+      </div>
+      <input
         placeholder="Create Post"
-        fontSize="10pt"
-        bg="whiteAlpha.100"
-        borderColor="transparent"
-        height="38px"
-        borderRadius="lg"
-        mr={4}
+        className="w-full text-[10pt] bg-white/10 border border-transparent h-[38px] rounded-lg mr-4 px-4 text-white placeholder:text-gray-500 hover:bg-white/20 hover:border-white/30 focus:outline-none focus:bg-white/20 focus:border-[#FF5722] transition-all cursor-pointer"
         onClick={onClick}
-        _placeholder={{ color: "gray.500" }}
-        _hover={{
-          bg: "whiteAlpha.200",
-          border: "1px solid",
-          borderColor: "whiteAlpha.300",
-        }}
-        _focus={{
-          outline: "none",
-          bg: "whiteAlpha.200",
-          border: "1px solid",
-          borderColor: "#FF5722",
-        }}
       />
-      <Icon
-        as={IoImageOutline}
-        fontSize={24}
-        mr={4}
-        color="gray.400"
-        cursor="pointer"
-        _hover={{ color: "white" }}
+      <IoImageOutline
+        className="text-[24px] mr-4 text-gray-400 cursor-pointer hover:text-white transition-colors shrink-0"
       />
-      <Icon 
-        as={BsLink45Deg} 
-        fontSize={24} 
-        color="gray.400" 
-        cursor="pointer"
-        _hover={{ color: "white" }}
+      <BsLink45Deg
+        className="text-[24px] text-gray-400 cursor-pointer hover:text-white transition-colors shrink-0"
       />
-    </Flex>
+    </div>
   );
 };
 

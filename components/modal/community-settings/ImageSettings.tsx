@@ -1,5 +1,4 @@
 import { Community } from "@/types/community";
-import { Box, Button, Flex, Image, Input, Stack, Text, Textarea } from "@chakra-ui/react";
 import React from "react";
 
 type ImageSettingsProps = {
@@ -18,9 +17,6 @@ type ImageSettingsProps = {
   setDeleteBanner?: (value: boolean) => void;
 };
 
-/**
- * Component for managing community profile settings
- */
 const ImageSettings: React.FC<ImageSettingsProps> = ({
   selectedFile,
   onSelectFile,
@@ -40,101 +36,105 @@ const ImageSettings: React.FC<ImageSettingsProps> = ({
   const bannerToDisplay = selectedBannerFile || currentCommunity?.bannerURL;
 
   return (
-    <Stack gap={6}>
-      <Stack>
-        <Text fontWeight={600} fontSize="12pt">
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-2">
+        <label className="text-[12pt] font-bold text-white">
           Community Description
-        </Text>
-        <Textarea 
+        </label>
+        <textarea 
           placeholder="Tell us about your community"
+          className="w-full bg-transparent border border-white/10 rounded-lg p-3 text-[14px] text-white focus:outline-none focus:border-[#FF5722] transition-all min-h-[100px] resize-none"
           value={description || ""}
           onChange={(e) => setDescription && setDescription(e.target.value)}
           maxLength={500}
         />
-      </Stack>
+        <p className="text-right text-[10px] text-gray-500">
+          {(description?.length || 0)}/500
+        </p>
+      </div>
 
-      <Stack>
-        <Text fontWeight={600} fontSize="12pt">
+      <div className="flex flex-col gap-4">
+        <label className="text-[12pt] font-bold text-white">
           Community Image
-        </Text>
-        <Flex direction="column" align="center" width="100%">
-          {imageToDisplay ? (
-            <Image
-              borderRadius="full"
-              boxSize="100px"
-              src={imageToDisplay}
-              alt="Community Image"
-              objectFit="cover"
-            />
-          ) : (
-            <Box
-              borderRadius="full"
-              boxSize="100px"
-              border="4px dashed"
-              borderColor="gray.200"
-            />
-          )}
-          <Stack direction="row" mt={4}>
-            <Button height="28px" onClick={() => selectFileRef.current?.click()}>
-              Change Image
-            </Button>
-            {(currentCommunity?.imageURL || selectedFile) && (
-              <Button
-                height="28px"
-                onClick={() => setDeleteImage(!deleteImage)}
-                variant={deleteImage ? "solid" : "outline"}
-              >
-                {deleteImage ? "Undo Delete" : "Delete Image"}
-              </Button>
-            )}
-          </Stack>
-          <Input ref={selectFileRef} type="file" hidden onChange={onSelectFile} accept="image/*" />
-        </Flex>
-      </Stack>
-
-      {onSelectBannerFile && selectBannerRef && (
-        <Stack>
-          <Text fontWeight={600} fontSize="12pt">
-            Community Banner
-          </Text>
-          <Flex direction="column" align="center" width="100%">
-            {bannerToDisplay ? (
-              <Image
-                width="100%"
-                height="120px"
-                borderRadius="md"
-                src={bannerToDisplay}
-                alt="Community Banner"
-                objectFit="cover"
+        </label>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-[100px] h-[100px] rounded-full border-2 border-dashed border-white/20 overflow-hidden bg-white/5 flex items-center justify-center">
+            {imageToDisplay ? (
+              <img
+                src={imageToDisplay}
+                alt="Community Image"
+                className="w-full h-full object-cover"
               />
             ) : (
-              <Box
-                width="100%"
-                height="120px"
-                borderRadius="md"
-                border="4px dashed"
-                borderColor="gray.200"
-              />
+              <div className="w-full h-full" />
             )}
-            <Stack direction="row" mt={4}>
-              <Button height="28px" onClick={() => selectBannerRef.current?.click()}>
+          </div>
+          <div className="flex gap-3">
+            <button 
+              className="px-4 py-1.5 bg-white text-black text-[12px] font-bold rounded-full hover:bg-gray-200 transition-colors"
+              onClick={() => selectFileRef.current?.click()}
+            >
+              Change Image
+            </button>
+            {(currentCommunity?.imageURL || selectedFile) && (
+              <button
+                className={`px-4 py-1.5 text-[12px] font-bold rounded-full transition-all ${
+                  deleteImage 
+                    ? "bg-red-600 text-white hover:bg-red-700" 
+                    : "border border-white/30 text-white hover:bg-white/10"
+                }`}
+                onClick={() => setDeleteImage(!deleteImage)}
+              >
+                {deleteImage ? "Undo Delete" : "Delete Image"}
+              </button>
+            )}
+          </div>
+          <input ref={selectFileRef} type="file" hidden onChange={onSelectFile} accept="image/*" />
+        </div>
+      </div>
+
+      {onSelectBannerFile && selectBannerRef && (
+        <div className="flex flex-col gap-4">
+          <label className="text-[12pt] font-bold text-white">
+            Community Banner
+          </label>
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-full h-[120px] rounded-lg border-2 border-dashed border-white/20 overflow-hidden bg-white/5">
+              {bannerToDisplay ? (
+                <img
+                  src={bannerToDisplay}
+                  alt="Community Banner"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full" />
+              )}
+            </div>
+            <div className="flex gap-3">
+              <button 
+                className="px-4 py-1.5 bg-white text-black text-[12px] font-bold rounded-full hover:bg-gray-200 transition-colors"
+                onClick={() => selectBannerRef.current?.click()}
+              >
                 Change Banner
-              </Button>
+              </button>
               {(currentCommunity?.bannerURL || selectedBannerFile) && setDeleteBanner && (
-                <Button
-                  height="28px"
+                <button
+                  className={`px-4 py-1.5 text-[12px] font-bold rounded-full transition-all ${
+                    deleteBanner 
+                      ? "bg-red-600 text-white hover:bg-red-700" 
+                      : "border border-white/30 text-white hover:bg-white/10"
+                  }`}
                   onClick={() => setDeleteBanner(!deleteBanner)}
-                  variant={deleteBanner ? "solid" : "outline"}
                 >
                   {deleteBanner ? "Undo Delete" : "Delete Banner"}
-                </Button>
+                </button>
               )}
-            </Stack>
-            <Input ref={selectBannerRef} type="file" hidden onChange={onSelectBannerFile} accept="image/*" />
-          </Flex>
-        </Stack>
+            </div>
+            <input ref={selectBannerRef} type="file" hidden onChange={onSelectBannerFile} accept="image/*" />
+          </div>
+        </div>
       )}
-    </Stack>
+    </div>
   );
 };
 

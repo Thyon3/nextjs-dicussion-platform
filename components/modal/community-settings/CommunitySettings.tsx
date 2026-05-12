@@ -4,21 +4,9 @@ import useCommunityPrivacy from "@/hooks/community/useCommunityPrivacy";
 import useDeleteCommunity from "@/hooks/community/useDeleteCommunity";
 import useCustomToast from "@/hooks/useCustomToast";
 import useSelectFile from "@/hooks/useSelectFile";
-import {
-  Box,
-  DialogBackdrop,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogPositioner,
-  DialogRoot,
-  DialogTitle,
-  Portal,
-  Tabs,
-} from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import React, { useRef, useState } from "react";
+import { IoClose } from "react-icons/io5";
 import {
   AdminManager,
   DangerZone,
@@ -34,18 +22,12 @@ type CommunitySettingsModalProps = {
   communityData: Community;
 };
 
-/**
- * Modal for managing community settings including image, privacy, admins, and deletion
- */
 const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
   open,
   handleClose,
   communityData,
 }) => {
-  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile(
-    300,
-    300
-  );
+  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile(300, 300);
   const selectFileRef = useRef<HTMLInputElement>(null);
   const selectBannerRef = useRef<HTMLInputElement>(null);
   const [communityStateValue] = useAtom(communityStateAtom);
@@ -53,28 +35,20 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
   const [deleteBanner, setDeleteBanner] = useState(false);
   const [selectedPrivacyType, setSelectedPrivacyType] = useState("");
   const [description, setDescription] = useState(communityData?.description || "");
+  const [activeTab, setActiveTab] = useState("profile");
   const showToast = useCustomToast();
 
-  const { selectedFile: selectedBannerFile, setSelectedFile: setSelectedBannerFile, onSelectFile: onSelectBannerFile } = useSelectFile(
-    1200,
-    300
-  );
+  const { selectedFile: selectedBannerFile, setSelectedFile: setSelectedBannerFile, onSelectFile: onSelectBannerFile } = useSelectFile(1200, 300);
 
-  const { updateProfile, deleteCommunityImage } =
-    useCommunityImage(communityData);
+  const { updateProfile, deleteCommunityImage } = useCommunityImage(communityData);
   const { updatePrivacyType } = useCommunityPrivacy(communityData);
   const { deleteCommunity: callDeleteCommunity, loading } = useDeleteCommunity();
-
-  const handlePrivacyTypeChange = (details: { value: string }) => {
-    setSelectedPrivacyType(details.value);
-  };
 
   const handleSaveButtonClick = async () => {
     if (selectedPrivacyType) {
       await updatePrivacyType(selectedPrivacyType);
     }
     
-    // Check if we need to update the profile (image, banner, or description)
     if (selectedFile || selectedBannerFile || description !== communityData?.description) {
       await updateProfile(selectedFile || undefined, selectedBannerFile || undefined, description);
       setSelectedFile("");
@@ -101,89 +75,89 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
     handleClose();
   };
 
-  return (
-    <DialogRoot
-      open={open}
-      onOpenChange={({ open }: { open: boolean }) => {
-        if (!open) handleClose();
-      }}
-    >
-      <Portal>
-        <DialogBackdrop bg="rgba(0, 0, 0, 0.4)" backdropFilter="blur(6px)" />
-        <DialogPositioner>
-          <DialogContent borderRadius={10}>
-            <DialogHeader
-              display="flex"
-              flexDirection="column"
-              padding={3}
-              textAlign="center"
-            >
-              <DialogTitle>Community Settings</DialogTitle>
-            </DialogHeader>
-            <Box>
-              <DialogCloseTrigger position="absolute" top={2} right={2} />
-              <DialogBody
-                display="flex"
-                flexDirection="column"
-                padding="10px 0px"
-              >
-                <Tabs.Root defaultValue="profile" variant="line" fitted>
-                  <Tabs.List mb={4}>
-                    <Tabs.Trigger value="profile">Profile</Tabs.Trigger>
-                    <Tabs.Trigger value="privacy">Privacy</Tabs.Trigger>
-                    <Tabs.Trigger value="admins">Admins</Tabs.Trigger>
-                    <Tabs.Trigger value="danger">Danger Zone</Tabs.Trigger>
-                  </Tabs.List>
-                  <Tabs.Content value="profile" p={5}>
-                    <ImageSettings
-                      selectedFile={selectedFile || ""}
-                      onSelectFile={onSelectFile}
-                      selectFileRef={selectFileRef}
-                      selectedBannerFile={selectedBannerFile || ""}
-                      onSelectBannerFile={onSelectBannerFile}
-                      selectBannerRef={selectBannerRef}
-                      description={description}
-                      setDescription={setDescription}
-                      currentCommunity={
-                        communityStateValue.currentCommunity || communityData
-                      }
-                      deleteImage={deleteImage}
-                      setDeleteImage={setDeleteImage}
-                      deleteBanner={deleteBanner}
-                      setDeleteBanner={setDeleteBanner}
-                    />
-                  </Tabs.Content>
-                  <Tabs.Content value="privacy" p={5}>
-                    <PrivacySettings
-                      currentCommunity={
-                        communityStateValue.currentCommunity || null
-                      }
-                      selectedPrivacyType={selectedPrivacyType}
-                      handlePrivacyTypeChange={handlePrivacyTypeChange}
-                    />
-                  </Tabs.Content>
-                  <Tabs.Content value="admins" p={5}>
-                    <AdminManager
-                      communityData={
-                        communityStateValue.currentCommunity || communityData
-                      }
-                    />
-                  </Tabs.Content>
-                  <Tabs.Content value="danger" p={5}>
-                    <DangerZone
-                      deleteCommunity={() => callDeleteCommunity(communityData.id)}
-                      loading={loading}
-                    />
-                  </Tabs.Content>
+  if (!open) return null;
 
-                </Tabs.Root>
-              </DialogBody>
-            </Box>
-            <ModalFooter onCancel={closeModal} onSave={handleSaveButtonClick} />
-          </DialogContent>
-        </DialogPositioner>
-      </Portal>
-    </DialogRoot>
+  return (
+    <div className="fixed inset-0 z-[1500] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        onClick={closeModal}
+      />
+      
+      {/* Modal Content */}
+      <div className="relative bg-[#1A1D23] w-full max-w-[600px] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+        <div className="flex items-center justify-between p-6 pb-2">
+          <h2 className="text-xl font-bold text-white">Community Settings</h2>
+          <button 
+            onClick={closeModal}
+            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <IoClose size={24} />
+          </button>
+        </div>
+
+        <div className="flex flex-col">
+          {/* Tabs List */}
+          <div className="flex border-b border-white/10 px-6">
+            {["profile", "privacy", "admins", "danger"].map((tab) => (
+              <button
+                key={tab}
+                className={`px-4 py-3 text-[14px] font-bold capitalize transition-all border-b-2 ${
+                  activeTab === tab 
+                    ? "text-[#FF5722] border-b-[#FF5722]" 
+                    : "text-gray-500 border-b-transparent hover:text-gray-300"
+                }`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab === "danger" ? "Danger Zone" : tab}
+              </button>
+            ))}
+          </div>
+
+          {/* Tabs Content */}
+          <div className="p-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
+            {activeTab === "profile" && (
+              <ImageSettings
+                selectedFile={selectedFile || ""}
+                onSelectFile={onSelectFile}
+                selectFileRef={selectFileRef}
+                selectedBannerFile={selectedBannerFile || ""}
+                onSelectBannerFile={onSelectBannerFile}
+                selectBannerRef={selectBannerRef}
+                description={description}
+                setDescription={setDescription}
+                currentCommunity={communityStateValue.currentCommunity || communityData}
+                deleteImage={deleteImage}
+                setDeleteImage={setDeleteImage}
+                deleteBanner={deleteBanner}
+                setDeleteBanner={setDeleteBanner}
+              />
+            )}
+            {activeTab === "privacy" && (
+              <PrivacySettings
+                currentCommunity={communityStateValue.currentCommunity || null}
+                selectedPrivacyType={selectedPrivacyType}
+                handlePrivacyTypeChange={(details) => setSelectedPrivacyType(details.value)}
+              />
+            )}
+            {activeTab === "admins" && (
+              <AdminManager
+                communityData={communityStateValue.currentCommunity || communityData}
+              />
+            )}
+            {activeTab === "danger" && (
+              <DangerZone
+                deleteCommunity={() => callDeleteCommunity(communityData.id)}
+                loading={loading}
+              />
+            )}
+          </div>
+        </div>
+
+        <ModalFooter onCancel={closeModal} onSave={handleSaveButtonClick} />
+      </div>
+    </div>
   );
 };
 

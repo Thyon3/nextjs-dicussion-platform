@@ -1,22 +1,10 @@
-import { Flex, SkeletonCircle, Skeleton } from "@chakra-ui/react";
 import React from "react";
 
-/**
- * Loading component while the communities are being loaded.
- * @returns {React.FC} - loading component while the community is being loaded
- */
 const CommunityLoader: React.FC = () => (
-  <Flex
-    bg={{ base: "white", _dark: "gray.800" }}
-    justify="space-between"
-    align="center"
-    p={5}
-    borderRadius={10}
-    shadow="md"
-  >
-    <SkeletonCircle size="14" />
-    <Skeleton height="10px" width="80%" />
-  </Flex>
+  <div className="flex items-center justify-between p-5 bg-[#1A1D23] border border-white/10 rounded-[12px] shadow-md animate-pulse">
+    <div className="w-14 h-14 bg-white/10 rounded-full mr-4" />
+    <div className="h-2.5 bg-white/10 rounded-full w-full max-w-[80%]" />
+  </div>
 );
 
 export default CommunityLoader;

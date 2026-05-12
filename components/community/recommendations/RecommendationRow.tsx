@@ -1,6 +1,5 @@
 import React from "react";
 import { Community } from "@/types/community";
-import { Flex, Icon, Image, Text, Button } from "@chakra-ui/react";
 import Link from "next/link";
 import { IoPeopleCircleOutline } from "react-icons/io5";
 
@@ -11,14 +10,6 @@ type RecommendationRowProps = {
   onJoinOrLeaveCommunity: (community: Community, isJoined: boolean) => void;
 };
 
-/**
- * Single recommendation row showing rank, avatar, and join/leave action.
- * @param item - Community to render.
- * @param index - Position in recommendation list for ranking.
- * @param isJoined - Whether the user is subscribed to the community.
- * @param onJoinOrLeaveCommunity - Callback to toggle membership.
- * @returns Link-wrapped row with action button.
- */
 const RecommendationRow: React.FC<RecommendationRowProps> = ({
   item,
   index,
@@ -27,78 +18,49 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
 }) => {
   return (
     <Link key={item.id} href={`/community/${item.id}`}>
-      <Flex
-        align="center"
-        fontSize="10pt"
-        p="8px 16px"
-        _hover={{ bg: "whiteAlpha.50" }}
-        transition="all 0.2s"
-      >
-        <Flex align="center" gap={3} minWidth={0} flex={1}>
-          <Text 
-            fontWeight={700} 
-            color="gray.500" 
-            width="14px"
-          >
+      <div className="flex items-center text-[10pt] p-2 px-4 hover:bg-white/5 transition-all cursor-pointer">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
+          <span className="font-bold text-gray-500 w-[14px]">
             {index + 1}
-          </Text>
+          </span>
           
-          <Flex align="center" minWidth={0} gap={3}>
+          <div className="flex items-center min-w-0 gap-3">
             {item.imageURL ? (
-              <Image
+              <img
                 src={item.imageURL}
-                borderRadius="full"
-                boxSize="32px"
+                className="rounded-full w-8 h-8 object-cover"
                 alt="Community Icon"
-                fallbackSrc="https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png"
               />
             ) : (
-              <Icon
-                as={IoPeopleCircleOutline}
-                fontSize="24pt"
-                color="#FF5722"
+              <IoPeopleCircleOutline
+                className="text-[24pt] text-[#FF5722]"
               />
             )}
-            <Flex direction="column" minWidth={0}>
-              <Text
-                fontWeight={700}
-                color="white"
-                fontSize="10pt"
-                overflow="hidden"
-                textOverflow="ellipsis"
-                whiteSpace="nowrap"
-              >
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-white text-[10pt] overflow-hidden text-ellipsis whitespace-nowrap">
                 {item.id}
-              </Text>
-              <Text fontSize="8pt" color="gray.500">
+              </span>
+              <span className="text-[8pt] text-gray-500">
                 {item.numberOfMembers || 0} members
-              </Text>
-            </Flex>
-          </Flex>
-        </Flex>
+              </span>
+            </div>
+          </div>
+        </div>
 
-        <Button
-          height="30px"
-          fontSize="9pt"
-          px={6}
-          bg={isJoined ? "transparent" : "white"}
-          color={isJoined ? "white" : "black"}
-          border={isJoined ? "1px solid" : "none"}
-          borderColor={isJoined ? "whiteAlpha.300" : "transparent"}
-          borderRadius="full"
-          fontWeight={700}
-          _hover={{ 
-            bg: isJoined ? "whiteAlpha.100" : "gray.200",
-            borderColor: isJoined ? "whiteAlpha.500" : "transparent"
-          }}
+        <button
+          className={`h-[30px] text-[9pt] px-6 rounded-full font-bold transition-all ${
+            isJoined 
+            ? "bg-transparent text-white border border-white/30 hover:bg-white/10 hover:border-white/50" 
+            : "bg-white text-black hover:bg-gray-200"
+          }`}
           onClick={(event) => {
             event.preventDefault();
             onJoinOrLeaveCommunity(item, isJoined);
           }}
         >
           {isJoined ? "Joined" : "Join"}
-        </Button>
-      </Flex>
+        </button>
+      </div>
     </Link>
   );
 };

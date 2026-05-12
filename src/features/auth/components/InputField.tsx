@@ -1,32 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Input } from '@chakra-ui/react';
 
-/**
- * Shared input field used inside auth forms.
- * Wraps Chakra UI Input with consistent styling.
- */
-const InputField = React.forwardRef<HTMLInputElement, React.ComponentProps<typeof Input>>(
-  ({ ...props }, ref) => (
-    <Input
+type InputFieldProps = React.InputHTMLAttributes<HTMLInputElement>;
+
+const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(
+  ({ className, ...props }, ref) => (
+    <input
       ref={ref}
-      required
-      fontSize="10pt"
-      bg={{ base: 'gray.50', _dark: 'gray.800' }}
-      borderColor={{ base: 'gray.200', _dark: 'gray.600' }}
-      _placeholder={{ color: 'gray.500' }}
-      _hover={{
-        bg: { base: 'white', _dark: 'gray.700' },
-        border: '1px solid',
-        borderColor: { base: 'red.500', _dark: 'red.400' },
-      }}
-      _focus={{
-        outline: 'none',
-        bg: { base: 'white', _dark: 'gray.700' },
-        border: '1px solid',
-        borderColor: { base: 'red.500', _dark: 'red.400' },
-      }}
+      className={`w-full px-4 py-2 text-[10pt] bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-gray-500 focus:outline-none focus:border-[#FF5722] focus:bg-white/10 transition-all ${className}`}
       {...props}
     />
   )

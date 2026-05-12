@@ -1,21 +1,15 @@
 import React from "react";
-import { Text } from "@chakra-ui/react";
 import { Post } from "@/types/post";
 
 type PostTitleProps = {
   post: Post;
 };
 
-/**
- * Displays the title of a post card.
- * @param post - Post entity with title text.
- * @returns Styled text heading.
- */
 const PostTitle: React.FC<PostTitleProps> = ({ post }) => {
   return (
-    <Text fontSize="14pt" fontWeight={700} color="white" mb={2}>
+    <h3 className="text-[14pt] font-bold text-white mb-2 leading-tight">
       {post.title}
-    </Text>
+    </h3>
   );
 };
 

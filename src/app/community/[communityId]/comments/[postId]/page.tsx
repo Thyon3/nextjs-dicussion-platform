@@ -10,14 +10,8 @@ import { Community } from "@/types/community";
 import { Post } from "@/types/post";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Stack } from "@chakra-ui/react";
 import { useAuth } from "@/hooks/useAuth";
 
-/**
- * Detailed view of a single post, including voting, full content, and eventually comments.
- * Fetches both post and community data to provide full context.
- * @returns The post detail view with community-specific sidebar.
- */
 const PostPage: React.FC = () => {
   const { communityId, postId } = useParams();
   const { user } = useAuth();
@@ -41,7 +35,7 @@ const PostPage: React.FC = () => {
         setPostStateValue((prev) => ({
           ...prev,
           selectedPost: post as Post,
-          posts: [post as Post], // Add to posts array so PostItem can find it if needed
+          posts: [post as Post],
         }));
         setCommunityData(community);
       } catch (err) {
@@ -59,8 +53,12 @@ const PostPage: React.FC = () => {
   return (
     <PageContent>
       {/* Left Content */}
-      <Stack gap={5}>
-        {postStateValue.selectedPost && (
+      <div className="flex flex-col gap-5">
+        {loading ? (
+          <div className="animate-pulse flex flex-col gap-5">
+            <div className="h-[200px] bg-white/5 rounded-[12px]" />
+          </div>
+        ) : postStateValue.selectedPost ? (
           <PostItem
             post={postStateValue.selectedPost}
             userIsCreator={user?.id === postStateValue.selectedPost.creatorId}
@@ -71,14 +69,14 @@ const PostPage: React.FC = () => {
                   ?.voteValue
               }
           />
-        )}
+        ) : null}
         {/* TODO: Add Comments Component here */}
-      </Stack>
+      </div>
 
       {/* Right Content */}
-      <Stack gap={5}>
+      <div className="flex flex-col gap-5">
         {communityData && <About communityData={communityData} />}
-      </Stack>
+      </div>
     </PageContent>
   );
 };

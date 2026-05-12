@@ -1,5 +1,4 @@
 import React from "react";
-import { Text, Flex, Skeleton, Image } from "@chakra-ui/react";
 import { Post } from "@/types/post";
 
 type PostBodyProps = {
@@ -8,13 +7,6 @@ type PostBodyProps = {
   setLoadingImage: (value: React.SetStateAction<boolean>) => void;
 };
 
-/**
- * Renders post body preview and optional image with skeleton fallback.
- * @param post - Post content to show.
- * @param loadingImage - Whether image is still loading.
- * @param setLoadingImage - Setter triggered on image load.
- * @returns Text excerpt and image block.
- */
 const PostBody: React.FC<PostBodyProps> = ({
   post,
   loadingImage,
@@ -23,49 +15,46 @@ const PostBody: React.FC<PostBodyProps> = ({
   return (
     <>
       {post.body && (
-        <Text fontSize="11pt" color="gray.300" lineHeight="tall" mt={1}>
+        <p className="text-[11pt] text-gray-300 leading-relaxed mt-1">
           {post.body.split(" ").slice(0, 50).join(" ")}
           {post.body.split(" ").length > 50 && "..."}
-        </Text>
+        </p>
       )}
       {post.imageURL && (
-        <Flex justify="center" align="center" mt={3}>
+        <div className="flex justify-center items-center mt-3 relative min-h-[100px]">
           {loadingImage && (
-            <Skeleton height="300px" width="100%" borderRadius={12} />
+            <div className="absolute inset-0 bg-white/5 animate-pulse rounded-[12px]" />
           )}
-          <Image
+          <img
             src={post.imageURL}
             alt="Post image"
-            maxHeight="500px"
-            maxWidth="100%"
-            borderRadius={12}
-            border="1px solid"
-            borderColor="whiteAlpha.100"
-            display={loadingImage ? "none" : "unset"}
+            className={`max-h-[500px] max-w-full rounded-[12px] border border-white/10 ${
+              loadingImage ? "invisible" : "visible"
+            }`}
             onLoad={() => setLoadingImage(false)}
           />
-        </Flex>
+        </div>
       )}
       {post.videoURL && (
-        <Flex justify="center" align="center" mt={3}>
+        <div className="flex justify-center items-center mt-3">
           <video 
             src={post.videoURL} 
             controls 
-            style={{ 
-              maxHeight: '500px', 
-              maxWidth: '100%', 
-              borderRadius: '12px',
-              border: '1px solid rgba(255, 255, 255, 0.1)'
-            }} 
+            className="max-h-[500px] max-w-full rounded-[12px] border border-white/10"
           />
-        </Flex>
+        </div>
       )}
       {post.linkURL && (
-        <Flex mt={3} p={2} bg="whiteAlpha.50" borderRadius="md" border="1px solid" borderColor="whiteAlpha.100">
-          <Text as="a" href={post.linkURL} target="_blank" color="#FF8A65" fontSize="10pt" fontWeight={600} _hover={{ textDecoration: 'underline' }}>
+        <div className="mt-3 p-2 bg-white/5 rounded-md border border-white/10">
+          <a 
+            href={post.linkURL} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="text-[#FF8A65] text-[10pt] font-semibold hover:underline"
+          >
             {post.linkURL}
-          </Text>
-        </Flex>
+          </a>
+        </div>
       )}
     </>
   );

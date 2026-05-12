@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Flex, Box, Text, Input, Textarea, Button, Icon, Stack, Spinner, Select } from '@chakra-ui/react';
+import React, { useState, useRef } from 'react';
 import { IoDocumentText, IoImageOutline, IoLinkOutline } from 'react-icons/io5';
 import { BiPoll } from 'react-icons/bi';
 import { useAuth } from '@/src/features/auth';
@@ -12,7 +11,7 @@ const tabs: TabItem[] = [
   { title: 'Post', type: 'text', icon: IoDocumentText },
   { title: 'Images & Video', type: 'image', icon: IoImageOutline },
   { title: 'Link', type: 'link', icon: IoLinkOutline },
-  { title: 'Poll', type: 'poll', icon: BiPoll }, // Assuming poll is not fully supported yet but UI exists
+  { title: 'Poll', type: 'poll', icon: BiPoll },
 ];
 
 interface CreatePostFormProps {
@@ -65,185 +64,146 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
   };
 
   return (
-    <Stack gap={4} w="100%">
-      {/* Community Selector (only show if not initialized with a specific community or if on global submit) */}
+    <div className="flex flex-col gap-4 w-full">
+      {/* Community Selector */}
       {!initialCommunityId && user?.communitySnippets && (
-        <Box width="300px">
-          <Select 
-            placeholder="Choose a community" 
+        <div className="w-[300px]">
+          <select 
+            className="w-full bg-[#1A1D23] text-white border border-white/10 rounded-md h-[40px] px-3 focus:outline-none focus:border-[#FF5722] transition-colors"
             value={selectedCommunityId}
             onChange={handleCommunitySelect}
-            bg={{ base: 'white', _dark: '#1a1a1b' }}
-            borderColor={{ base: 'gray.200', _dark: '#343536' }}
-            borderRadius="4px"
-            _hover={{ bg: { base: 'white', _dark: '#1a1a1b' } }}
           >
+            <option value="" disabled>Choose a community</option>
             {user.communitySnippets.map((snippet) => (
               <option key={snippet.communityId} value={snippet.communityId}>
                 r/{snippet.communityId}
               </option>
             ))}
-          </Select>
-        </Box>
+          </select>
+        </div>
       )}
 
-      <Box bg={{ base: 'white', _dark: '#1a1a1b' }} borderRadius="md" w="100%" overflow="hidden">
+      <div className="bg-[#1A1D23] rounded-[12px] border border-white/10 overflow-hidden">
         {/* Tabs */}
-        <Flex borderBottom="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }}>
-        {tabs.map((tab) => (
-          <Flex
-            key={tab.type}
-            flex={1}
-            align="center"
-            justify="center"
-            p="14px 0px"
-            cursor={tab.type === 'poll' ? 'not-allowed' : 'pointer'}
-            fontWeight={700}
-            color={selectedTab === tab.type ? 'blue.500' : 'gray.500'}
-            borderBottom={selectedTab === tab.type ? '2px solid' : '2px solid transparent'}
-            borderBottomColor={selectedTab === tab.type ? 'blue.500' : 'transparent'}
-            borderRight="1px solid"
-            borderColor={{ base: 'gray.200', _dark: '#343536' }}
-            _hover={{ bg: { base: 'gray.50', _dark: '#272729' } }}
-            onClick={() => tab.type !== 'poll' && setSelectedTab(tab.type)}
-            opacity={tab.type === 'poll' ? 0.5 : 1}
-          >
-            <Icon as={tab.icon} mr={2} fontSize="1.2em" />
-            <Text fontSize="14px">{tab.title}</Text>
-          </Flex>
-        ))}
-      </Flex>
+        <div className="flex border-b border-white/10">
+          {tabs.map((tab) => (
+            <button
+              key={tab.type}
+              className={`flex-1 flex items-center justify-center py-3 font-bold text-[14px] transition-all border-b-2 border-r border-white/10 last:border-r-0 ${
+                selectedTab === tab.type 
+                  ? "text-[#FF5722] border-b-[#FF5722] bg-white/5" 
+                  : "text-gray-500 border-b-transparent hover:bg-white/5"
+              } ${tab.type === 'poll' ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+              onClick={() => tab.type !== 'poll' && setSelectedTab(tab.type)}
+              disabled={tab.type === 'poll'}
+            >
+              <tab.icon className="mr-2 text-[18px]" />
+              {tab.title}
+            </button>
+          ))}
+        </div>
 
-      <Stack p={4} gap={4}>
-        {/* Title Input */}
-        <Box position="relative">
-          <Input
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            maxLength={300}
-            fontSize="14px"
-            borderRadius="4px"
-            bg="transparent"
-            border="1px solid"
-            borderColor={{ base: 'gray.200', _dark: '#343536' }}
-            _focus={{ outline: 'none', border: '1px solid', borderColor: { base: 'black', _dark: 'white' } }}
-            pr="60px"
+        <div className="p-4 flex flex-col gap-4">
+          {/* Title Input */}
+          <div className="relative">
+            <input
+              placeholder="Title"
+              className="w-full bg-transparent border border-white/10 rounded-md h-[40px] px-4 pr-16 text-[14px] text-white focus:outline-none focus:border-white/30 transition-all"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              maxLength={300}
+            />
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[12px] font-bold text-gray-500">
+              {title.length}/300
+            </span>
+          </div>
+
+          {/* Dynamic Content Area */}
+          {selectedTab === 'image' && (
+            <div className="flex justify-center items-center min-h-[250px] border border-dashed border-white/20 rounded-md relative bg-white/5">
+              {filePreview ? (
+                <div className="relative p-2 w-full flex justify-center">
+                  {file?.type.startsWith('video/') ? (
+                    <video src={filePreview} controls className="max-h-[400px] max-w-full rounded-md" />
+                  ) : (
+                    <img src={filePreview} alt="Preview" className="max-h-[400px] max-w-full rounded-md" />
+                  )}
+                  <button
+                    className="absolute top-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-[12px] hover:bg-black/80 transition-colors"
+                    onClick={() => {
+                      setFile(null);
+                      setFilePreview('');
+                    }}
+                  >
+                    Remove
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-4">
+                  <p className="text-gray-500 font-medium">Drag and drop images or</p>
+                  <button 
+                    className="px-6 py-2 border border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    Upload
+                  </button>
+                  <input
+                    type="file"
+                    className="hidden"
+                    ref={fileInputRef}
+                    accept="image/*,video/*"
+                    onChange={handleFileChange}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {selectedTab === 'link' && (
+            <input
+              placeholder="URL"
+              className="w-full bg-transparent border border-white/10 rounded-md h-[40px] px-4 text-[14px] text-white focus:outline-none focus:border-white/30 transition-all"
+              value={linkURL}
+              onChange={(e) => setLinkURL(e.target.value)}
+            />
+          )}
+
+          {/* Description Area */}
+          <textarea
+            placeholder={selectedTab === 'text' ? "Text (optional)" : "Description (optional)"}
+            className="w-full bg-transparent border border-white/10 rounded-md min-h-[150px] p-4 text-[14px] text-white focus:outline-none focus:border-white/30 transition-all resize-none"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
           />
-          <Text
-            position="absolute"
-            right="10px"
-            top="50%"
-            transform="translateY(-50%)"
-            fontSize="12px"
-            color="gray.500"
-            fontWeight={700}
-          >
-            {title.length}/300
-          </Text>
-        </Box>
 
-        {/* Dynamic Content Area based on Tab */}
+          {error && (
+            <p className="text-red-500 text-[14px] font-semibold">
+              {error}
+            </p>
+          )}
 
-        {selectedTab === 'image' && (
-          <Flex
-            justify="center"
-            align="center"
-            minH="250px"
-            border="1px dashed"
-            borderColor={{ base: 'gray.300', _dark: '#4f4f51' }}
-            borderRadius="4px"
-            position="relative"
-          >
-            {filePreview ? (
-              <Box position="relative" p={2}>
-                {file?.type.startsWith('video/') ? (
-                  <video src={filePreview} controls style={{ maxHeight: '400px', maxWidth: '100%' }} />
-                ) : (
-                  <img src={filePreview} alt="Preview" style={{ maxHeight: '400px', maxWidth: '100%' }} />
-                )}
-                <Button
-                  size="sm"
-                  position="absolute"
-                  top={4}
-                  right={4}
-                  onClick={() => {
-                    setFile(null);
-                    setFilePreview('');
-                  }}
-                >
-                  Remove
-                </Button>
-              </Box>
-            ) : (
-              <Stack align="center" gap={4}>
-                <Text color="gray.500" fontWeight={500}>Drag and drop images or</Text>
-                <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
-                  Upload
-                </Button>
-                <input
-                  type="file"
-                  hidden
-                  ref={fileInputRef}
-                  accept="image/*,video/*"
-                  onChange={handleFileChange}
-                />
-              </Stack>
-            )}
-          </Flex>
-        )}
-
-        {selectedTab === 'link' && (
-          <Input
-            placeholder="Url"
-            value={linkURL}
-            onChange={(e) => setLinkURL(e.target.value)}
-            fontSize="14px"
-            borderRadius="4px"
-            border="1px solid"
-            borderColor={{ base: 'gray.200', _dark: '#343536' }}
-            _focus={{ outline: 'none', border: '1px solid', borderColor: { base: 'black', _dark: 'white' } }}
-          />
-        )}
-
-        {/* Description / Text Area (Available for all post types) */}
-        <Textarea
-          placeholder={selectedTab === 'text' ? "Text (optional)" : "Description (optional)"}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          fontSize="14px"
-          minH="150px"
-          borderRadius="4px"
-          border="1px solid"
-          borderColor={{ base: 'gray.200', _dark: '#343536' }}
-          _focus={{ outline: 'none', border: '1px solid', borderColor: { base: 'black', _dark: 'white' } }}
-        />
-
-        {error && (
-          <Text color="red.500" fontSize="14px" mt={2}>
-            {error}
-          </Text>
-        )}
-
-        {/* Footer Actions */}
-        <Flex justify="flex-end" align="center" pt={2}>
-          <Button variant="outline" mr={2} borderRadius="999px" height="32px" fontSize="14px" fontWeight={700}>
-            Save Draft
-          </Button>
-          <Button
-            borderRadius="999px"
-            height="32px"
-            fontSize="14px"
-            fontWeight={700}
-            disabled={!isFormValid() || loading}
-            onClick={handleSubmit}
-          >
-            {loading ? <Spinner size="sm" /> : 'Post'}
-          </Button>
-        </Flex>
-      </Stack>
-    </Box>
-  </Stack>
+          {/* Footer Actions */}
+          <div className="flex justify-end items-center pt-2 gap-3">
+            <button className="px-6 py-1.5 text-white text-[14px] font-bold border border-white/30 rounded-full hover:bg-white/10 transition-all">
+              Save Draft
+            </button>
+            <button
+              className={`px-8 py-1.5 text-white text-[14px] font-bold rounded-full transition-all ${
+                !isFormValid() || loading 
+                  ? "bg-gray-600 cursor-not-allowed" 
+                  : "bg-[#FF5722] hover:bg-[#E64A19]"
+              }`}
+              onClick={handleSubmit}
+              disabled={!isFormValid() || loading}
+            >
+              {loading ? (
+                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+              ) : 'Post'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

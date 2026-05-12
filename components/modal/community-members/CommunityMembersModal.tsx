@@ -1,28 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  DialogBackdrop,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogPositioner,
-  DialogRoot,
-  DialogTitle,
-  Flex,
-  IconButton,
-  Portal,
-  Spinner,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
 import { CommunityMember } from "@/types/communityMember";
 import { Community } from "@/types/community";
 import useCommunityMembers from "@/hooks/community/useCommunityMembers";
-
 import { LuTrash } from "react-icons/lu";
+import { IoClose } from "react-icons/io5";
 import { useAtomValue } from "jotai";
 import useCommunityPermissions from "@/hooks/community/useCommunityPermissions";
 import useRemoveCommunityMember from "@/hooks/community/useRemoveCommunityMember";
@@ -30,43 +13,35 @@ import ConfirmationDialog from "@/components/modal/ConfirmationDialog";
 import { communityStateAtom } from "@/atoms/communitiesAtom";
 
 type CommunityMembersModalProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  communityId: string;
+  open: boolean;
+  handleClose: () => void;
+  communityData: Community;
 };
 
-/**
- * Modal that lists community members and allows admins to remove subscribers.
- * Fetches members on open to keep list fresh.
- * @param isOpen - Whether the modal is visible.
- * @param onClose - Callback to close the modal.
- * @param communityId - Community whose members are shown.
- * @returns Dialog with member cards and optional remove actions.
- */
 const CommunityMembersModal: React.FC<CommunityMembersModalProps> = ({
-  isOpen,
-  onClose,
-  communityId,
+  open,
+  handleClose,
+  communityData,
 }) => {
   const { members, loading, error, loadMembers } = useCommunityMembers();
   const memberCount = members?.length ?? 0;
   const communityStateValue = useAtomValue(communityStateAtom);
   const { isAdmin } = useCommunityPermissions(
-    communityStateValue.currentCommunity || ({} as Community)
+    communityStateValue.currentCommunity || communityData
   );
 
   const { removeMember, loading: removeLoading } = useRemoveCommunityMember();
   const [memberToRemove, setMemberToRemove] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isOpen) return;
-    loadMembers(communityId);
-  }, [isOpen, communityId, loadMembers]);
+    if (!open) return;
+    loadMembers(communityData.id);
+  }, [open, communityData.id, loadMembers]);
 
   const handleRemoveMember = async (memberId: string) => {
-    const success = await removeMember(communityId, memberId);
+    const success = await removeMember(communityData.id, memberId);
     if (success) {
-      loadMembers(communityId);
+      loadMembers(communityData.id);
     }
   };
 
@@ -76,84 +51,72 @@ const CommunityMembersModal: React.FC<CommunityMembersModalProps> = ({
     setMemberToRemove(null);
   };
 
-  const renderContent = () => {
-    if (loading) {
-      return (
-        <Flex justify="center" py={10}>
-          <Spinner />
-        </Flex>
-      );
-    }
-
-    if (!members.length) {
-      return (
-        <Flex justify="center" py={10} px={4} textAlign="center">
-          <Text color="gray.500">
-            {error ? "Failed to load subscribers." : "No subscribers found."}
-          </Text>
-        </Flex>
-      );
-    }
-
-    return (
-      <Stack gap={2}>
-        {members.map((member: CommunityMember) => (
-          <Flex
-            key={member.uid}
-            borderWidth="1px"
-            borderRadius="xl"
-            p={3}
-            borderColor={{ base: "gray.200", _dark: "gray.700" }}
-            align="center"
-            justify="space-between"
-          >
-            <Box>
-              <Text fontWeight="semibold">
-                {member.displayName?.trim() ? member.displayName : "No Name"}
-              </Text>
-              <Text fontSize="sm" color="gray.500">
-                {member.email}
-              </Text>
-            </Box>
-            {isAdmin && (
-              <IconButton
-                variant="ghost"
-                colorPalette="red"
-                size="sm"
-                aria-label="Remove member"
-                onClick={() => setMemberToRemove(member.uid)}
-              >
-                <LuTrash />
-              </IconButton>
-            )}
-          </Flex>
-        ))}
-      </Stack>
-    );
-  };
+  if (!open) return null;
 
   return (
-    <DialogRoot
-      open={isOpen}
-      onOpenChange={(details: { open: boolean }) => !details.open && onClose()}
-      placement="center"
-    >
-      <Portal>
-        <DialogBackdrop bg="rgba(0, 0, 0, 0.4)" backdropFilter="blur(6px)" />
-        <DialogPositioner>
-          <DialogContent maxH="70vh" borderRadius="xl">
-            <DialogHeader>
-              <DialogTitle>
-                {memberCount} Community Member{memberCount === 1 ? "" : "s"}
-              </DialogTitle>
-            </DialogHeader>
-            <DialogCloseTrigger />
-            <DialogBody pb={6} overflowY="auto">
-              {renderContent()}
-            </DialogBody>
-          </DialogContent>
-        </DialogPositioner>
-      </Portal>
+    <div className="fixed inset-0 z-[1500] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        onClick={handleClose}
+      />
+      
+      {/* Modal Content */}
+      <div className="relative bg-[#1A1D23] w-full max-w-[500px] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[70vh]">
+        <div className="flex items-center justify-between p-6 pb-4">
+          <h2 className="text-xl font-bold text-white">
+            {memberCount} Community Member{memberCount === 1 ? "" : "s"}
+          </h2>
+          <button 
+            onClick={handleClose}
+            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <IoClose size={24} />
+          </button>
+        </div>
+
+        <div className="px-6 pb-6 overflow-y-auto custom-scrollbar flex-1">
+          {loading ? (
+            <div className="flex justify-center py-10">
+              <div className="w-8 h-8 border-4 border-white/20 border-t-[#FF5722] rounded-full animate-spin" />
+            </div>
+          ) : !members.length ? (
+            <div className="flex justify-center py-10 px-4 text-center">
+              <p className="text-gray-500">
+                {error ? "Failed to load subscribers." : "No subscribers found."}
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {members.map((member: CommunityMember) => (
+                <div
+                  key={member.uid}
+                  className="flex items-center justify-between p-4 border border-white/10 rounded-[12px] bg-white/5 transition-all hover:bg-white/10"
+                >
+                  <div className="flex flex-col">
+                    <span className="text-[14px] font-bold text-white">
+                      {member.displayName?.trim() ? member.displayName : "No Name"}
+                    </span>
+                    <span className="text-[12px] text-gray-500">
+                      {member.email}
+                    </span>
+                  </div>
+                  {isAdmin && (
+                    <button
+                      className="p-2 text-red-500 hover:bg-red-500/10 rounded-full transition-colors"
+                      onClick={() => setMemberToRemove(member.uid)}
+                      title="Remove member"
+                    >
+                      <LuTrash size={18} />
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
       <ConfirmationDialog
         open={!!memberToRemove}
         onClose={() => setMemberToRemove(null)}
@@ -163,7 +126,7 @@ const CommunityMembersModal: React.FC<CommunityMembersModalProps> = ({
         confirmButtonText="Remove"
         isLoading={removeLoading}
       />
-    </DialogRoot>
+    </div>
   );
 };
 

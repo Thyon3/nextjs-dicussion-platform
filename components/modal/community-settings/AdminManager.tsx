@@ -1,14 +1,5 @@
 import { Community } from "@/types/community";
 import useCustomToast from "@/hooks/useCustomToast";
-import {
-  Box,
-  Button,
-  Flex,
-  Input,
-  Spinner,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { AdminUser } from "@/types/adminUser";
@@ -21,12 +12,7 @@ type AdminManagerProps = {
   communityData: Community;
 };
 
-/**
- * Admin management panel for adding and removing moderators on a community.
- * Handles email search, duplication checks, and confirmation before removal.
- */
 const AdminManager: React.FC<AdminManagerProps> = ({ communityData }) => {
-  // Placeholder for missing hooks
   const [admins, setAdmins] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -34,9 +20,7 @@ const AdminManager: React.FC<AdminManagerProps> = ({ communityData }) => {
     register,
     handleSubmit,
     watch,
-    setValue,
     formState: { errors },
-    reset,
   } = useForm<AddAdminInput>({
     resolver: zodResolver(addAdminSchema),
     defaultValues: { email: "" },
@@ -45,8 +29,6 @@ const AdminManager: React.FC<AdminManagerProps> = ({ communityData }) => {
   const emailValue = watch("email");
 
   const [addingAdmin, setAddingAdmin] = useState(false);
-  const [searchResults, setSearchResults] = useState<AdminUser[]>([]);
-  const [showResults, setShowResults] = useState(false);
   const showToast = useCustomToast();
   const { user } = useAuth();
   const [adminToRemove, setAdminToRemove] = useState<string | null>(null);
@@ -60,7 +42,6 @@ const AdminManager: React.FC<AdminManagerProps> = ({ communityData }) => {
   const onAddAdmin = async (data: AddAdminInput) => {
     setAddingAdmin(true);
     try {
-      // TODO: Implement backend add admin
       showToast({
         title: "Not Implemented",
         description: "Admin management is coming soon to the new backend.",
@@ -87,81 +68,78 @@ const AdminManager: React.FC<AdminManagerProps> = ({ communityData }) => {
   };
 
   return (
-    <Stack gap={4}>
-      <Text fontSize="lg" fontWeight={600}>
-        Manage Admins
-      </Text>
+    <div className="flex flex-col gap-6">
+      <h3 className="text-lg font-bold text-white">Manage Admins</h3>
 
-      <Box position="relative">
-        <Flex gap={2} direction="column">
-          <Flex gap={2}>
-            <Input
-              placeholder="Enter email to add admin"
-              {...register("email")}
-              onFocus={() =>
-                emailValue && emailValue.length >= 3 && setShowResults(true)
-              }
-              onBlur={() => setTimeout(() => setShowResults(false), 200)}
-              borderRadius={"xl"}
-            />
-            <Button
-              onClick={handleSubmit(onAddAdmin)}
-              loading={addingAdmin}
-              disabled={!emailValue}
-            >
-              Add
-            </Button>
-          </Flex>
-          {errors.email && (
-            <Text color="red.500" fontSize="xs">
-              {errors.email.message}
-            </Text>
-          )}
-        </Flex>
-      </Box>
+      <div className="flex flex-col gap-3">
+        <div className="flex gap-2">
+          <input
+            placeholder="Enter email to add admin"
+            className="flex-1 bg-transparent border border-white/10 rounded-full h-[40px] px-4 text-[14px] text-white focus:outline-none focus:border-[#FF5722] transition-all"
+            {...register("email")}
+          />
+          <button
+            className={`px-6 h-[40px] font-bold text-[14px] rounded-full transition-all ${
+              !emailValue || addingAdmin
+                ? "bg-gray-600 cursor-not-allowed text-gray-300"
+                : "bg-[#FF5722] text-white hover:bg-[#E64A19]"
+            }`}
+            onClick={handleSubmit(onAddAdmin)}
+            disabled={!emailValue || addingAdmin}
+          >
+            {addingAdmin ? (
+              <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+            ) : "Add"}
+          </button>
+        </div>
+        {errors.email && (
+          <p className="text-red-500 text-[10px] font-semibold px-2">
+            {errors.email.message}
+          </p>
+        )}
+      </div>
 
-      {loading ? (
-        <Flex justify="center" p={4}>
-          <Spinner />
-        </Flex>
-      ) : (
-        <Stack gap={2}>
-          {admins.map((admin) => (
-            <Flex
+      <div className="flex flex-col gap-3">
+        {loading ? (
+          <div className="flex justify-center p-4">
+            <div className="w-6 h-6 border-2 border-white/20 border-t-[#FF5722] rounded-full animate-spin" />
+          </div>
+        ) : admins.length === 0 ? (
+          <p className="text-gray-500 text-[12px] italic text-center p-4">
+            No additional admins found.
+          </p>
+        ) : (
+          admins.map((admin) => (
+            <div
               key={admin.uid}
-              align="center"
-              justify="space-between"
-              p={2}
-              borderWidth="1px"
-              borderRadius="xl"
+              className="flex items-center justify-between p-3 border border-white/10 rounded-[12px] bg-white/5"
             >
-              <Stack gap={0}>
-                <Text fontWeight={600}>{admin.displayName || "No Name"}</Text>
-                <Text fontSize="sm" color="gray.500">
+              <div className="flex flex-col">
+                <span className="text-[14px] font-bold text-white">
+                  {admin.displayName || "No Name"}
+                </span>
+                <span className="text-[12px] text-gray-500">
                   {admin.email}
-                </Text>
-              </Stack>
-              {admin.uid !== communityData.creatorId &&
-                admin.uid !== user?.id && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    colorPalette="red"
-                    onClick={() => setAdminToRemove(admin.uid)}
-                  >
-                    Remove
-                  </Button>
-                )}
-              {admin.uid === communityData.creatorId && (
-
-                <Text fontSize="xs" color="gray.500" fontStyle="italic">
+                </span>
+              </div>
+              
+              {admin.uid === communityData.creatorId ? (
+                <span className="text-[10px] text-gray-500 italic font-medium bg-white/5 px-2 py-0.5 rounded-full">
                   Creator
-                </Text>
-              )}
-            </Flex>
-          ))}
-        </Stack>
-      )}
+                </span>
+              ) : admin.uid !== user?.id ? (
+                <button
+                  className="px-4 py-1 text-[12px] font-bold text-red-500 border border-red-500/30 rounded-full hover:bg-red-500/10 transition-all"
+                  onClick={() => setAdminToRemove(admin.uid)}
+                >
+                  Remove
+                </button>
+              ) : null}
+            </div>
+          ))
+        )}
+      </div>
+
       <ConfirmationDialog
         open={!!adminToRemove}
         onClose={() => setAdminToRemove(null)}
@@ -171,9 +149,8 @@ const AdminManager: React.FC<AdminManagerProps> = ({ communityData }) => {
         confirmButtonText="Remove"
         isLoading={removingAdmin}
       />
-    </Stack>
+    </div>
   );
 };
 
 export default AdminManager;
-

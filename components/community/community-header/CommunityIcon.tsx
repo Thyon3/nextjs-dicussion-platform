@@ -1,39 +1,21 @@
 import React from "react";
-import { Image, Icon } from "@chakra-ui/react";
 import { HiArrowCircleUp } from "react-icons/hi";
 
 type CommunityIconProps = {
   imageURL?: string;
 };
 
-/**
- * Renders the community avatar or a default icon.
- * @param imageURL - Optional community image url.
- * @returns Circle avatar image or fallback glyph.
- */
 const CommunityIcon: React.FC<CommunityIconProps> = ({ imageURL }) => {
   return imageURL ? (
-    <Image
+    <img
       src={imageURL}
-      borderRadius="full"
-      boxSize="66px"
+      className="w-[66px] h-[66px] rounded-full border-[3px] border-[#1A1D23] shadow-md object-cover bg-white"
       alt="Community icon"
-      color="red.500"
-      border="3px solid"
-      borderColor={{ base: "white", _dark: "gray.800" }}
-      shadow="md"
     />
   ) : (
-    <Icon
-      as={HiArrowCircleUp}
-      fontSize={64}
-      color="red.500"
-      border="3px solid"
-      borderColor={{ base: "white", _dark: "gray.800" }}
-      borderRadius="full"
-      bg={{ base: "white", _dark: "gray.800" }}
-      shadow="md"
-    />
+    <div className="w-[66px] h-[66px] rounded-full border-[3px] border-[#1A1D23] bg-white flex items-center justify-center shadow-md">
+      <HiArrowCircleUp className="text-[60px] text-[#FF5722]" />
+    </div>
   );
 };
 

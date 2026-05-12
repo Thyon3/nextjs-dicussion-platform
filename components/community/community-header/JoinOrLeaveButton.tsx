@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "@chakra-ui/react";
 
 type JoinOrLeaveButtonProps = {
   isJoined: boolean;
@@ -7,31 +6,29 @@ type JoinOrLeaveButtonProps = {
   isLoading?: boolean;
 };
 
-/**
- * Subscription toggle button for a community header.
- * @param isJoined - Whether the viewer is already subscribed.
- * @param onClick - Handler to join or leave.
- * @param isLoading - Shows loading state when membership is updating.
- * @returns Styled button with subscribe/unsubscribe label.
- */
 const JoinOrLeaveButton: React.FC<JoinOrLeaveButtonProps> = ({
   isJoined,
   onClick,
   isLoading,
 }) => {
   return (
-    <Button
-      variant={isJoined ? "outline" : "solid"}
-      height="40px"
-      pr={{ base: 2, md: 6 }}
-      pl={{ base: 2, md: 6 }}
+    <button
+      className={`h-[40px] px-6 rounded-full font-bold transition-all shadow-md w-[130px] flex items-center justify-center ${
+        isJoined 
+          ? "border border-white/30 text-white hover:bg-white/10" 
+          : "bg-[#FF5722] text-white hover:bg-[#E64A19]"
+      } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
       onClick={onClick}
-      shadow="md"
-      width="120px"
-      loading={isLoading}
+      disabled={isLoading}
     >
-      {isJoined ? "Unsubscribe" : "Subscribe"}
-    </Button>
+      {isLoading ? (
+        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+      ) : isJoined ? (
+        "Unsubscribe"
+      ) : (
+        "Subscribe"
+      )}
+    </button>
   );
 };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { Button, Image } from "@chakra-ui/react";
 
 interface AuthButtonProps {
   provider: string;
@@ -8,14 +7,6 @@ interface AuthButtonProps {
   image: string;
 }
 
-/**
- * OAuth provider button used in auth modal.
- * @param provider - Provider label shown on button.
- * @param loading - Shows spinner while sign-in is pending.
- * @param onClick - Handler to trigger provider flow.
- * @param image - Logo displayed beside label.
- * @returns Styled button for third-party auth.
- */
 const AuthButton: React.FC<AuthButtonProps> = ({
   provider,
   loading,
@@ -23,21 +14,22 @@ const AuthButton: React.FC<AuthButtonProps> = ({
   image,
 }) => {
   return (
-    <Button
-      flexGrow={1}
-      variant={"oauth" as any}
-      loading={loading}
+    <button
+      className={`flex items-center justify-center flex-1 h-[40px] px-4 border border-white/20 rounded-full text-white font-bold text-[14px] hover:bg-white/5 transition-all gap-2 ${
+        loading ? "opacity-50 cursor-not-allowed" : ""
+      }`}
       onClick={onClick}
-      width="50%"
+      disabled={loading}
     >
-      <Image
+      <img
         src={image}
         alt={`Continue with ${provider}`}
-        mr={2}
-        height="20px"
+        className="h-[20px] w-auto"
       />
-      {provider}
-    </Button>
+      <span>
+        {loading ? "Connecting..." : provider}
+      </span>
+    </button>
   );
 };
 

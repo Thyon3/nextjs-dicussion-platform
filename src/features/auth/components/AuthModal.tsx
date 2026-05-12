@@ -1,27 +1,12 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import {
-  DialogBackdrop,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogPositioner,
-  DialogRoot,
-  DialogTitle,
-  Flex,
-} from '@chakra-ui/react';
 import { useAuth, useAuthModal } from '../hooks/useAuth';
 import LoginForm from './LoginForm';
 import RegisterForm from './RegisterForm';
 import ResetPassword from './ResetPassword';
+import { IoClose } from 'react-icons/io5';
 
-/**
- * Auth modal — driven entirely by the Zustand auth store.
- * Auto-closes when a user becomes authenticated.
- * Renders the correct form based on modal.view state.
- */
 const AuthModal: React.FC = () => {
   const { user } = useAuth();
   const { modal, closeModal } = useAuthModal();
@@ -31,34 +16,43 @@ const AuthModal: React.FC = () => {
     if (user) closeModal();
   }, [user, closeModal]);
 
+  if (!modal.open) return null;
+
   return (
-    <DialogRoot
-      open={modal.open}
-      onOpenChange={({ open }: { open: boolean }) => {
-        if (!open) closeModal();
-      }}
-    >
-      <DialogBackdrop bg="rgba(0, 0, 0, 0.4)" backdropFilter="blur(6px)" />
-      <DialogPositioner>
-        <DialogContent borderRadius={10}>
-          <DialogHeader textAlign="center">
-            <DialogTitle>
-              {modal.view === 'login' && 'Log In'}
-              {modal.view === 'signup' && 'Sign Up'}
-              {modal.view === 'resetPassword' && 'Reset Password'}
-            </DialogTitle>
-          </DialogHeader>
-          <DialogCloseTrigger position="absolute" top={2} right={2} />
-          <DialogBody display="flex" flexDirection="column" alignItems="center" pb={6}>
-            <Flex direction="column" align="center" justify="center" width="75%">
+    <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        onClick={closeModal}
+      />
+      
+      {/* Modal Content */}
+      <div className="relative bg-[#1A1D23] w-full max-w-[400px] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+        <div className="flex items-center justify-between p-6 pb-4">
+          <h2 className="text-xl font-bold text-white">
+            {modal.view === 'login' && 'Log In'}
+            {modal.view === 'signup' && 'Sign Up'}
+            {modal.view === 'resetPassword' && 'Reset Password'}
+          </h2>
+          <button 
+            onClick={closeModal}
+            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <IoClose size={24} />
+          </button>
+        </div>
+
+        <div className="px-6 pb-8">
+          <div className="flex flex-col items-center">
+            <div className="w-full">
               {modal.view === 'login' && <LoginForm />}
               {modal.view === 'signup' && <RegisterForm />}
               {modal.view === 'resetPassword' && <ResetPassword />}
-            </Flex>
-          </DialogBody>
-        </DialogContent>
-      </DialogPositioner>
-    </DialogRoot>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

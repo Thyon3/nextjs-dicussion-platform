@@ -1,14 +1,8 @@
 import useCallCreatePost from "@/hooks/posts/useCallCreatePost";
-import { Button, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { AiFillHome } from "react-icons/ai";
 import CreateCommunityModal from "../modal/create-community/CreateCommunityModal";
 
-/**
- * A sidebar card that provides quick actions for the user's personal home feed.
- * Allows users to initiate post creation or open the community creation modal.
- * @returns A themed card with action buttons for home feed management.
- */
 const PersonalHome: React.FC = () => {
   const [open, setOpen] = useState(false);
   const { onClick } = useCallCreatePost();
@@ -16,69 +10,37 @@ const PersonalHome: React.FC = () => {
   return (
     <>
       <CreateCommunityModal open={open} handleClose={() => setOpen(false)} />
-      <Flex
-        direction="column"
-        bg="#1A1D23"
-        borderRadius={12}
-        border="1px solid"
-        borderColor="whiteAlpha.100"
-        position="sticky"
-        top="60px"
-      >
-        <Flex
-          align="center"
-          p="12px 16px"
-          bgGradient="linear(to-r, #FF8A65, #FF5722)"
-          height="50px"
-          borderRadius="12px 12px 0px 0px"
-        >
-          <Flex 
-            bg="whiteAlpha.200" 
-            p={2} 
-            borderRadius="lg" 
-            mr={3}
-            border="1px solid"
-            borderColor="whiteAlpha.300"
-          >
-            <Icon as={AiFillHome} color="white" fontSize={20} />
-          </Flex>
-          <Text fontWeight={700} color="white" fontSize="14pt">
+      <div className="flex flex-col bg-[#1A1D23] rounded-[12px] border border-white/10 sticky top-[60px]">
+        <div className="flex items-center p-3 px-4 bg-gradient-to-r from-[#FF8A65] to-[#FF5722] h-[50px] rounded-t-[12px]">
+          <div className="bg-white/20 p-2 rounded-lg mr-3 border border-white/30 flex items-center justify-center">
+            <AiFillHome className="text-white text-[20px]" />
+          </div>
+          <span className="font-bold text-white text-[14pt]">
             Home
-          </Text>
-        </Flex>
+          </span>
+        </div>
         
-        <Flex direction="column" p="16px">
-          <Text fontSize="10pt" color="gray.400" mb={6}>
+        <div className="flex flex-col p-4">
+          <p className="text-[10pt] text-gray-400 mb-6">
             Home page personalized based on your subscribed communities. Circus represents a shift back to intentional spaces.
-          </Text>
+          </p>
           
-          <Stack gap={3}>
-            <Button 
-              height="38px" 
-              bg="white" 
-              color="black"
-              _hover={{ bg: "gray.200" }}
-              fontWeight={700}
-              borderRadius="full"
+          <div className="flex flex-col gap-3">
+            <button 
+              className="h-[38px] bg-white text-black hover:bg-gray-200 font-bold rounded-full transition-colors"
               onClick={onClick}
             >
               Create Post
-            </Button>
-            <Button
-              variant="outline"
-              height="38px"
-              color="white"
-              borderColor="whiteAlpha.300"
-              _hover={{ bg: "whiteAlpha.100" }}
-              fontWeight={700}
-              borderRadius="full"
+            </button>
+            <button
+              className="h-[38px] text-white border border-white/30 hover:bg-white/10 font-bold rounded-full transition-colors"
               onClick={() => setOpen(true)}
             >
               Create Community
-            </Button>
-          </Stack>
-        </Flex>
-      </Flex>
+            </button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };

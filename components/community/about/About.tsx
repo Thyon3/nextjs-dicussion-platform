@@ -1,7 +1,6 @@
 import { Community } from "@/types/community";
 import useCommunityState from "@/hooks/community/useCommunityState";
 import { useRouter } from "next/navigation";
-import { Box, Button, Flex, Stack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import CommunityMembersModal from "../../modal/community-members/CommunityMembersModal";
 import AboutCommunity from "./AboutCommunity";
@@ -13,20 +12,6 @@ type AboutProps = {
   communityData: Community;
 };
 
-/**
- * This about component is used for displaying general information about a community.
- * It displays the following data:
- *  - The number of subscribers in community
- *  - Date when community was created
- *  - Button for creating a new post
- *  - Additional elements are displayed if the current user is an admin:
- *  - Button for opening the community settings modal
- * @param {communityData} - Data required to be displayed
- * @returns (React.FC<AboutProps>) - About component
- * @requires AboutHeaderBar - Header bar for about section.
- * @requires AboutCommunity - Displays number of subscribers and date when community was created.
- * @requires AdminSectionAbout - Displays some additional elements if the current user is an admin.
- */
 const About: React.FC<AboutProps> = ({ communityData }) => {
   const router = useRouter();
   const { communityStateValue } = useCommunityState();
@@ -34,48 +19,45 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
     (item) => item.communityId === communityData.id
   );
   const [isMembersModalOpen, setMembersModalOpen] = useState(false);
-  const { canView, canPost } = useCommunityPermissions(communityData);
+  const { canView } = useCommunityPermissions(communityData);
 
   if (!canView) {
     return null;
   }
 
   return (
-    // sticky position for about section
-    <Box position="sticky" top="80px" borderRadius={10} shadow="md">
+    <div className="sticky top-[80px] rounded-[10px] shadow-md overflow-hidden">
       <AboutHeaderBar communityName={communityData.id} />
-      {/* about section */}
-      <Flex
-        direction="column"
-        p={3}
-        bg={{ base: "white", _dark: "gray.800" }}
-        borderRadius="0px 0px 10px 10px"
-      >
+      <div className="flex flex-col p-3 bg-[#1A1D23] rounded-b-[10px] border-x border-b border-white/10">
         <AboutCommunity communityData={communityData} />
-        <Stack>
+        <div className="flex flex-col gap-3 mt-3">
           {isJoined && (
-            <Button
-              width="100%"
+            <button
+              className="w-full h-[32px] bg-white text-black font-bold text-[10pt] rounded-full hover:bg-gray-200 transition-colors"
               onClick={() => {
                 router.push(`/community/${communityData.id}/submit`);
               }}
             >
               Create Post
-            </Button>
+            </button>
           )}
           {isJoined && (
-            <Button
-              width="100%"
-              variant="outline"
+            <button
+              className="w-full h-[32px] font-bold text-[10pt] text-white border border-white/30 rounded-full hover:bg-white/10 transition-colors"
               onClick={() => setMembersModalOpen(true)}
             >
               View Subscribers
-            </Button>
+            </button>
           )}
           <AdminSectionAbout communityData={communityData} />
-        </Stack>
-      </Flex>
-    </Box>
+        </div>
+      </div>
+      <CommunityMembersModal
+        open={isMembersModalOpen}
+        handleClose={() => setMembersModalOpen(false)}
+        communityData={communityData}
+      />
+    </div>
   );
 };
 

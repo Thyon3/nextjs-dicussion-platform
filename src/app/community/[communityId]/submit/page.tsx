@@ -1,11 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Box, Flex, Text, Stack } from '@chakra-ui/react';
 import { PageContent } from '@/components';
 import CreatePostForm from '@/src/features/posts/components/CreatePostForm';
 import { useParams } from 'next/navigation';
-import AboutCommunity from '@/components/community/about/AboutCommunity';
 import useCommunityState from '@/hooks/community/useCommunityState';
 
 export default function SubmitPostPage() {
@@ -16,42 +14,42 @@ export default function SubmitPostPage() {
   return (
     <PageContent>
       {/* Left Content */}
-      <Box flex={1}>
-        <Flex borderBottom="1px solid" borderColor="whiteAlpha.200" pb={4} mb={4} mt={6}>
-          <Text fontSize="18px" fontWeight={600}>
+      <div className="flex-1 mt-6">
+        <div className="border-b border-white/10 pb-4 mb-6">
+          <h2 className="text-[18px] font-bold text-white">
             Create a post
-          </Text>
-        </Flex>
+          </h2>
+        </div>
         
-        {/* If we are at /submit without a communityId, we might need a community selector.
-            For now, we assume this is under /community/[communityId]/submit */}
         <CreatePostForm 
           communityId={communityId || communityStateValue.currentCommunity?.id || ''} 
           communityImageURL={communityStateValue.currentCommunity?.imageURL} 
         />
-      </Box>
+      </div>
 
       {/* Right Content - Sidebar */}
-      <Box display={{ base: 'none', md: 'block' }}>
-        <Stack gap={4} mt={14}>
-          <Box bg={{ base: 'white', _dark: '#1a1a1b' }} p={3} borderRadius={4} border="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }}>
-            <Flex align="center" gap={2} mb={2}>
-              <img src="/images/redditPersonalHome.png" alt="posting rules" height="40px" style={{ borderRadius: '4px' }}/>
-              <Text fontWeight={600} fontSize="14px">Posting to Reddit</Text>
-            </Flex>
-            <Stack gap={2} fontSize="12px" fontWeight={500} borderTop="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pt={2}>
-              <Text borderBottom="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pb={2}>1. Remember the human</Text>
-              <Text borderBottom="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pb={2}>2. Behave like you would in real life</Text>
-              <Text borderBottom="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pb={2}>3. Look for the original source of content</Text>
-              <Text borderBottom="1px solid" borderColor={{ base: 'gray.200', _dark: '#343536' }} pb={2}>4. Search for duplicates before posting</Text>
-              <Text pb={2}>5. Read the community's rules</Text>
-            </Stack>
-          </Box>
-          <Text fontSize="12px" color="gray.500" fontWeight={500} textAlign="center">
-            Please be mindful of reddit's content policy and practice good reddiquette.
-          </Text>
-        </Stack>
-      </Box>
+      <div className="hidden md:flex flex-col gap-5 mt-14">
+        <div className="bg-[#1A1D23] p-4 rounded-[12px] border border-white/10">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="bg-[#FF5722] p-2 rounded-lg">
+              <img src="/images/logo.svg" alt="logo" className="h-[24px] brightness-0 invert" />
+            </div>
+            <span className="font-bold text-white text-[14px]">Posting Rules</span>
+          </div>
+          
+          <div className="flex flex-col text-[12px] text-gray-400 font-medium">
+            <div className="py-2 border-b border-white/5">1. Remember the human</div>
+            <div className="py-2 border-b border-white/5">2. Behave like you would in real life</div>
+            <div className="py-2 border-b border-white/5">3. Look for the original source of content</div>
+            <div className="py-2 border-b border-white/5">4. Search for duplicates before posting</div>
+            <div className="py-2">5. Read the community's rules</div>
+          </div>
+        </div>
+        
+        <p className="text-[12px] text-gray-500 font-medium text-center px-4 leading-relaxed">
+          Please be mindful of the content policy and practice good community etiquette.
+        </p>
+      </div>
     </PageContent>
   );
 }

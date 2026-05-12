@@ -1,7 +1,6 @@
 import { Post } from "@/types/post";
 import useCustomToast from "@/hooks/useCustomToast";
 import useSavedPosts from "@/hooks/posts/useSavedPosts";
-import { Flex, Stack } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import PostItemError from "../../ui/ErrorMessage";
@@ -12,25 +11,13 @@ import PostBody from "./PostBody";
 import PostActions from "./PostActions";
 import ConfirmationDialog from "@/components/modal/ConfirmationDialog";
 
-/**
- * Interface for PostItem component properties.
- * @param post - The post data to render.
- * @param userIsCreator - Whether current user is the author of the post.
- * @param userIsAdmin - Whether current user has administrative rights in the community.
- * @param userVoteValue - The current user's vote on this post (1, -1, or 0).
- * @param onVote - Callback to handle voting actions.
- * @param onDeletePost - Callback to handle post deletion.
- * @param onSelectPost - Optional callback to navigate to the post's detail page.
- * @param showCommunityImage - Whether to display the community's avatar.
- * @param votingDisabled - Whether voting is restricted for the current user.
- */
 type PostItemProps = {
   post: Post;
   userIsCreator: boolean;
   userIsAdmin?: boolean;
   userVoteValue?: number;
   onVote: (
-    event: React.MouseEvent<SVGElement, MouseEvent>,
+    event: React.MouseEvent<any, MouseEvent>,
     post: Post,
     vote: number,
     communityId: string
@@ -41,12 +28,6 @@ type PostItemProps = {
   votingDisabled?: boolean;
 };
 
-/**
- * A comprehensive card component for displaying post summaries or details.
- * Includes sections for voting, metadata, content preview, and moderation actions.
- * @param props - Component properties.
- * @returns A themed card representing a post.
- */
 const PostItem: React.FC<PostItemProps> = ({
   post,
   userIsCreator,
@@ -79,11 +60,10 @@ const PostItem: React.FC<PostItemProps> = ({
   const onConfirmDelete = async () => {
     setLoadingDelete(true);
     try {
-      const success: boolean = await onDeletePost(post); // call delete function from usePosts hook
+      const success: boolean = await onDeletePost(post);
 
       if (!success) {
-        // if post was not deleted successfully
-        throw new Error("Post could not be deleted"); // throw error
+        throw new Error("Post could not be deleted");
       }
 
       showToast({
@@ -91,13 +71,11 @@ const PostItem: React.FC<PostItemProps> = ({
         description: "Your post has been deleted",
         status: "success",
       });
-      // if user deletes post from single post page, they should be redirected to post's community page
       if (singlePostPage) {
-        // if post is on single post page
         if (post.communityId) {
-          router.push(`/community/${post.communityId}`); // redirect to community page
+          router.push(`/community/${post.communityId}`);
         } else {
-          router.push("/"); // redirect to home if communityId is missing
+          router.push("/");
         }
       }
     } catch (error: any) {
@@ -114,6 +92,7 @@ const PostItem: React.FC<PostItemProps> = ({
   };
 
   const getPostLink = () => {
+    if (typeof window === 'undefined') return '';
     const baseUrl = `${window.location.protocol}//${window.location.host}`;
     return `${baseUrl}/community/${post.communityId}/comments/${post.id}`;
   };
@@ -126,36 +105,24 @@ const PostItem: React.FC<PostItemProps> = ({
   };
 
   return (
-    <Flex
-      border="1px solid"
-      bg="#1A1D23"
-      borderColor="whiteAlpha.100"
-      borderRadius={12}
-      cursor={singlePostPage ? "unset" : "pointer"}
+    <div
+      className={`flex bg-[#1A1D23] border border-white/10 rounded-[12px] transition-all hover:border-white/30 ${
+        singlePostPage ? "cursor-default" : "cursor-pointer"
+      }`}
       onClick={() => onSelectPost && onSelectPost(post)}
-      _hover={{
-        borderColor: "whiteAlpha.300",
-      }}
-      transition="all 0.2s"
     >
       {/* Left Section: Voting */}
-      <Flex
-        direction="column"
-        align="center"
-        p={3}
-        width="48px"
-        borderRadius="12px 0px 0px 12px"
-      >
+      <div className="flex flex-col items-center p-3 w-[48px] rounded-l-[12px]">
         <VoteSection
           userVoteValue={userVoteValue}
           onVote={onVote}
           post={post}
         />
-      </Flex>
+      </div>
 
       {/* Right Section */}
-      <Flex direction="column" width="100%">
-        <Stack gap={1} p="12px">
+      <div className="flex flex-col w-full min-w-0">
+        <div className="flex flex-col gap-1 p-3">
           <PostDetails showCommunityImage={true} post={post} />
           <PostTitle post={post} />
           <PostBody
@@ -163,7 +130,7 @@ const PostItem: React.FC<PostItemProps> = ({
             loadingImage={loadingImage}
             setLoadingImage={setLoadingImage}
           />
-        </Stack>
+        </div>
         <PostActions
           handleDelete={handleDeleteClick}
           loadingDelete={loadingDelete}
@@ -187,8 +154,9 @@ const PostItem: React.FC<PostItemProps> = ({
           confirmButtonText="Delete"
           isLoading={loadingDelete}
         />
-      </Flex>
-    </Flex>
+      </div>
+    </div>
   );
 };
+
 export default PostItem;

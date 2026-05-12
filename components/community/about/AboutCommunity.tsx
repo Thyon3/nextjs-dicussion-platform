@@ -1,41 +1,34 @@
 import React from "react";
 import { Community } from "@/types/community";
-import { Flex, Text } from "@chakra-ui/react";
 import moment from "moment";
 
 interface AboutCommunityProps {
   communityData: Community;
 }
 
-/**
- * Displays community stats for the about card.
- * @param communityData - Community metadata including member count and createdAt.
- * @returns Two-column row showing subscribers and creation date.
- */
 const AboutCommunity: React.FC<AboutCommunityProps> = ({ communityData }) => {
   return (
-    <Flex direction="column" width="100%" p={2} fontSize="10pt">
+    <div className="flex flex-col w-full p-2 text-[10pt] text-white">
       {communityData.description && (
-        <Text mb={4} fontSize="14px" lineHeight="1.5">
+        <p className="mb-4 text-[14px] leading-[1.5] text-gray-300">
           {communityData.description}
-        </Text>
+        </p>
       )}
-      <Flex width="100%">
-        <Flex direction="column" flexGrow={1}>
-          <Text fontWeight={700}>Subscribers</Text>
-          <Text>{communityData.numberOfMembers.toLocaleString()}</Text>
-        </Flex>
-        <Flex direction="column" flexGrow={1}>
-          <Text fontWeight={700}>Created</Text>
-          <Text>
+      <div className="flex w-full">
+        <div className="flex flex-col flex-grow">
+          <span className="font-bold">Subscribers</span>
+          <span className="text-gray-400">{communityData.numberOfMembers.toLocaleString()}</span>
+        </div>
+        <div className="flex flex-col flex-grow">
+          <span className="font-bold">Created</span>
+          <span className="text-gray-400">
             {communityData.createdAt &&
               moment(communityData.createdAt).format("MMM DD, YYYY")}
-          </Text>
-        </Flex>
-      </Flex>
-    </Flex>
+          </span>
+        </div>
+      </div>
+    </div>
   );
 };
 
 export default AboutCommunity;
-

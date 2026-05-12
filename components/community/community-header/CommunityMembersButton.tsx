@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { IconButton, Icon } from "@chakra-ui/react";
 import CommunityMembersModal from "../../modal/community-members/CommunityMembersModal";
 import { FiUsers } from "react-icons/fi";
 
@@ -8,12 +7,6 @@ type CommunityMembersButtonProps = {
   isJoined: boolean;
 };
 
-/**
- * Button that opens to community members modal for subscribers.
- * @param communityId - Community whose members should be listed.
- * @param isJoined - Whether the current user is a member; hides button otherwise.
- * @returns Icon button and modal wiring.
- */
 const CommunityMembersButton: React.FC<CommunityMembersButtonProps> = ({
   communityId,
   isJoined,
@@ -31,14 +24,13 @@ const CommunityMembersButton: React.FC<CommunityMembersButtonProps> = ({
         onClose={() => setModalOpen(false)}
         communityId={communityId}
       />
-      <IconButton
+      <button
         aria-label="View community members"
-        variant="ghost"
-        fontSize={20}
+        className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
         onClick={() => setModalOpen(true)}
       >
-        <Icon as={FiUsers} />
-      </IconButton>
+        <FiUsers size={20} />
+      </button>
     </>
   );
 };

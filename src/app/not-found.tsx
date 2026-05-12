@@ -1,41 +1,25 @@
-import { Button, Flex, Stack, Text } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
 
-/**
- * The default 404 error page for the application.
- * Displayed when a user navigates to a non-existent route.
- * Provides helpful links to return to the home page or browse communities.
- * @returns A centered error message with navigation options.
- */
 const PageNotFound: React.FC = () => {
   return (
-    <Flex
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="60vh"
-    >
-      <Text
-        fontSize="2xl"
-        fontWeight="bold"
-        color={{ base: "gray.600", _dark: "gray.400" }}
-      >
+    <div className="flex flex-col justify-center items-center min-h-[60vh] p-6 text-center">
+      <h2 className="text-2xl font-bold text-gray-400 mb-6">
         Sorry, this page does not exist!
-      </Text>
-      <Stack direction="row" gap={4} mt={4}>
+      </h2>
+      <div className="flex flex-col sm:flex-row gap-4">
         <Link href="/">
-          <Button mt={4} width="150px">
-            Home
-          </Button>
+          <button className="w-[180px] h-[40px] bg-[#FF5722] text-white font-bold rounded-full hover:bg-[#E64A19] transition-all">
+            Go Home
+          </button>
         </Link>
         <Link href="/communities">
-          <Button mt={4} width="150px">
+          <button className="w-[180px] h-[40px] border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition-all">
             All Communities
-          </Button>
+          </button>
         </Link>
-      </Stack>
-    </Flex>
+      </div>
+    </div>
   );
 };
 

@@ -1,24 +1,22 @@
 import React from "react";
-import { Flex, Text, Link, Stack } from "@chakra-ui/react";
+import Link from "next/link";
 
 const SidebarFooter: React.FC = () => {
+  const currentYear = new Date().getFullYear();
+  
   return (
-    <Flex direction="column" p={4} mt={4}>
-      <Flex wrap="wrap" gap={4} mb={4}>
-        <Stack direction="row" gap={4}>
-          <Link href="#" fontSize="8pt" color="gray.500" _hover={{ textDecoration: 'none', color: 'white' }}>About</Link>
-          <Link href="#" fontSize="8pt" color="gray.500" _hover={{ textDecoration: 'none', color: 'white' }}>Careers</Link>
-          <Link href="#" fontSize="8pt" color="gray.500" _hover={{ textDecoration: 'none', color: 'white' }}>Terms</Link>
-        </Stack>
-        <Stack direction="row" gap={4}>
-          <Link href="#" fontSize="8pt" color="gray.500" _hover={{ textDecoration: 'none', color: 'white' }}>Content Policy</Link>
-          <Link href="#" fontSize="8pt" color="gray.500" _hover={{ textDecoration: 'none', color: 'white' }}>Privacy Policy</Link>
-        </Stack>
-      </Flex>
-      <Text fontSize="8pt" color="gray.600">
-        © 2024 Circus Inc. All rights reserved.
-      </Text>
-    </Flex>
+    <div className="flex flex-col p-4 mt-2">
+      <div className="flex flex-wrap gap-x-4 gap-y-2 mb-4">
+        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">About</Link>
+        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">Careers</Link>
+        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">Terms</Link>
+        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">Content Policy</Link>
+        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">Privacy Policy</Link>
+      </div>
+      <p className="text-[8pt] text-gray-600">
+        © {currentYear} Circus Inc. All rights reserved.
+      </p>
+    </div>
   );
 };
 

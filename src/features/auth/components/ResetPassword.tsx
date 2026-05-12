@@ -3,9 +3,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Flex, Icon, Image, Input, Text } from "@chakra-ui/react";
 import { BsDot } from "react-icons/bs";
-import { loginSchema } from "../validators"; // We'll just use a simple email check or create a specific schema
 import { useAuthModal } from "../hooks/useAuth";
 import InputField from "./InputField";
 import { z } from "zod";
@@ -16,9 +14,6 @@ const resetPasswordSchema = z.object({
 
 type ResetPasswordValues = z.infer<typeof resetPasswordSchema>;
 
-/**
- * ResetPassword component — migrated to the auth feature.
- */
 const ResetPassword: React.FC = () => {
   const { setModalView } = useAuthModal();
   const [success, setSuccess] = useState(false);
@@ -43,60 +38,67 @@ const ResetPassword: React.FC = () => {
   };
 
   return (
-    <Flex direction="column" alignItems="center" width="100%">
-      <Image src="/images/logo.svg" height="40px" mb={2} alt="Website logo" />
-      <Text fontWeight={700} mb={2}>
+    <div className="flex flex-col items-center w-full">
+      <h3 className="text-lg font-bold text-white mb-4">
         Reset your password
-      </Text>
+      </h3>
       {success ? (
-        <Text mb={4} textAlign="center">
+        <p className="mb-6 text-center text-gray-300 text-[10pt]">
           If an account exists for this email, 
           you will receive a reset link shortly.
-        </Text>
+        </p>
       ) : (
         <>
-          <Text fontSize="sm" textAlign="center" mb={2}>
-            Enter email associated with your account and we will send you a
-            reset link
-          </Text>
-          <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
-            <InputField
-              placeholder="Email"
-              type="email"
-              {...register("email")}
-            />
-            {errors.email && (
-              <Text color="red.500" fontSize="10pt" mt={1}>
-                {errors.email.message}
-              </Text>
-            )}
-            <Button
-              width="100%"
-              height="36px"
-              mb={2}
-              mt={2}
+          <p className="text-[10pt] text-gray-400 text-center mb-6">
+            Enter the email associated with your account and we will send you a reset link.
+          </p>
+          <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
+            <div>
+              <InputField
+                placeholder="Email"
+                type="email"
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-[9pt] mt-1 font-semibold">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+            <button
               type="submit"
-              loading={loading}
-              disabled={!isValid}
+              disabled={!isValid || loading}
+              className={`w-full h-[40px] rounded-full text-white font-bold transition-all ${
+                !isValid || loading
+                  ? "bg-gray-600 cursor-not-allowed"
+                  : "bg-[#FF5722] hover:bg-[#E64A19]"
+              }`}
             >
-              Reset Password
-            </Button>
+              {loading ? (
+                <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mx-auto" />
+              ) : "Reset Password"}
+            </button>
           </form>
         </>
       )}
-      <Flex
-        alignItems="center"
-        fontSize="9pt"
-        color={{ base: "red.500", _dark: "red.400" }}
-        fontWeight={700}
-        cursor="pointer"
-        mt={2}
-      >
-        <Text onClick={() => setModalView("login")}>LOGIN</Text>
-        <Icon as={BsDot} />
-        <Text onClick={() => setModalView("signup")}>SIGN UP</Text>
-      </Flex>
-    </Flex>
+      <div className="flex items-center gap-1 text-[9pt] text-[#FF5722] font-bold mt-6">
+        <button 
+          type="button" 
+          className="hover:underline uppercase"
+          onClick={() => setModalView("login")}
+        >
+          Login
+        </button>
+        <BsDot className="text-gray-500 text-xl" />
+        <button 
+          type="button" 
+          className="hover:underline uppercase"
+          onClick={() => setModalView("signup")}
+        >
+          Sign Up
+        </button>
+      </div>
+    </div>
   );
 };
 

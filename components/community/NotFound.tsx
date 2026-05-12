@@ -1,39 +1,25 @@
 import React from "react";
-import { Flex, Button, Stack, Text } from "@chakra-ui/react";
 import Link from "next/link";
 
-/**
- * Friendly empty state shown when a community ID is invalid.
- * @returns Message with links back to home and discovery.
- */
 const CommunityNotFound: React.FC = () => {
   return (
-    <Flex
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="60vh"
-    >
-      <Text
-        fontSize="2xl"
-        fontWeight="bold"
-        color={{ base: "gray.600", _dark: "gray.400" }}
-      >
+    <div className="flex flex-col justify-center items-center min-h-[60vh] gap-4">
+      <h2 className="text-2xl font-bold text-gray-400">
         Sorry, this community does not exist!
-      </Text>
-      <Stack direction="row" gap={4} mt={4}>
+      </h2>
+      <div className="flex gap-4">
         <Link href="/">
-          <Button mt={4} width="150px">
+          <button className="w-[150px] h-[36px] bg-[#FF5722] text-white font-bold rounded-full hover:bg-[#E64A19] transition-all">
             Home
-          </Button>
+          </button>
         </Link>
         <Link href="/communities">
-          <Button mt={4} width="150px">
+          <button className="w-[150px] h-[36px] border border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">
             All Communities
-          </Button>
+          </button>
         </Link>
-      </Stack>
-    </Flex>
+      </div>
+    </div>
   );
 };
 

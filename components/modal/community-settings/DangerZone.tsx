@@ -1,4 +1,3 @@
-import { Button, Stack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
 import ConfirmationDialog from "@/components/modal/ConfirmationDialog";
 
@@ -7,9 +6,6 @@ type DangerZoneProps = {
   loading: boolean;
 };
 
-/**
- * Component for dangerous community actions like deletion
- */
 const DangerZone: React.FC<DangerZoneProps> = ({
   deleteCommunity,
   loading,
@@ -17,22 +13,25 @@ const DangerZone: React.FC<DangerZoneProps> = ({
   const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
 
   return (
-    <Stack>
-      <Text fontWeight={600} fontSize="12pt" color="red.500">
+    <div className="flex flex-col gap-4">
+      <h3 className="text-[12pt] font-bold text-red-500">
         Danger Zone
-      </Text>
-      <Text fontSize="9pt" color={{ base: "gray.600", _dark: "gray.400" }}>
+      </h3>
+      <p className="text-[10pt] text-gray-400">
         Once you delete a community, there is no going back. Please be certain.
-      </Text>
-      <Button
-        variant="outline"
-        colorPalette="red"
-        height="30px"
+      </p>
+      <button
+        className={`w-full h-[36px] text-[14px] font-bold text-red-500 border border-red-500/30 rounded-full hover:bg-red-500/10 transition-all ${
+          loading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
         onClick={() => setDeleteConfirmationOpen(true)}
-        loading={loading}
+        disabled={loading}
       >
-        Delete Community
-      </Button>
+        {loading ? (
+          <div className="w-4 h-4 border-2 border-red-500/20 border-t-red-500 rounded-full animate-spin mx-auto" />
+        ) : "Delete Community"}
+      </button>
+
       <ConfirmationDialog
         open={deleteConfirmationOpen}
         onClose={() => setDeleteConfirmationOpen(false)}
@@ -45,7 +44,7 @@ const DangerZone: React.FC<DangerZoneProps> = ({
         confirmButtonText="Delete Community"
         isLoading={loading}
       />
-    </Stack>
+    </div>
   );
 };
 

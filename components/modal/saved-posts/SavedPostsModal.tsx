@@ -1,135 +1,99 @@
 import { savedPostStateAtom } from "@/atoms/savedPostsAtom";
 import useSavedPosts from "@/hooks/posts/useSavedPosts";
-import {
-  DialogBackdrop,
-  DialogBody,
-  DialogCloseTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogPositioner,
-  DialogRoot,
-  DialogTitle,
-  Flex,
-  Icon,
-  Image,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
 import { useAtom } from "jotai";
 import Link from "next/link";
 import React from "react";
 import { LuTrash } from "react-icons/lu";
 import { FaReddit } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 
-/**
- * Modal listing saved posts with quick navigation and remove controls.
- * Relies on saved post atom for visibility and content.
- * Allows users to view their saved posts and navigate to them or their communities.
- * @returns Dialog with list items linking to posts and communities.
- */
 const SavedPostsModal: React.FC = () => {
   const [savedPostState, setSavedPostState] = useAtom(savedPostStateAtom);
   const { onRemoveSavedPost } = useSavedPosts();
 
-  /**
-   * Closes the modal by toggling atom state.
-   */
   const handleClose = () => {
     setSavedPostState((prev) => ({ ...prev, isOpen: false }));
   };
 
-  /**
-   * Modal listing saved posts with quick navigation and remove controls.
-   * Relies on saved post atom for visibility and content.
-   * @returns Dialog with list items linking to posts and communities.
-   */
+  if (!savedPostState.isOpen) return null;
+
   return (
-    <DialogRoot
-      open={savedPostState.isOpen}
-      onOpenChange={(e: { open: boolean }) =>
-        setSavedPostState((prev) => ({ ...prev, isOpen: e.open }))
-      }
-      size="lg"
-    >
-      <DialogBackdrop />
-      <DialogPositioner>
-        <DialogContent borderRadius={10}>
-          <DialogHeader>
-            <DialogTitle>Saved Posts</DialogTitle>
-          </DialogHeader>
-          <DialogCloseTrigger />
-          <DialogBody pb={6} rounded={"xl"}>
-            <Stack gap={4}>
-              {savedPostState.savedPosts.length === 0 ? (
-                <Text color="gray.500" textAlign="center">
-                  No saved posts yet.
-                </Text>
-              ) : (
-                savedPostState.savedPosts.map((item) => (
-                  <Flex
-                    key={item.id}
-                    p={3}
-                    borderWidth="1px"
-                    borderRadius="xl"
-                    align="center"
-                    justify="space-between"
-                    _hover={{ borderColor: "gray.400" }}
+    <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+        onClick={handleClose}
+      />
+      
+      {/* Modal Content */}
+      <div className="relative bg-[#1A1D23] w-full max-w-[550px] max-h-[80vh] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col">
+        <div className="flex items-center justify-between p-6 pb-4">
+          <h2 className="text-xl font-bold text-white">
+            Saved Posts
+          </h2>
+          <button 
+            onClick={handleClose}
+            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+          >
+            <IoClose size={24} />
+          </button>
+        </div>
+
+        <div className="px-6 pb-8 overflow-y-auto custom-scrollbar">
+          <div className="flex flex-col gap-4">
+            {savedPostState.savedPosts.length === 0 ? (
+              <p className="text-gray-500 text-center py-10 font-medium">
+                No saved posts yet.
+              </p>
+            ) : (
+              savedPostState.savedPosts.map((item) => (
+                <div
+                  key={item.postId}
+                  className="p-4 bg-white/5 border border-white/10 rounded-[12px] flex items-center justify-between hover:border-white/30 transition-all group"
+                >
+                  <div className="flex items-center flex-1 gap-4">
+                    {item.communityImageURL ? (
+                      <img
+                        src={item.communityImageURL}
+                        className="w-[40px] h-[40px] rounded-full object-cover border border-white/10"
+                        alt="Community Image"
+                      />
+                    ) : (
+                      <div className="w-[40px] h-[40px] rounded-full bg-white/10 flex items-center justify-center text-gray-400">
+                        <FaReddit size={24} />
+                      </div>
+                    )}
+                    <div className="flex flex-col">
+                      <Link
+                        href={`/community/${item.communityId}/comments/${item.postId}`}
+                        onClick={handleClose}
+                        className="text-white font-bold text-[16px] hover:underline leading-tight"
+                      >
+                        {item.postTitle}
+                      </Link>
+                      <Link
+                        href={`/community/${item.communityId}`}
+                        onClick={handleClose}
+                        className="text-gray-500 text-[12px] font-semibold hover:underline mt-0.5"
+                      >
+                        r/{item.communityId}
+                      </Link>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => onRemoveSavedPost(item.postId)}
+                    className="p-2 text-gray-500 hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all ml-2"
+                    title="Remove from saved"
                   >
-                    <Flex align="center" flex={1} gap={3}>
-                      {item.communityImageURL ? (
-                        <Image
-                          src={item.communityImageURL}
-                          borderRadius="full"
-                          boxSize="40px"
-                          alt="Community Image"
-                        />
-                      ) : (
-                        <Icon as={FaReddit} fontSize={40} color="brand.100" />
-                      )}
-                      <Stack gap={0}>
-                        <Link
-                          href={`/community/${item.communityId}/comments/${item.postId}`}
-                          onClick={handleClose}
-                        >
-                          <Text
-                            fontWeight="bold"
-                            fontSize="lg"
-                            _hover={{ textDecoration: "underline" }}
-                          >
-                            {item.postTitle}
-                          </Text>
-                        </Link>
-                        <Link
-                          href={`/community/${item.communityId}`}
-                          onClick={handleClose}
-                        >
-                          <Text
-                            fontSize="sm"
-                            color="gray.500"
-                            _hover={{ textDecoration: "underline" }}
-                          >
-                            r/{item.communityId}
-                          </Text>
-                        </Link>
-                      </Stack>
-                    </Flex>
-                    <Icon
-                      as={LuTrash}
-                      cursor="pointer"
-                      color="gray.500"
-                      mr={2}
-                      fontSize={20}
-                      _hover={{ color: "red.500" }}
-                      onClick={() => onRemoveSavedPost(item.postId)}
-                    />
-                  </Flex>
-                ))
-              )}
-            </Stack>
-          </DialogBody>
-        </DialogContent>
-      </DialogPositioner>
-    </DialogRoot>
+                    <LuTrash size={20} />
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

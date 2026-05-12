@@ -47,12 +47,20 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
     300
   );
   const selectFileRef = useRef<HTMLInputElement>(null);
+  const selectBannerRef = useRef<HTMLInputElement>(null);
   const [communityStateValue] = useAtom(communityStateAtom);
   const [deleteImage, setDeleteImage] = useState(false);
+  const [deleteBanner, setDeleteBanner] = useState(false);
   const [selectedPrivacyType, setSelectedPrivacyType] = useState("");
+  const [description, setDescription] = useState(communityData?.description || "");
   const showToast = useCustomToast();
 
-  const { updateImage, deleteCommunityImage } =
+  const { selectedFile: selectedBannerFile, setSelectedFile: setSelectedBannerFile, onSelectFile: onSelectBannerFile } = useSelectFile(
+    1200,
+    300
+  );
+
+  const { updateProfile, deleteCommunityImage } =
     useCommunityImage(communityData);
   const { updatePrivacyType } = useCommunityPrivacy(communityData);
   const { deleteCommunity: callDeleteCommunity, loading } = useDeleteCommunity();
@@ -65,10 +73,14 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
     if (selectedPrivacyType) {
       await updatePrivacyType(selectedPrivacyType);
     }
-    if (selectedFile) {
-      await updateImage(selectedFile);
+    
+    // Check if we need to update the profile (image, banner, or description)
+    if (selectedFile || selectedBannerFile || description !== communityData?.description) {
+      await updateProfile(selectedFile || undefined, selectedBannerFile || undefined, description);
       setSelectedFile("");
+      setSelectedBannerFile("");
     }
+    
     if (deleteImage) {
       await deleteCommunityImage();
     }
@@ -82,8 +94,10 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
 
   const closeModal = () => {
     setSelectedFile("");
+    setSelectedBannerFile("");
     setSelectedPrivacyType("");
     setDeleteImage(false);
+    setDeleteBanner(false);
     handleClose();
   };
 
@@ -125,11 +139,18 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
                       selectedFile={selectedFile || ""}
                       onSelectFile={onSelectFile}
                       selectFileRef={selectFileRef}
+                      selectedBannerFile={selectedBannerFile || ""}
+                      onSelectBannerFile={onSelectBannerFile}
+                      selectBannerRef={selectBannerRef}
+                      description={description}
+                      setDescription={setDescription}
                       currentCommunity={
-                        communityStateValue.currentCommunity || null
+                        communityStateValue.currentCommunity || communityData
                       }
                       deleteImage={deleteImage}
                       setDeleteImage={setDeleteImage}
+                      deleteBanner={deleteBanner}
+                      setDeleteBanner={setDeleteBanner}
                     />
                   </Tabs.Content>
                   <Tabs.Content value="privacy" p={5}>

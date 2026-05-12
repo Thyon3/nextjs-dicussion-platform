@@ -6,6 +6,7 @@ import {
   PersonalHome,
   Posts,
   Recommendations,
+  SidebarFooter,
 } from "@/components";
 import React from "react";
 import { Stack } from "@chakra-ui/react";
@@ -28,6 +29,7 @@ export default function Home() {
       <Stack gap={5}>
         <Recommendations />
         <PersonalHome />
+        <SidebarFooter />
       </Stack>
     </PageContent>
   );

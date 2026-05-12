@@ -22,43 +22,60 @@ const Recommendations: React.FC = () => {
   const { communityStateValue } = useCommunityState();
   const { onJoinOrLeaveCommunity } = useCommunityMembershipActions();
   const { communities, loading } = useCommunitiesFeed({ limit: 5 });
-  const router = useRouter();
 
   return (
     <Flex
       direction="column"
-      position="relative"
-      bg={{ base: "white", _dark: "gray.800" }}
-      borderRadius="lg"
+      bg="#1A1D23"
+      borderRadius={12}
       border="1px solid"
-      borderColor={{ base: "gray.300", _dark: "gray.700" }}
-      shadow="md"
+      borderColor="whiteAlpha.100"
+      overflow="hidden"
     >
       <SuggestionsHeader />
-      <Flex direction="column">
+      <Flex direction="column" p="4px">
         {loading ? (
           <Stack mt={2} p={3}>
             {Array(5)
               .fill(0)
               .map((_, index) => (
-                <SkeletonCircle key={index} size="10px" />
+                <Flex key={index} align="center" gap={3} mb={2}>
+                  <SkeletonCircle size="24px" />
+                  <Skeleton height="15px" flex={1} />
+                </Flex>
               ))}
           </Stack>
         ) : (
-          communities.map((item, index) => {
-            const isJoined = !!communityStateValue.mySnippets.find(
-              (snippet) => snippet.communityId === item.id
-            );
-            return (
-              <RecommendationRow
-                key={item.id}
-                item={item}
-                index={index}
-                isJoined={isJoined}
-                onJoinOrLeaveCommunity={onJoinOrLeaveCommunity}
-              />
-            );
-          })
+          <>
+            {communities.map((item, index) => {
+              const isJoined = !!communityStateValue.mySnippets.find(
+                (snippet) => snippet.communityId === item.id
+              );
+              return (
+                <RecommendationRow
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  isJoined={isJoined}
+                  onJoinOrLeaveCommunity={onJoinOrLeaveCommunity}
+                />
+              );
+            })}
+            <Box p="12px">
+              <Button
+                width="100%"
+                height="32px"
+                bg="whiteAlpha.100"
+                color="white"
+                borderRadius="full"
+                fontSize="10pt"
+                fontWeight={700}
+                _hover={{ bg: "whiteAlpha.200" }}
+              >
+                View All
+              </Button>
+            </Box>
+          </>
         )}
       </Flex>
     </Flex>

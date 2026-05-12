@@ -3,7 +3,7 @@ import { useSetAtom } from "jotai";
 import { useState } from "react";
 import useCustomToast from "../useCustomToast";
 import { Community } from "@/types/community";
-import { updateCommunityImage } from "@/lib/api/community";
+import { updateCommunityImage, updateCommunityProfile } from "@/lib/api/community";
 
 
 /**
@@ -18,21 +18,28 @@ const useCommunityImage = (communityData: Community) => {
   const showToast = useCustomToast();
   const [uploadingImage, setUploadingImage] = useState(false);
 
-  const onUpdateImage = async (selectedFile: string) => {
-    if (!selectedFile) return;
+  const onUpdateProfile = async (
+    selectedImageFile?: string,
+    selectedBannerFile?: string,
+    description?: string
+  ) => {
     setUploadingImage(true);
 
     try {
-      const downloadURL = await updateCommunityImage(
+      const updatedCommunity = await updateCommunityProfile(
         communityData.id,
-        selectedFile
+        description,
+        selectedImageFile,
+        selectedBannerFile
       );
 
       setCommunityStateValue((prev) => ({
         ...prev,
         currentCommunity: {
           ...prev.currentCommunity,
-          imageURL: downloadURL,
+          imageURL: updatedCommunity.imageURL,
+          bannerURL: updatedCommunity.bannerURL,
+          description: updatedCommunity.description,
         } as Community,
       }));
 
@@ -42,17 +49,17 @@ const useCommunityImage = (communityData: Community) => {
           if (snippet.communityId === communityData.id) {
             return {
               ...snippet,
-              imageURL: downloadURL,
+              imageURL: updatedCommunity.imageURL,
             };
           }
           return snippet;
         }),
       }));
     } catch (error) {
-      console.log("Error: onUploadImage", error);
+      console.log("Error: onUpdateProfile", error);
       showToast({
-        title: "Image not Updated",
-        description: "There was an error updating image",
+        title: "Profile not Updated",
+        description: "There was an error updating the profile",
         status: "error",
       });
     } finally {
@@ -96,7 +103,7 @@ const useCommunityImage = (communityData: Community) => {
   };
 
   return {
-    updateImage: onUpdateImage,
+    updateProfile: onUpdateProfile,
     deleteCommunityImage: onDeleteCommunityImage,
     uploadingImage,
   };

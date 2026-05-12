@@ -29,6 +29,8 @@ interface PostActionsProps {
  * @param showToast - Toast helper to display copy feedback.
  * @returns Button stack for post interactions.
  */
+import { FaRegCommentAlt } from "react-icons/fa";
+
 const PostActions: React.FC<PostActionsProps> = ({
   handleDelete,
   loadingDelete,
@@ -43,11 +45,23 @@ const PostActions: React.FC<PostActionsProps> = ({
     ml={1}
     mb={1}
     color="gray.500"
-    fontWeight={600}
+    fontWeight={700}
     direction="row"
     gap={1}
-    pb={2}
+    p={2}
   >
+    <Button
+      variant="ghost"
+      height="32px"
+      borderRadius="md"
+      _hover={{ bg: "whiteAlpha.100", color: "white" }}
+      gap={2}
+      px={3}
+    >
+      <Icon as={FaRegCommentAlt} fontSize={16} />
+      <Text fontSize="9pt">Comments</Text>
+    </Button>
+
     <Clipboard.Root
       value={postLink}
       onStatusChange={(details: any) => {
@@ -62,36 +76,52 @@ const PostActions: React.FC<PostActionsProps> = ({
     >
       <Button
         as={Clipboard.Trigger as any}
-        variant={"action" as any}
+        variant="ghost"
         height="32px"
+        borderRadius="md"
+        _hover={{ bg: "whiteAlpha.100", color: "white" }}
+        gap={2}
+        px={3}
         onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
           event.stopPropagation();
         }}
       >
-        <Icon as={FiShare2} mr={2} />
+        <Icon as={FiShare2} fontSize={18} />
         <Text fontSize="9pt">Share</Text>
       </Button>
     </Clipboard.Root>
 
-    <Button variant={"action" as any} height="32px" onClick={handleSave}>
+    <Button
+      variant="ghost"
+      height="32px"
+      borderRadius="md"
+      _hover={{ bg: "whiteAlpha.100", color: "white" }}
+      gap={2}
+      px={3}
+      onClick={handleSave}
+    >
       <Icon
         as={isSaved ? BsBookmarkFill : BsBookmark}
-        mr={2}
-        color={isSaved ? "brand.100" : "gray.500"}
+        fontSize={18}
+        color={isSaved ? "#FF8A65" : "inherit"}
       />
-      <Text fontSize="9pt" color={isSaved ? "brand.100" : "gray.500"}>
+      <Text fontSize="9pt" color={isSaved ? "#FF8A65" : "inherit"}>
         {isSaved ? "Saved" : "Save"}
       </Text>
     </Button>
 
     {(userIsCreator || userIsAdmin) && (
       <Button
-        variant={"action" as any}
+        variant="ghost"
         height="32px"
+        borderRadius="md"
+        _hover={{ bg: "red.900", color: "red.200" }}
+        gap={2}
+        px={3}
         onClick={handleDelete}
         loading={loadingDelete}
       >
-        <Icon as={LuTrash} mr={2} />
+        <Icon as={LuTrash} fontSize={18} />
         <Text fontSize="9pt">Delete</Text>
       </Button>
     )}

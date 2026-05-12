@@ -1,11 +1,6 @@
 import React from "react";
 import { Icon, Text } from "@chakra-ui/react";
-import {
-  IoArrowDownCircleOutline,
-  IoArrowDownCircleSharp,
-  IoArrowUpCircleOutline,
-  IoArrowUpCircleSharp,
-} from "react-icons/io5";
+import { IoChevronDownOutline, IoChevronUpOutline } from "react-icons/io5";
 import { Post } from "@/types/post";
 
 type VoteSectionProps = {
@@ -20,14 +15,6 @@ type VoteSectionProps = {
   votingDisabled?: boolean;
 };
 
-/**
- * Upvote/downvote controls for a post card.
- * @param userVoteValue - Current user's vote value to style icons.
- * @param onVote - Handler invoked with vote intent.
- * @param post - Post being voted on.
- * @param votingDisabled - Disables interaction when lacking permission.
- * @returns Icon pair with vote count.
- */
 const VoteSection: React.FC<VoteSectionProps> = ({
   userVoteValue,
   onVote,
@@ -37,40 +24,39 @@ const VoteSection: React.FC<VoteSectionProps> = ({
   return (
     <>
       <Icon
-        as={userVoteValue === 1 ? IoArrowUpCircleSharp : IoArrowUpCircleOutline}
-        color={
-          votingDisabled
-            ? "gray.300"
-            : userVoteValue === 1
-            ? "red.500"
-            : "gray.500"
-        }
+        as={IoChevronUpOutline}
+        color={userVoteValue === 1 ? "#FF4500" : "gray.400"}
         fontSize={22}
         cursor={votingDisabled ? "not-allowed" : "pointer"}
-        _hover={votingDisabled ? undefined : { color: "red.300" }}
+        _hover={votingDisabled ? undefined : { color: "#FF4500", bg: "whiteAlpha.100" }}
+        borderRadius="md"
+        transition="all 0.2s"
         onClick={(event) =>
           !votingDisabled && onVote(event, post, 1, post.communityId)
         }
       />
-      <Text fontSize="12pt" color={{ base: "gray.600", _dark: "gray.400" }}>
-        {post.voteStatus}
+      <Text 
+        fontSize="10pt" 
+        fontWeight={700}
+        color={
+          userVoteValue === 1 
+          ? "#FF4500" 
+          : userVoteValue === -1 
+          ? "#7193FF" 
+          : "white"
+        }
+        my={1}
+      >
+        {post.voteStatus || 0}
       </Text>
       <Icon
-        as={
-          userVoteValue === -1
-            ? IoArrowDownCircleSharp
-            : IoArrowDownCircleOutline
-        }
-        color={
-          votingDisabled
-            ? "gray.300"
-            : userVoteValue === -1
-            ? "red.500"
-            : "gray.500"
-        }
-        _hover={votingDisabled ? undefined : { color: "red.300" }}
+        as={IoChevronDownOutline}
+        color={userVoteValue === -1 ? "#7193FF" : "gray.400"}
+        _hover={votingDisabled ? undefined : { color: "#7193FF", bg: "whiteAlpha.100" }}
         fontSize={22}
         cursor={votingDisabled ? "not-allowed" : "pointer"}
+        borderRadius="md"
+        transition="all 0.2s"
         onClick={(event) =>
           !votingDisabled && onVote(event, post, -1, post.communityId)
         }

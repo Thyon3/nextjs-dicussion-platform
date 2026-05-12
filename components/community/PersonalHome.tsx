@@ -1,8 +1,7 @@
-import { communityStateAtom } from "@/atoms/communitiesAtom";
 import useCallCreatePost from "@/hooks/posts/useCallCreatePost";
-import { Button, Flex, Image, Stack, Text } from "@chakra-ui/react";
-import { useAtomValue } from "jotai";
+import { Button, Flex, Icon, Stack, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { AiFillHome } from "react-icons/ai";
 import CreateCommunityModal from "../modal/create-community/CreateCommunityModal";
 
 /**
@@ -11,9 +10,7 @@ import CreateCommunityModal from "../modal/create-community/CreateCommunityModal
  * @returns A themed card with action buttons for home feed management.
  */
 const PersonalHome: React.FC = () => {
-  const [open, setOpen] = useState(false); // modal initially closed
-  const mySnippets = useAtomValue(communityStateAtom).mySnippets;
-
+  const [open, setOpen] = useState(false);
   const { onClick } = useCallCreatePost();
 
   return (
@@ -21,45 +18,60 @@ const PersonalHome: React.FC = () => {
       <CreateCommunityModal open={open} handleClose={() => setOpen(false)} />
       <Flex
         direction="column"
-        bg={{ base: "white", _dark: "gray.800" }}
-        borderRadius={10}
-        cursor="pointer"
+        bg="#1A1D23"
+        borderRadius={12}
         border="1px solid"
-        borderColor={{ base: "gray.300", _dark: "gray.700" }}
+        borderColor="whiteAlpha.100"
         position="sticky"
-        shadow="md"
+        top="60px"
       >
         <Flex
-          align="flex-end"
-          color="white"
-          p="6px 10px"
-          bg="blue.500"
-          height="34px"
-          borderRadius="10px 10px 0px 0px"
-          fontWeight={600}
-          bgImage="url(/images/banners/small.jpg)"
-          backgroundSize="cover"
-        ></Flex>
-        <Flex direction="column" p="12px">
-          <Flex align="center" mb={2}>
-            <Image
-              src="/images/logo.svg"
-              height="50px"
-              alt="Website logo"
-              mr={2}
-            />
-            <Text fontWeight={600}>Home</Text>
+          align="center"
+          p="12px 16px"
+          bgGradient="linear(to-r, #FF8A65, #FF5722)"
+          height="50px"
+          borderRadius="12px 12px 0px 0px"
+        >
+          <Flex 
+            bg="whiteAlpha.200" 
+            p={2} 
+            borderRadius="lg" 
+            mr={3}
+            border="1px solid"
+            borderColor="whiteAlpha.300"
+          >
+            <Icon as={AiFillHome} color="white" fontSize={20} />
           </Flex>
+          <Text fontWeight={700} color="white" fontSize="14pt">
+            Home
+          </Text>
+        </Flex>
+        
+        <Flex direction="column" p="16px">
+          <Text fontSize="10pt" color="gray.400" mb={6}>
+            Home page personalized based on your subscribed communities. Circus represents a shift back to intentional spaces.
+          </Text>
+          
           <Stack gap={3}>
-            <Text fontSize="9pt">
-              Home page personalized based on your subscribed communities.
-            </Text>
-            <Button height="30px" onClick={onClick}>
+            <Button 
+              height="38px" 
+              bg="white" 
+              color="black"
+              _hover={{ bg: "gray.200" }}
+              fontWeight={700}
+              borderRadius="full"
+              onClick={onClick}
+            >
               Create Post
             </Button>
             <Button
               variant="outline"
-              height="30px"
+              height="38px"
+              color="white"
+              borderColor="whiteAlpha.300"
+              _hover={{ bg: "whiteAlpha.100" }}
+              fontWeight={700}
+              borderRadius="full"
               onClick={() => setOpen(true)}
             >
               Create Community

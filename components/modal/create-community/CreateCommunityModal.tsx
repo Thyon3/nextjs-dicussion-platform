@@ -63,7 +63,7 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
   open,
   handleClose,
 }) => {
-  const { createCommunity, loading } = useCreateCommunity();
+  const { createCommunity, loading, error: createError } = useCreateCommunity();
   const {
     register,
     handleSubmit,
@@ -135,6 +135,11 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
                     }
                   />
                 </Box>
+                {createError && (
+                  <Text fontSize="10pt" color="red.500" fontWeight={600} mt={2} textAlign="center">
+                    {createError}
+                  </Text>
+                )}
               </form>
             </DialogBody>
           </Box>

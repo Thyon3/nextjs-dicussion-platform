@@ -8,6 +8,7 @@ export { default as Navbar } from "./navbar/Navbar";
 export { default as CommunityLoader } from "./loaders/CommunityLoader";
 export { default as PostLoader } from "./loaders/post-loader/PostLoader";
 export { default as PostLoaderItem } from "./loaders/post-loader/PostLoaderItem";
+export { default as SidebarFooter } from "./community/SidebarFooter";
 export { default as CreatePostLink } from "./community/CreatePostLink";
 export { default as PersonalHome } from "./community/PersonalHome";
 export { default as NotFound } from "./community/NotFound";

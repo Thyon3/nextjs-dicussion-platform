@@ -14,17 +14,24 @@ interface AboutCommunityProps {
  */
 const AboutCommunity: React.FC<AboutCommunityProps> = ({ communityData }) => {
   return (
-    <Flex width="100%" p={2} fontSize="10pt">
-      <Flex direction="column" flexGrow={1}>
-        <Text fontWeight={700}>Subscribers</Text>
-        <Text>{communityData.numberOfMembers.toLocaleString()}</Text>
-      </Flex>
-      <Flex direction="column" flexGrow={1}>
-        <Text fontWeight={700}>Created</Text>
-        <Text>
-          {communityData.createdAt &&
-            moment(communityData.createdAt).format("MMM DD, YYYY")}
+    <Flex direction="column" width="100%" p={2} fontSize="10pt">
+      {communityData.description && (
+        <Text mb={4} fontSize="14px" lineHeight="1.5">
+          {communityData.description}
         </Text>
+      )}
+      <Flex width="100%">
+        <Flex direction="column" flexGrow={1}>
+          <Text fontWeight={700}>Subscribers</Text>
+          <Text>{communityData.numberOfMembers.toLocaleString()}</Text>
+        </Flex>
+        <Flex direction="column" flexGrow={1}>
+          <Text fontWeight={700}>Created</Text>
+          <Text>
+            {communityData.createdAt &&
+              moment(communityData.createdAt).format("MMM DD, YYYY")}
+          </Text>
+        </Flex>
       </Flex>
     </Flex>
   );

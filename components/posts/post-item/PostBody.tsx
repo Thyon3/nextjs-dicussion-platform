@@ -23,38 +23,46 @@ const PostBody: React.FC<PostBodyProps> = ({
   return (
     <>
       {post.body && (
-        <Text fontSize="12pt">{post.body.split(" ").slice(0, 30).join(" ")}</Text>
+        <Text fontSize="11pt" color="gray.300" lineHeight="tall" mt={1}>
+          {post.body.split(" ").slice(0, 50).join(" ")}
+          {post.body.split(" ").length > 50 && "..."}
+        </Text>
       )}
       {post.imageURL && (
-        <Flex justify="center" align="center">
+        <Flex justify="center" align="center" mt={3}>
           {loadingImage && (
-            <Skeleton height="300px" width="100%" borderRadius={10} />
+            <Skeleton height="300px" width="100%" borderRadius={12} />
           )}
           <Image
-            mt={4}
             src={post.imageURL}
-            alt="Image for post"
-            maxHeight="450px"
+            alt="Post image"
+            maxHeight="500px"
             maxWidth="100%"
-            borderRadius="10px"
+            borderRadius={12}
+            border="1px solid"
+            borderColor="whiteAlpha.100"
             display={loadingImage ? "none" : "unset"}
             onLoad={() => setLoadingImage(false)}
-            shadow="md"
           />
         </Flex>
       )}
       {post.videoURL && (
-        <Flex justify="center" align="center" mt={4}>
+        <Flex justify="center" align="center" mt={3}>
           <video 
             src={post.videoURL} 
             controls 
-            style={{ maxHeight: '450px', maxWidth: '100%', borderRadius: '10px' }} 
+            style={{ 
+              maxHeight: '500px', 
+              maxWidth: '100%', 
+              borderRadius: '12px',
+              border: '1px solid rgba(255, 255, 255, 0.1)'
+            }} 
           />
         </Flex>
       )}
       {post.linkURL && (
-        <Flex mt={2}>
-          <Text as="a" href={post.linkURL} target="_blank" color="blue.500" _hover={{ textDecoration: 'underline' }}>
+        <Flex mt={3} p={2} bg="whiteAlpha.50" borderRadius="md" border="1px solid" borderColor="whiteAlpha.100">
+          <Text as="a" href={post.linkURL} target="_blank" color="#FF8A65" fontSize="10pt" fontWeight={600} _hover={{ textDecoration: 'underline' }}>
             {post.linkURL}
           </Text>
         </Flex>

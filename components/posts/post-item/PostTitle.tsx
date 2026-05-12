@@ -13,7 +13,7 @@ type PostTitleProps = {
  */
 const PostTitle: React.FC<PostTitleProps> = ({ post }) => {
   return (
-    <Text fontSize="14pt" fontWeight={600}>
+    <Text fontSize="14pt" fontWeight={700} color="white" mb={2}>
       {post.title}
     </Text>
   );

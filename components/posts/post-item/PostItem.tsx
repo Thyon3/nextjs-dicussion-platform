@@ -128,27 +128,23 @@ const PostItem: React.FC<PostItemProps> = ({
   return (
     <Flex
       border="1px solid"
-      bg={{ base: "white", _dark: "gray.800" }}
-      borderColor={{ base: "gray.300", _dark: "gray.700" }}
-      borderRadius={"xl"}
-      _hover={{
-        borderColor: singlePostPage
-          ? "none"
-          : { base: "gray.400", _dark: "gray.600" },
-        boxShadow: singlePostPage ? undefined : "sm",
-      }}
+      bg="#1A1D23"
+      borderColor="whiteAlpha.100"
+      borderRadius={12}
       cursor={singlePostPage ? "unset" : "pointer"}
-      onClick={() => onSelectPost && onSelectPost(post)} // if a post is selected then open post
-      shadow="md"
+      onClick={() => onSelectPost && onSelectPost(post)}
+      _hover={{
+        borderColor: "whiteAlpha.300",
+      }}
+      transition="all 0.2s"
     >
-      {/* Left Section */}
+      {/* Left Section: Voting */}
       <Flex
         direction="column"
         align="center"
-        bg={singlePostPage ? "none" : { base: "gray.100", _dark: "gray.700" }}
-        p={2}
-        width="40px"
-        borderRadius={singlePostPage ? "0" : "10px 0px 0px 10px"}
+        p={3}
+        width="48px"
+        borderRadius="12px 0px 0px 12px"
       >
         <VoteSection
           userVoteValue={userVoteValue}

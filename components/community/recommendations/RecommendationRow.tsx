@@ -30,41 +30,73 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
       <Flex
         align="center"
         fontSize="10pt"
-        p="10px 12px"
+        p="8px 16px"
+        _hover={{ bg: "whiteAlpha.50" }}
+        transition="all 0.2s"
       >
-        <Flex align="center" gap={2} minWidth={0} flex={1} mr={2}>
-          <Text flexShrink={0} width="20px">
+        <Flex align="center" gap={3} minWidth={0} flex={1}>
+          <Text 
+            fontWeight={700} 
+            color="gray.500" 
+            width="14px"
+          >
             {index + 1}
           </Text>
-          <Image
-            src={item.imageURL}
-            borderRadius="full"
-            boxSize="28px"
-            alt="Community Icon"
-            flexShrink={0}
-          />
+          
+          <Flex align="center" minWidth={0} gap={3}>
+            {item.imageURL ? (
+              <Image
+                src={item.imageURL}
+                borderRadius="full"
+                boxSize="32px"
+                alt="Community Icon"
+                fallbackSrc="https://www.redditstatic.com/desktop2x/img/favicon/favicon-32x32.png"
+              />
+            ) : (
+              <Icon
+                as={IoPeopleCircleOutline}
+                fontSize="24pt"
+                color="#FF5722"
+              />
+            )}
+            <Flex direction="column" minWidth={0}>
+              <Text
+                fontWeight={700}
+                color="white"
+                fontSize="10pt"
+                overflow="hidden"
+                textOverflow="ellipsis"
+                whiteSpace="nowrap"
+              >
+                {item.id}
+              </Text>
+              <Text fontSize="8pt" color="gray.500">
+                {item.numberOfMembers || 0} members
+              </Text>
+            </Flex>
+          </Flex>
         </Flex>
-        <Text
-          fontWeight={600}
-          fontSize="10pt"
-          overflow="hidden"
-          textOverflow="ellipsis"
-          whiteSpace="nowrap"
-        >
-          {item.id}
-        </Text>
+
         <Button
-          height="24px"
-          fontSize="8pt"
-          px={4}
-          variant={isJoined ? "outline" : "solid"}
-          flexShrink={0}
+          height="30px"
+          fontSize="9pt"
+          px={6}
+          bg={isJoined ? "transparent" : "white"}
+          color={isJoined ? "white" : "black"}
+          border={isJoined ? "1px solid" : "none"}
+          borderColor={isJoined ? "whiteAlpha.300" : "transparent"}
+          borderRadius="full"
+          fontWeight={700}
+          _hover={{ 
+            bg: isJoined ? "whiteAlpha.100" : "gray.200",
+            borderColor: isJoined ? "whiteAlpha.500" : "transparent"
+          }}
           onClick={(event) => {
             event.preventDefault();
             onJoinOrLeaveCommunity(item, isJoined);
           }}
         >
-          {isJoined ? "Unsubscribe" : "Subscribe"}
+          {isJoined ? "Joined" : "Join"}
         </Button>
       </Flex>
     </Link>

@@ -17,13 +17,13 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
   onJoinOrLeaveCommunity,
 }) => {
   return (
-    <Link key={item.id} href={`/community/${item.id}`}>
+    <Link href={`/community/${item.id}`}>
       <div className="flex items-center text-[10pt] p-2 px-4 hover:bg-white/5 transition-all cursor-pointer">
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <span className="font-bold text-gray-500 w-[14px]">
             {index + 1}
           </span>
-          
+
           <div className="flex items-center min-w-0 gap-3">
             {item.imageURL ? (
               <img
@@ -32,13 +32,11 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
                 alt="Community Icon"
               />
             ) : (
-              <IoPeopleCircleOutline
-                className="text-[24pt] text-[#FF5722]"
-              />
+              <IoPeopleCircleOutline className="text-[24pt] text-[#FF5722] shrink-0" />
             )}
             <div className="flex flex-col min-w-0">
               <span className="font-bold text-white text-[10pt] overflow-hidden text-ellipsis whitespace-nowrap">
-                {item.id}
+                r/{item.id}
               </span>
               <span className="text-[8pt] text-gray-500">
                 {item.numberOfMembers || 0} members
@@ -47,19 +45,22 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
           </div>
         </div>
 
-        <button
-          className={`h-[30px] text-[9pt] px-6 rounded-full font-bold transition-all ${
-            isJoined 
-            ? "bg-transparent text-white border border-white/30 hover:bg-white/10 hover:border-white/50" 
-            : "bg-white text-black hover:bg-gray-200"
-          }`}
-          onClick={(event) => {
-            event.preventDefault();
-            onJoinOrLeaveCommunity(item, isJoined);
-          }}
-        >
-          {isJoined ? "Joined" : "Join"}
-        </button>
+        {/* Only show Join button if NOT already a member */}
+        {!isJoined ? (
+          <button
+            className="h-[30px] text-[9pt] px-6 rounded-full font-bold transition-all bg-white text-black hover:bg-gray-200 shrink-0"
+            onClick={(event) => {
+              event.preventDefault();
+              onJoinOrLeaveCommunity(item, false);
+            }}
+          >
+            Join
+          </button>
+        ) : (
+          <span className="h-[30px] text-[9pt] px-3 flex items-center font-semibold text-gray-500 shrink-0">
+            ✓ Joined
+          </span>
+        )}
       </div>
     </Link>
   );

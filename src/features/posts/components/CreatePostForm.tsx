@@ -36,6 +36,7 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
 
   const isFormValid = () => {
     if (!title.trim()) return false;
+    if (!selectedCommunityId) return false; // community is required
     if (selectedTab === 'image' && !file) return false;
     if (selectedTab === 'link' && !linkURL.trim()) return false;
     return true;
@@ -65,21 +66,38 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({ communityId: initialCom
 
   return (
     <div className="flex flex-col gap-4 w-full">
-      {/* Community Selector */}
-      {!initialCommunityId && user?.communitySnippets && (
-        <div className="w-[300px]">
-          <select 
-            className="w-full bg-[#1A1D23] text-white border border-white/10 rounded-md h-[40px] px-3 focus:outline-none focus:border-[#FF5722] transition-colors"
-            value={selectedCommunityId}
-            onChange={handleCommunitySelect}
-          >
-            <option value="" disabled>Choose a community</option>
-            {user.communitySnippets.map((snippet) => (
-              <option key={snippet.communityId} value={snippet.communityId}>
-                r/{snippet.communityId}
-              </option>
-            ))}
-          </select>
+      {/* Community Selector — always shown when not pre-set by page context */}
+      {!initialCommunityId && (
+        <div className="flex flex-col gap-1">
+          <label className="text-[12px] font-bold text-gray-400 uppercase tracking-wider">
+            Choose a community <span className="text-red-500">*</span>
+          </label>
+          {user?.communitySnippets?.length ? (
+            <select
+              className={`w-full max-w-[360px] bg-[#1A1D23] text-white border rounded-md h-[42px] px-3 focus:outline-none transition-colors ${
+                !selectedCommunityId
+                  ? 'border-red-500/50 focus:border-red-500'
+                  : 'border-white/10 focus:border-[#FF5722]'
+              }`}
+              value={selectedCommunityId}
+              onChange={handleCommunitySelect}
+            >
+              <option value="" disabled>Select a community…</option>
+              {user.communitySnippets.map((snippet) => (
+                <option key={snippet.communityId} value={snippet.communityId}>
+                  r/{snippet.communityId}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <p className="text-[13px] text-gray-500">
+              You haven&apos;t joined any communities yet.{' '}
+              <a href="/communities" className="text-[#FF5722] hover:underline">Browse communities</a>
+            </p>
+          )}
+          {!selectedCommunityId && user?.communitySnippets?.length ? (
+            <p className="text-[11px] text-red-400">A community is required to post.</p>
+          ) : null}
         </div>
       )}
 

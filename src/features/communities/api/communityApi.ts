@@ -60,3 +60,7 @@ export async function updateCommunityPrivacy(communityId: string, privacyType: s
     body: JSON.stringify({ communityId, isPrivate: privacyType === 'private' }),
   });
 }
+
+export async function getUserCommunities(userId: string) {
+  return apiClient<any[]>(`/users/${userId}/communities`);
+}

@@ -19,7 +19,7 @@ const useCustomToast = () => {
         toaster.create({
           title,
           description,
-          type: status,
+          status, // Use 'status' directly as defined in ToastOptions
           closable: true,
           duration: 5000,
         });

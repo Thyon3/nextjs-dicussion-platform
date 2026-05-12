@@ -1,142 +1,154 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  ReactNode,
+} from "react";
+import { IoCheckmarkCircle, IoAlertCircle, IoInformationCircle, IoWarning, IoClose } from "react-icons/io5";
 
-interface Toast {
-  id: string;
-  title?: string;
+/* ─── Types ──────────────────────────────────────────────────── */
+interface ToastOptions {
+  title: string;
   description?: string;
   status: "success" | "error" | "warning" | "info";
   duration?: number;
-  isClosable?: boolean;
+  closable?: boolean;
+}
+
+interface Toast extends ToastOptions {
+  id: string;
 }
 
 interface ToastContextType {
   toasts: Toast[];
-  toast: (options: Omit<Toast, "id">) => void;
+  showToast: (options: ToastOptions) => void;
   removeToast: (id: string) => void;
 }
 
+/* ─── Global event bus (works outside React) ─────────────────── */
+type ToastListener = (options: ToastOptions) => void;
+const listeners: ToastListener[] = [];
+
+export const toaster = {
+  create: (options: ToastOptions) => {
+    listeners.forEach((fn) => fn(options));
+  },
+};
+
+/* ─── Context ────────────────────────────────────────────────── */
 const ToastContext = createContext<ToastContextType | undefined>(undefined);
 
 export function ToasterProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const toast = useCallback((options: Omit<Toast, "id">) => {
+  const showToast = useCallback((options: ToastOptions) => {
     const id = Math.random().toString(36).substr(2, 9);
     const newToast: Toast = {
       ...options,
       id,
-      duration: options.duration || 5000,
-      isClosable: options.isClosable !== false,
+      duration: options.duration ?? 5000,
+      closable: options.closable !== false,
     };
-
     setToasts((prev) => [...prev, newToast]);
-
-    // Auto remove after duration
     if (newToast.duration && newToast.duration > 0) {
       setTimeout(() => {
-        removeToast(id);
+        setToasts((prev) => prev.filter((t) => t.id !== id));
       }, newToast.duration);
     }
   }, []);
 
   const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+    setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
+  // Subscribe the React showToast to the global event bus
+  useEffect(() => {
+    listeners.push(showToast);
+    return () => {
+      const idx = listeners.indexOf(showToast);
+      if (idx !== -1) listeners.splice(idx, 1);
+    };
+  }, [showToast]);
+
   return (
-    <ToastContext.Provider value={{ toasts, toast, removeToast }}>
+    <ToastContext.Provider value={{ toasts, showToast, removeToast }}>
       {children}
       <ToastContainer />
     </ToastContext.Provider>
   );
 }
 
+/* ─── Hook ───────────────────────────────────────────────────── */
+export function useToast() {
+  const ctx = useContext(ToastContext);
+  if (!ctx) throw new Error("useToast must be used within ToasterProvider");
+  return ctx;
+}
+
+/* ─── Container ──────────────────────────────────────────────── */
 function ToastContainer() {
   const { toasts, removeToast } = useToast();
-
   return (
-    <div className="fixed top-4 right-4 z-50 space-y-2">
-      {toasts.map((toast) => (
-        <ToastItem key={toast.id} toast={toast} onRemove={removeToast} />
+    <div className="fixed top-4 right-4 z-[9999] flex flex-col gap-2 pointer-events-none">
+      {toasts.map((t) => (
+        <ToastItem key={t.id} toast={t} onRemove={removeToast} />
       ))}
     </div>
   );
 }
 
-function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string) => void }) {
-  const bgColor = {
-    success: "bg-green-500",
-    error: "bg-red-500",
-    warning: "bg-yellow-500",
-    info: "bg-blue-500",
-  }[toast.status];
+/* ─── Item ───────────────────────────────────────────────────── */
+const ICON_MAP = {
+  success: <IoCheckmarkCircle className="text-[20px] shrink-0" />,
+  error: <IoAlertCircle className="text-[20px] shrink-0" />,
+  warning: <IoWarning className="text-[20px] shrink-0" />,
+  info: <IoInformationCircle className="text-[20px] shrink-0" />,
+};
 
+const COLOR_MAP = {
+  success: "bg-green-600 border-green-500",
+  error: "bg-red-600 border-red-500",
+  warning: "bg-yellow-600 border-yellow-500",
+  info: "bg-blue-600 border-blue-500",
+};
+
+function ToastItem({
+  toast,
+  onRemove,
+}: {
+  toast: Toast;
+  onRemove: (id: string) => void;
+}) {
   return (
     <div
-      className={`${bgColor} text-white p-4 rounded-lg shadow-lg max-w-sm min-w-[300px] transform transition-all duration-300 ease-in-out`}
+      className={`${COLOR_MAP[toast.status]} border text-white px-4 py-3 rounded-[10px] shadow-2xl min-w-[300px] max-w-[400px] flex items-start gap-3 pointer-events-auto animate-in slide-in-from-right duration-300`}
     >
-      <div className="flex justify-between items-start">
-        <div className="flex-1">
-          {toast.title && (
-            <h4 className="font-semibold text-sm mb-1">{toast.title}</h4>
-          )}
-          {toast.description && (
-            <p className="text-sm opacity-90">{toast.description}</p>
-          )}
-        </div>
-        {toast.isClosable && (
-          <button
-            onClick={() => onRemove(toast.id)}
-            className="ml-4 text-white hover:opacity-75 transition-opacity"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
+      <div className="mt-0.5">{ICON_MAP[toast.status]}</div>
+      <div className="flex-1 min-w-0">
+        {toast.title && (
+          <p className="font-bold text-[14px] leading-tight">{toast.title}</p>
+        )}
+        {toast.description && (
+          <p className="text-[12px] opacity-90 mt-0.5">{toast.description}</p>
         )}
       </div>
+      {toast.closable && (
+        <button
+          className="shrink-0 opacity-70 hover:opacity-100 transition-opacity"
+          onClick={() => onRemove(toast.id)}
+        >
+          <IoClose size={18} />
+        </button>
+      )}
     </div>
   );
 }
 
-export function useToast() {
-  const context = useContext(ToastContext);
-  if (context === undefined) {
-    throw new Error("useToast must be used within a ToasterProvider");
-  }
-  return context;
-}
-
-// Export a default Toaster component for backward compatibility
+// Backward-compat named export
 export function Toaster() {
-  return null; // The actual toaster is handled by ToasterProvider
+  return null;
 }
-
-// Export toaster function for backward compatibility
-export const toaster = {
-  success: (title: string, description?: string) => {
-    // This is a placeholder - actual implementation should use useToast hook
-    console.log('Success:', title, description);
-  },
-  error: (title: string, description?: string) => {
-    console.log('Error:', title, description);
-  },
-  info: (title: string, description?: string) => {
-    console.log('Info:', title, description);
-  },
-  warning: (title: string, description?: string) => {
-    console.log('Warning:', title, description);
-  }
-};

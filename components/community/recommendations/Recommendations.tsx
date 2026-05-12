@@ -8,7 +8,7 @@ import SuggestionsHeader from "./SuggestionsHeader";
 
 const Recommendations: React.FC = () => {
   const { communityStateValue } = useCommunityState();
-  const { onJoinOrLeaveCommunity } = useCommunityMembershipActions();
+  const { onJoinOrLeaveCommunity, isLoadingUser } = useCommunityMembershipActions();
   const { communities, loading } = useCommunitiesFeed({ limit: 5 });
   const { user } = useAuth();
 
@@ -40,6 +40,7 @@ const Recommendations: React.FC = () => {
                   item={item}
                   index={index}
                   isJoined={isJoined}
+                  joinDisabled={isLoadingUser}
                   onJoinOrLeaveCommunity={onJoinOrLeaveCommunity}
                 />
               );

@@ -11,7 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 const CommunitiesPage: React.FC = () => {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [loading, setLoading] = useState(false);
-  const { onJoinOrLeaveCommunity } = useCommunityMembershipActions();
+  const { onJoinOrLeaveCommunity, isLoadingUser } = useCommunityMembershipActions();
   const { communityStateValue } = useCommunityState();
   const { user } = useAuth();
 
@@ -56,6 +56,7 @@ const CommunitiesPage: React.FC = () => {
                     item={item}
                     index={index}
                     isJoined={isJoined}
+                    joinDisabled={isLoadingUser}
                     onJoinOrLeaveCommunity={onJoinOrLeaveCommunity}
                   />
                 );

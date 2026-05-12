@@ -2,6 +2,7 @@ import { useState } from "react";
 import { communityStateAtom } from "@/atoms/communitiesAtom";
 import { useSetAtom } from "jotai";
 import { useAuth } from "../useAuth";
+import { useAuthStore } from "@/src/features/auth";
 import useCustomToast from "../useCustomToast";
 import { leaveCommunity } from "@/lib/api/community";
 
@@ -9,6 +10,7 @@ import { leaveCommunity } from "@/lib/api/community";
  * A custom hook that provides functionality for a user to leave a community.
  * It handles backend leave logic, removes the user's membership snippet,
  * and decrements the community's member count in local Jotai state.
+ * Also keeps the Zustand auth store in sync so GlobalHooks doesn't stale-reset.
  * @returns An object containing `leaveCommunity` function, loading state, and error state.
  */
 const useLeaveCommunity = () => {
@@ -24,6 +26,7 @@ const useLeaveCommunity = () => {
     try {
       await leaveCommunity(user.id, communityId);
 
+      // Update Jotai atom immediately
       setCommunityStateValue((prev) => ({
         ...prev,
         mySnippets: prev.mySnippets.filter(
@@ -33,10 +36,31 @@ const useLeaveCommunity = () => {
           prev.currentCommunity?.id === communityId
             ? {
                 ...prev.currentCommunity,
-                numberOfMembers: prev.currentCommunity.numberOfMembers - 1,
+                numberOfMembers: Math.max(
+                  0,
+                  prev.currentCommunity.numberOfMembers - 1
+                ),
               }
             : prev.currentCommunity,
       }));
+
+      // Sync the Zustand auth store so GlobalHooks doesn't re-add the snippet
+      useAuthStore.setState((s) => ({
+        user: s.user
+          ? {
+              ...s.user,
+              communitySnippets: (s.user.communitySnippets ?? []).filter(
+                (sn) => sn.communityId !== communityId
+              ),
+            }
+          : null,
+      }));
+
+      showToast({
+        title: `Left r/${communityId}`,
+        description: "You have left this community",
+        status: "info",
+      });
     } catch (error: any) {
       console.log("Error: leaveCommunity", error.message);
       setError(error.message);
@@ -58,4 +82,3 @@ const useLeaveCommunity = () => {
 };
 
 export default useLeaveCommunity;
-

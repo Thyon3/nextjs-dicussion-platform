@@ -12,6 +12,7 @@ import { useAuthStore } from "@/src/features/auth";
  */
 const useCommunityMembershipActions = () => {
   const { user } = useAuth();
+  const isLoadingUser = useAuthStore((s) => s.isLoadingUser);
   const openModal = useAuthStore((s) => s.openModal);
   const { joinCommunity, joinLoading } = useJoinCommunity();
   const { leaveCommunity, leaveLoading } = useLeaveCommunity();
@@ -20,6 +21,10 @@ const useCommunityMembershipActions = () => {
     communityData: Community,
     isJoined: boolean
   ) => {
+    // Don't show login modal while auth is still being checked —
+    // wait until we're sure whether the user is logged in or not.
+    if (isLoadingUser) return;
+
     if (!user) {
       openModal('login');
       return;
@@ -35,8 +40,8 @@ const useCommunityMembershipActions = () => {
   return {
     onJoinOrLeaveCommunity,
     loading: joinLoading || leaveLoading,
+    isLoadingUser,
   };
 };
 
 export default useCommunityMembershipActions;
-

@@ -7,6 +7,7 @@ type RecommendationRowProps = {
   item: Community;
   index: number;
   isJoined: boolean;
+  joinDisabled?: boolean;
   onJoinOrLeaveCommunity: (community: Community, isJoined: boolean) => void;
 };
 
@@ -14,15 +15,14 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
   item,
   index,
   isJoined,
+  joinDisabled = false,
   onJoinOrLeaveCommunity,
 }) => {
   return (
     <Link href={`/community/${item.id}`}>
       <div className="flex items-center text-[10pt] p-2 px-4 hover:bg-white/5 transition-all cursor-pointer">
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <span className="font-bold text-gray-500 w-[14px]">
-            {index + 1}
-          </span>
+          <span className="font-bold text-gray-500 w-[14px]">{index + 1}</span>
 
           <div className="flex items-center min-w-0 gap-3">
             {item.imageURL ? (
@@ -45,21 +45,25 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
           </div>
         </div>
 
-        {/* Only show Join button if NOT already a member */}
-        {!isJoined ? (
-          <button
-            className="h-[30px] text-[9pt] px-6 rounded-full font-bold transition-all bg-white text-black hover:bg-gray-200 shrink-0"
-            onClick={(event) => {
-              event.preventDefault();
-              onJoinOrLeaveCommunity(item, false);
-            }}
-          >
-            Join
-          </button>
-        ) : (
-          <span className="h-[30px] text-[9pt] px-3 flex items-center font-semibold text-gray-500 shrink-0">
-            ✓ Joined
-          </span>
+        {/* Show nothing while auth is loading to avoid flicker */}
+        {!joinDisabled && (
+          <>
+            {isJoined ? (
+              <span className="h-[30px] text-[9pt] px-3 flex items-center font-semibold text-gray-500 shrink-0">
+                ✓ Joined
+              </span>
+            ) : (
+              <button
+                className="h-[30px] text-[9pt] px-6 rounded-full font-bold transition-all bg-white text-black hover:bg-gray-200 shrink-0"
+                onClick={(event) => {
+                  event.preventDefault();
+                  onJoinOrLeaveCommunity(item, false);
+                }}
+              >
+                Join
+              </button>
+            )}
+          </>
         )}
       </div>
     </Link>

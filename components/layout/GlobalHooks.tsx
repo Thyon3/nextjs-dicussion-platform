@@ -22,27 +22,28 @@ const GlobalHooks: React.FC = () => {
 
   useEffect(() => {
     if (!loading && user) {
-      // Bootstrap snippets
+      // Bootstrap community snippets from user object returned by the API.
+      // After the backend fix, both login and /auth/me now return communitySnippets.
       setCommunityState((prev) => ({
         ...prev,
-        mySnippets: user.communitySnippets || [],
+        mySnippets: user.communitySnippets ?? [],
         snippetFetched: true,
       }));
 
       // Bootstrap saved posts
       setSavedPostState((prev) => ({
         ...prev,
-        savedPosts: user.savedPosts || [],
+        savedPosts: user.savedPosts ?? [],
         fetched: true,
       }));
 
       // Bootstrap post votes
       setPostState((prev) => ({
         ...prev,
-        postVotes: user.postVotes || [],
+        postVotes: user.postVotes ?? [],
       }));
     } else if (!loading && !user) {
-      // Clear states if not logged in
+      // Clear all state when logged out
       setCommunityState((prev) => ({
         ...prev,
         mySnippets: [],

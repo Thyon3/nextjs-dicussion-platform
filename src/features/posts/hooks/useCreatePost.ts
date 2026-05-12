@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/src/features/auth';
-import { createPost, uploadToCloudinary } from '../api/postApi';
+import { createPost } from '../api/postApi';
 import { CreatePostDTO, PostType } from '../types';
 import useCustomToast from '@/hooks/useCustomToast';
 
@@ -34,12 +34,6 @@ export const useCreatePost = (communityId?: string, communityImageURL?: string) 
     setError('');
 
     try {
-      let mediaURL = '';
-      if (file && (postType === 'image' || postType === 'video')) {
-        const resourceType = file.type.startsWith('video/') ? 'video' : 'image';
-        mediaURL = await uploadToCloudinary(file, resourceType);
-      }
-
       const dto: CreatePostDTO = {
         communityId,
         communityImageURL: communityImageURL || '',
@@ -48,13 +42,11 @@ export const useCreatePost = (communityId?: string, communityImageURL?: string) 
           title,
           body,
           postType,
-          imageURL: postType === 'image' ? mediaURL : undefined,
-          videoURL: postType === 'video' ? mediaURL : undefined,
           linkURL: postType === 'link' ? linkURL : undefined,
         },
       };
 
-      const newPost = await createPost(dto);
+      const newPost = await createPost(dto, file);
       
       toast({
         title: 'Post created successfully',

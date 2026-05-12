@@ -23,7 +23,21 @@ export async function uploadToCloudinary(file: File, resourceType: 'image' | 'vi
   return data.secure_url;
 }
 
-export async function createPost(dto: CreatePostDTO): Promise<Post> {
+export async function createPost(dto: CreatePostDTO, file?: File): Promise<Post> {
+  if (file) {
+    const formData = new FormData();
+    formData.append('communityId', dto.communityId || '');
+    formData.append('communityImageURL', dto.communityImageURL || '');
+    formData.append('username', dto.username);
+    formData.append('postData', JSON.stringify(dto.postData));
+    formData.append('file', file);
+
+    return apiClient<Post>('/posts/create', {
+      method: 'POST',
+      body: formData,
+    });
+  }
+
   return apiClient<Post>('/posts/create', {
     method: 'POST',
     body: JSON.stringify(dto),

@@ -19,7 +19,6 @@ const Navbar: React.FC = () => {
             Circus
           </span>
         </Link>
-
       </div>
 
       {/* Center Section: Search Bar */}

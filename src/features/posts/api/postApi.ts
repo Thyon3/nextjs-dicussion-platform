@@ -91,3 +91,7 @@ export async function getPostVotes(userId: string) {
 export async function getCommunityPostVotes(userId: string, communityId: string) {
   return apiClient<any[]>(`/posts/votes/${userId}/${communityId}`);
 }
+
+export async function getFollowingPosts() {
+  return apiClient<any[]>('/posts/following');
+}

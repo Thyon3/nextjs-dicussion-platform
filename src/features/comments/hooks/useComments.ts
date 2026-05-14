@@ -40,7 +40,7 @@ const useComments = (postId: string, communityId: string, postTitle: string) => 
     setCreateLoading(true);
     try {
       const newComment = await createCommentApi({
-        creatorDisplayText: user.displayName,
+        creatorDisplayText: user.displayName || user.email.split('@')[0] || 'Anonymous',
         communityId,
         postId,
         postTitle,

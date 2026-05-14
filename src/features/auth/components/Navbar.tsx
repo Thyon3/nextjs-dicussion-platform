@@ -20,14 +20,6 @@ const Navbar: React.FC = () => {
           </span>
         </Link>
 
-        <Link href="/communities">
-          <div className="relative group">
-            <span className="font-semibold text-[11pt] text-white cursor-pointer transition-colors hover:text-white/80">
-              Communities
-            </span>
-            <div className="absolute -bottom-[18px] left-0 w-full h-[2px] bg-[#FF5722]" />
-          </div>
-        </Link>
       </div>
 
       {/* Center Section: Search Bar */}

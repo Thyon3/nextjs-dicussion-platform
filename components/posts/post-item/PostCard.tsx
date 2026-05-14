@@ -56,13 +56,13 @@ const PostCard: React.FC<PostCardProps> = ({
 
   return (
     <div
-      className={`flex bg-[#1A1D23] rounded-[4px] transition-all ${
-        singlePostPage ? "cursor-default" : "cursor-pointer hover:bg-white/5"
+      className={`flex bg-transparent rounded-[12px] transition-all ${
+        singlePostPage ? "cursor-default" : "cursor-pointer hover:bg-[#1A1D23]"
       }`}
       onClick={() => onSelectPost && onSelectPost(post)}
     >
       {/* ── Vote Rail ────────────────────────────────────── */}
-      <div className="flex flex-col items-center py-2 px-2 w-[40px] shrink-0 rounded-l-[4px]">
+      <div className="flex flex-col items-center py-2 px-2 w-[40px] shrink-0 rounded-l-[12px]">
         <button
           className={`p-1 rounded transition-colors hover:bg-white/10 ${
             userVoteValue === 1 ? "text-[#FF4500]" : "text-gray-400 hover:text-[#FF4500]"
@@ -137,7 +137,7 @@ const PostCard: React.FC<PostCardProps> = ({
 
         {/* Image */}
         {post.imageURL && (
-          <div className="relative flex justify-center items-center mb-2 min-h-[100px] max-h-[512px] overflow-hidden rounded-[4px] bg-black/20">
+          <div className="relative flex justify-center items-center mb-2 min-h-[100px] max-h-[512px] overflow-hidden rounded-[8px] bg-black/20">
             {loadingImage && (
               <div className="absolute inset-0 bg-white/5 animate-pulse" />
             )}
@@ -157,7 +157,7 @@ const PostCard: React.FC<PostCardProps> = ({
           <video
             src={post.videoURL}
             controls
-            className="max-h-[512px] w-full rounded-[4px] mb-2 object-contain bg-black"
+            className="max-h-[512px] w-full rounded-[8px] mb-2 object-contain bg-black"
           />
         )}
 

@@ -130,7 +130,7 @@ const PostCard: React.FC<PostCardProps> = ({
 
         {/* Body text */}
         {post.body && (
-          <p className="text-[13px] text-gray-400 leading-relaxed mb-2 line-clamp-3">
+          <p className={`text-[13px] text-gray-400 leading-relaxed mb-2 ${singlePostPage ? "" : "line-clamp-3"}`}>
             {post.body}
           </p>
         )}

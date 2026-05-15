@@ -78,7 +78,7 @@ const PostDetailPage: React.FC = () => {
                 userVoteValue={0}
               />
               
-              <div className="bg-[#1A1D23] rounded-[4px] p-4 lg:p-6 mt-4">
+              <div className="p-4 lg:p-6 mt-4">
                  <CommentSection 
                    postId={post.id!} 
                    communityId={post.communityId} 

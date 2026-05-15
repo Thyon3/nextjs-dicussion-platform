@@ -203,10 +203,10 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
   return (
     <Link
       href={href}
-      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all group ${
+      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${
         active
-          ? "bg-white/10 text-white font-semibold"
-          : "text-gray-400 hover:bg-white/5 hover:text-white"
+          ? "bg-white/10 text-white font-bold"
+          : "text-gray-400 hover:bg-white/5 hover:text-white font-bold"
       }`}
     >
       <div
@@ -216,7 +216,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       >
         {icon}
       </div>
-      <span className="text-[13px]">{label}</span>
+      <span className="text-[14px] uppercase tracking-wide">{label}</span>
     </Link>
   );
 };

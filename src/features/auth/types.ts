@@ -31,6 +31,52 @@ export interface AuthUser {
   communitySnippets: CommunitySnippet[];
   postVotes: PostVote[];
   savedPosts: SavedPost[];
+  settings?: {
+    account: {
+      gender: string;
+      locationCustomization: string;
+      twoFactorEnabled: boolean;
+    };
+    profile: {
+      about: string;
+      socialLinks: { platform: string; url: string }[];
+      nsfw: boolean;
+      activeCommunityVisibility: boolean;
+      contentVisibility: boolean;
+    };
+    privacy: {
+      allowFollowing: boolean;
+      chatRequests: string;
+      personalizeAds: boolean;
+    };
+    preferences: {
+      displayLanguage: string;
+      contentLanguages: string[];
+      showMatureContent: boolean;
+      blurMatureMedia: boolean;
+      showRecommendations: boolean;
+      autoplayMedia: boolean;
+      reduceMotion: boolean;
+      displayMode: string;
+      useCommunityThemes: boolean;
+      openInNewTab: boolean;
+      defaultFeedView: string;
+    };
+    notifications: {
+      communityNotifications: boolean;
+      webPushNotifications: boolean;
+      chatMessages: string;
+      chatRequests: string;
+      activity: {
+        mentions: boolean;
+        comments: boolean;
+        upvotesPosts: boolean;
+        upvotesComments: boolean;
+        replies: boolean;
+        newFollowers: boolean;
+      };
+    };
+  };
 }
 
 // =========================================

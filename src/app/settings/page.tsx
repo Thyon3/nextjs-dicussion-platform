@@ -1,22 +1,47 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/src/features/auth';
+import { updateUserSettings } from '@/src/features/auth/api/userApi';
 import { 
   IoChevronForwardOutline, 
-  IoLogoGoogle, 
-  IoLogoApple, 
   IoArrowRedoOutline,
   IoCheckmarkOutline,
-  IoMoonOutline,
-  IoLanguageOutline
 } from 'react-icons/io5';
+import useCustomToast from '@/hooks/useCustomToast';
 
 type TabType = 'Account' | 'Profile' | 'Privacy' | 'Preferences' | 'Notifications' | 'Email';
 
 const SettingsPage: React.FC = () => {
+  const { user, setUser } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>('Account');
+  const showToast = useCustomToast();
+
+  const handleUpdate = async (newSettings: any) => {
+    try {
+      const updatedUser = await updateUserSettings(newSettings);
+      setUser(updatedUser);
+    } catch (error) {
+      console.error('Error updating settings:', error);
+      showToast({
+        title: 'Error',
+        description: 'Failed to update settings',
+        status: 'error',
+      });
+    }
+  };
 
   const tabs: TabType[] = ['Account', 'Profile', 'Privacy', 'Preferences', 'Notifications', 'Email'];
+
+  if (!user) return <div className="min-h-screen bg-[#0B0E11] flex items-center justify-center text-gray-500">Please log in to view settings.</div>;
+
+  const settings = user.settings || {
+    account: { gender: 'Man', locationCustomization: 'Use approximate location (based on IP)', twoFactorEnabled: false },
+    profile: { about: '', socialLinks: [], nsfw: false, activeCommunityVisibility: true, contentVisibility: true },
+    privacy: { allowFollowing: true, chatRequests: 'Everyone', personalizeAds: true },
+    preferences: { displayLanguage: 'English (US)', contentLanguages: [], showMatureContent: false, blurMatureMedia: false, showRecommendations: true, autoplayMedia: true, reduceMotion: false, displayMode: 'Auto', useCommunityThemes: true, openInNewTab: false, defaultFeedView: 'Card' },
+    notifications: { communityNotifications: true, webPushNotifications: false, chatMessages: 'All on', chatRequests: 'All on', activity: { mentions: true, comments: true, upvotesPosts: true, upvotesComments: true, replies: true, newFollowers: true } }
+  };
 
   return (
     <div className="min-h-screen bg-[#0B0E11] text-white pt-8 pb-20">
@@ -43,12 +68,12 @@ const SettingsPage: React.FC = () => {
 
         {/* Tab Content */}
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
-          {activeTab === 'Account' && <AccountSettings />}
-          {activeTab === 'Profile' && <ProfileSettings />}
-          {activeTab === 'Privacy' && <PrivacySettings />}
-          {activeTab === 'Preferences' && <PreferencesSettings />}
-          {activeTab === 'Notifications' && <NotificationsSettings />}
-          {activeTab === 'Email' && <div className="text-gray-500 italic py-10">Email settings UI coming soon...</div>}
+          {activeTab === 'Account' && <AccountSettings settings={settings.account} onUpdate={(val) => handleUpdate({ account: val })} />}
+          {activeTab === 'Profile' && <ProfileSettings settings={settings.profile} onUpdate={(val) => handleUpdate({ profile: val })} />}
+          {activeTab === 'Privacy' && <PrivacySettings settings={settings.privacy} onUpdate={(val) => handleUpdate({ privacy: val })} />}
+          {activeTab === 'Preferences' && <PreferencesSettings settings={settings.preferences} onUpdate={(val) => handleUpdate({ preferences: val })} />}
+          {activeTab === 'Notifications' && <NotificationsSettings settings={settings.notifications} onUpdate={(val) => handleUpdate({ notifications: val })} />}
+          {activeTab === 'Email' && <div className="text-gray-500 italic py-10">Email settings coming soon...</div>}
         </div>
       </div>
     </div>
@@ -56,12 +81,12 @@ const SettingsPage: React.FC = () => {
 };
 
 /* ── Profile Tab ───────────────────────────────────────────────── */
-const ProfileSettings = () => (
+const ProfileSettings = ({ settings, onUpdate }: any) => (
   <div className="space-y-10">
     <Section title="Profile Information">
       <SettingItem label="Display name (optional)" sublabel="Set a display name that is shown instead of your username" value="Set name" hasArrow />
-      <SettingItem label="About (optional)" sublabel="A brief description of yourself shown on your profile" value="Set description" hasArrow />
-      <SettingItem label="Social links" sublabel="Add links to your social media profiles" value="0" hasArrow />
+      <SettingItem label="About (optional)" sublabel="A brief description of yourself shown on your profile" value={settings.about || "Set description"} hasArrow />
+      <SettingItem label="Social links" sublabel="Add links to your social media profiles" value={settings.socialLinks?.length || "0"} hasArrow />
     </Section>
 
     <Section title="Images">
@@ -69,20 +94,32 @@ const ProfileSettings = () => (
     </Section>
 
     <Section title="Profile Visibility">
-      <SettingItem label="NSFW" sublabel="Mark your profile as Not Safe for Work" action={<Toggle active={false} />} />
-      <SettingItem label="Active in communities visibility" sublabel="Show which communities you are active in on your profile" action={<Toggle active={true} />} />
-      <SettingItem label="Content visibility" sublabel="Allow your posts to be visible in search results and r/all" action={<Toggle active={true} />} />
+      <SettingItem 
+        label="NSFW" 
+        sublabel="Mark your profile as Not Safe for Work" 
+        action={<Toggle active={settings.nsfw} onChange={(val) => onUpdate({ nsfw: val })} />} 
+      />
+      <SettingItem 
+        label="Active in communities visibility" 
+        sublabel="Show which communities you are active in on your profile" 
+        action={<Toggle active={settings.activeCommunityVisibility} onChange={(val) => onUpdate({ activeCommunityVisibility: val })} />} 
+      />
+      <SettingItem 
+        label="Content visibility" 
+        sublabel="Allow your posts to be visible in search results and r/all" 
+        action={<Toggle active={settings.contentVisibility} onChange={(val) => onUpdate({ contentVisibility: val })} />} 
+      />
     </Section>
   </div>
 );
 
 /* ── Account Tab ───────────────────────────────────────────────── */
-const AccountSettings = () => (
+const AccountSettings = ({ settings, onUpdate }: any) => (
   <div className="space-y-10">
     <Section title="General">
       <SettingItem label="Email address" value="user@example.com" hasArrow />
-      <SettingItem label="Gender" value="Man" hasArrow />
-      <SettingItem label="Location customization" value="Use approximate location (based on IP)" hasArrow />
+      <SettingItem label="Gender" value={settings.gender} hasArrow />
+      <SettingItem label="Location customization" value={settings.locationCustomization} hasArrow />
     </Section>
 
     <Section title="Account authorization">
@@ -96,16 +133,10 @@ const AccountSettings = () => (
         sublabel="Connect to log in with your Apple account" 
         action={<button className="bg-white/10 hover:bg-white/20 text-white px-4 py-1.5 rounded-full text-[13px] font-bold transition-all">Connect</button>} 
       />
-      <SettingItem label="Two-factor authentication" action={<Toggle active={false} />} />
-    </Section>
-
-    <Section title="Apps">
-      <SettingItem label="App settings" value="0" hasArrow />
-      <SettingItem label="Learn about Developer Platform" action={<IoArrowRedoOutline size={18} className="text-gray-500" />} />
-    </Section>
-
-    <Section title="Reddit Premium">
-      <SettingItem label="Get premium" hasArrow />
+      <SettingItem 
+        label="Two-factor authentication" 
+        action={<Toggle active={settings.twoFactorEnabled} onChange={(val) => onUpdate({ twoFactorEnabled: val })} />} 
+      />
     </Section>
 
     <Section title="Advanced">
@@ -115,21 +146,23 @@ const AccountSettings = () => (
 );
 
 /* ── Privacy Tab ───────────────────────────────────────────────── */
-const PrivacySettings = () => (
+const PrivacySettings = ({ settings, onUpdate }: any) => (
   <div className="space-y-10">
     <Section title="Social interactions">
-      <SettingItem label="Allow people to follow you" sublabel="Let people follow you to see your profile posts in their home feed" action={<Toggle active={true} />} />
-      <SettingItem label="Who can send you chat requests" value="Everyone" hasArrow />
+      <SettingItem 
+        label="Allow people to follow you" 
+        sublabel="Let people follow you to see your profile posts in their home feed" 
+        action={<Toggle active={settings.allowFollowing} onChange={(val) => onUpdate({ allowFollowing: val })} />} 
+      />
+      <SettingItem label="Who can send you chat requests" value={settings.chatRequests} hasArrow />
       <SettingItem label="Blocked accounts" hasArrow />
     </Section>
 
-    <Section title="Discoverability">
-      <SettingItem label="List your profile on old.reddit.com/users" sublabel="List your profile and allow posts to appear in r/all" action={<Toggle active={true} />} />
-      <SettingItem label="Show up in search results" sublabel="Allow search engines like Google to link to your profile" action={<Toggle active={true} />} />
-    </Section>
-
     <Section title="Advertising">
-      <SettingItem label="Personalize ads based on information from our partners" action={<Toggle active={true} />} />
+      <SettingItem 
+        label="Personalize ads based on information from our partners" 
+        action={<Toggle active={settings.personalizeAds} onChange={(val) => onUpdate({ personalizeAds: val })} />} 
+      />
     </Section>
 
     <Section title="Advanced">
@@ -144,57 +177,76 @@ const PrivacySettings = () => (
 );
 
 /* ── Preferences Tab ───────────────────────────────────────────── */
-const PreferencesSettings = () => (
+const PreferencesSettings = ({ settings, onUpdate }: any) => (
   <div className="space-y-10">
     <Section title="Language">
-      <SettingItem label="Display language" value="English (US)" hasArrow />
-      <SettingItem label="Content languages" sublabel="Content in the listed languages won't be translated" value="1" hasArrow />
+      <SettingItem label="Display language" value={settings.displayLanguage} hasArrow />
+      <SettingItem label="Content languages" sublabel="Content in the listed languages won't be translated" value={settings.contentLanguages?.length || "0"} hasArrow />
     </Section>
 
     <Section title="Content">
-      <SettingItem label="Show mature content (I'm over 18)" sublabel="See Not Safe for Work content in your feeds" action={<Toggle active={false} />} />
-      <SettingItem label="Blur mature (18+) images and media" action={<Toggle active={false} disabled />} />
-      <SettingItem label="Show recommendations in home feed" action={<Toggle active={true} />} />
+      <SettingItem 
+        label="Show mature content (I'm over 18)" 
+        sublabel="See Not Safe for Work content in your feeds" 
+        action={<Toggle active={settings.showMatureContent} onChange={(val) => onUpdate({ showMatureContent: val })} />} 
+      />
+      <SettingItem 
+        label="Show recommendations in home feed" 
+        action={<Toggle active={settings.showRecommendations} onChange={(val) => onUpdate({ showRecommendations: val })} />} 
+      />
       <SettingItem label="Muted communities" hasArrow />
     </Section>
 
     <Section title="Accessibility">
-      <SettingItem label="Autoplay media" action={<Toggle active={true} />} />
-      <SettingItem label="Reduce Motion" action={<Toggle active={false} />} />
+      <SettingItem 
+        label="Autoplay media" 
+        action={<Toggle active={settings.autoplayMedia} onChange={(val) => onUpdate({ autoplayMedia: val })} />} 
+      />
+      <SettingItem 
+        label="Reduce Motion" 
+        action={<Toggle active={settings.reduceMotion} onChange={(val) => onUpdate({ reduceMotion: val })} />} 
+      />
     </Section>
 
     <Section title="Experience">
-      <SettingItem label="Display Mode" value="Auto (follow system settings)" hasArrow />
-      <SettingItem label="Use community themes" action={<Toggle active={true} />} />
-      <SettingItem label="Open posts in new tab" action={<Toggle active={false} />} />
-      <SettingItem label="Default feed view" value="Card" hasArrow />
+      <SettingItem label="Display Mode" value={settings.displayMode} hasArrow />
+      <SettingItem 
+        label="Use community themes" 
+        action={<Toggle active={settings.useCommunityThemes} onChange={(val) => onUpdate({ useCommunityThemes: val })} />} 
+      />
+      <SettingItem 
+        label="Open posts in new tab" 
+        action={<Toggle active={settings.openInNewTab} onChange={(val) => onUpdate({ openInNewTab: val })} />} 
+      />
+      <SettingItem label="Default feed view" value={settings.defaultFeedView} hasArrow />
     </Section>
   </div>
 );
 
 /* ── Notifications Tab ─────────────────────────────────────────── */
-const NotificationsSettings = () => (
+const NotificationsSettings = ({ settings, onUpdate }: any) => (
   <div className="space-y-10">
     <Section title="General">
       <SettingItem label="Community notifications" hasArrow />
-      <SettingItem label="Web push notifications" action={<Toggle active={false} disabled />} />
-    </Section>
-
-    <Section title="Messages">
-      <SettingItem label="Chat messages" value="All on" hasArrow />
-      <SettingItem label="Chat requests" value="All on" hasArrow />
       <SettingItem 
-        label="Mark all as read" 
-        sublabel="Mark all chat conversations as read" 
-        action={<button className="bg-white/10 hover:bg-white/20 text-white px-4 py-1.5 rounded-full text-[13px] font-bold transition-all">Mark as read</button>} 
+        label="Web push notifications" 
+        action={<Toggle active={settings.webPushNotifications} onChange={(val) => onUpdate({ webPushNotifications: val })} />} 
       />
     </Section>
 
     <Section title="Activity">
-      <SettingItem label="Mentions of u/username" value="All on" hasArrow />
-      <SettingItem label="Comments on your posts" value="All on" hasArrow />
-      <SettingItem label="Upvotes on your posts" value="All on" hasArrow />
-      <SettingItem label="New followers" value="All on" hasArrow />
+      <SettingItem 
+        label="Mentions" 
+        action={<Toggle active={settings.activity?.mentions} onChange={(val) => onUpdate({ activity: { mentions: val } })} />} 
+      />
+      <SettingItem 
+        label="Comments" 
+        action={<Toggle active={settings.activity?.comments} onChange={(val) => onUpdate({ activity: { comments: val } })} />} 
+      />
+      <SettingItem 
+        label="Upvotes" 
+        action={<Toggle active={settings.activity?.upvotesPosts} onChange={(val) => onUpdate({ activity: { upvotesPosts: val } })} />} 
+      />
     </Section>
   </div>
 );
@@ -227,11 +279,14 @@ const SettingItem: React.FC<{
   </div>
 );
 
-const Toggle: React.FC<{ active: boolean; disabled?: boolean }> = ({ active, disabled }) => (
-  <div className={`w-[40px] h-[22px] rounded-full relative transition-all ${
-    disabled ? 'bg-white/5 cursor-not-allowed' : 
-    active ? 'bg-[#FF5722] cursor-pointer' : 'bg-white/10 cursor-pointer'
-  }`}>
+const Toggle: React.FC<{ active: boolean; disabled?: boolean; onChange?: (val: boolean) => void }> = ({ active, disabled, onChange }) => (
+  <div 
+    onClick={() => !disabled && onChange && onChange(!active)}
+    className={`w-[40px] h-[22px] rounded-full relative transition-all ${
+      disabled ? 'bg-white/5 cursor-not-allowed' : 
+      active ? 'bg-[#FF5722] cursor-pointer' : 'bg-white/10 cursor-pointer'
+    }`}
+  >
     <div className={`absolute top-[3px] w-[16px] h-[16px] rounded-full bg-white transition-all shadow-md flex items-center justify-center ${
       active ? 'left-[21px]' : 'left-[3px]'
     }`}>
@@ -241,3 +296,4 @@ const Toggle: React.FC<{ active: boolean; disabled?: boolean }> = ({ active, dis
 );
 
 export default SettingsPage;
+

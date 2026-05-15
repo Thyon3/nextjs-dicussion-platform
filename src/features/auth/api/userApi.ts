@@ -17,3 +17,10 @@ export async function updateDisplayName(newDisplayName: string): Promise<AuthUse
     body: JSON.stringify({ newDisplayName }),
   });
 }
+
+export async function updateUserSettings(settings: Partial<AuthUser['settings']>): Promise<AuthUser> {
+  return apiClient<AuthUser>('/users/updateSettings', {
+    method: 'POST',
+    body: JSON.stringify({ settings }),
+  });
+}

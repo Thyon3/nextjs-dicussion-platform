@@ -8,6 +8,7 @@ import { LuTrash } from "react-icons/lu";
 import moment from "moment";
 import Link from "next/link";
 import { Post } from "@/types/post";
+import AutoPlayVideo from "./AutoPlayVideo";
 
 interface PostCardProps {
   post: Post;
@@ -56,67 +57,52 @@ const PostCard: React.FC<PostCardProps> = ({
 
   return (
     <div
-      className={`flex bg-transparent rounded-[12px] transition-all ${
+      className={`flex flex-col bg-transparent rounded-[12px] transition-all p-3 ${
         singlePostPage ? "cursor-default" : "cursor-pointer hover:bg-[#1A1D23]"
       }`}
       onClick={() => onSelectPost && onSelectPost(post)}
     >
-      {/* ── Vote Rail ────────────────────────────────────── */}
-      <div className="flex flex-col items-center py-2 px-2 w-[40px] shrink-0 rounded-l-[12px]">
-        <button
-          className={`p-1 rounded transition-colors hover:bg-white/10 ${
-            userVoteValue === 1 ? "text-[#FF4500]" : "text-gray-400 hover:text-[#FF4500]"
-          }`}
-          onClick={(e) => {
-            e.stopPropagation();
-            onVote(e, post, 1, post.communityId);
-          }}
-        >
-          <IoChevronUpOutline size={18} />
-        </button>
-        <span className={`text-[11px] font-bold my-0.5 ${voteColor}`}>
-          {post.voteStatus || 0}
-        </span>
-        <button
-          className={`p-1 rounded transition-colors hover:bg-white/10 ${
-            userVoteValue === -1 ? "text-[#7193FF]" : "text-gray-400 hover:text-[#7193FF]"
-          }`}
-          onClick={(e) => {
-            e.stopPropagation();
-            onVote(e, post, -1, post.communityId);
-          }}
-        >
-          <IoChevronDownOutline size={18} />
-        </button>
-      </div>
-
       {/* ── Post Content ─────────────────────────────────── */}
-      <div className="flex flex-col flex-1 min-w-0 py-2 pr-2">
+      <div className="flex flex-col flex-1 min-w-0">
         {/* Meta line: community • author • time */}
-        <div className="flex items-center gap-1.5 mb-1.5 flex-wrap">
-          {post.communityImageURL ? (
-            <img
-              src={post.communityImageURL}
-              alt={post.communityId}
-              className="w-5 h-5 rounded-full object-cover shrink-0"
-            />
-          ) : (
-            <IoPeopleCircleOutline size={18} className="text-[#FF5722] shrink-0" />
-          )}
-          <Link
-            href={`/community/${post.communityId}`}
-            onClick={(e) => e.stopPropagation()}
-            className="text-[12px] font-bold text-white hover:underline"
-          >
-            r/{post.communityId}
-          </Link>
+        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+          <div className="flex items-center gap-1.5">
+            {post.communityImageURL ? (
+              <img
+                src={post.communityImageURL}
+                alt={post.communityId}
+                className="w-5 h-5 rounded-full object-cover shrink-0"
+              />
+            ) : (
+              <IoPeopleCircleOutline size={18} className="text-[#FF5722] shrink-0" />
+            )}
+            <Link
+              href={`/community/${post.communityId}`}
+              onClick={(e) => e.stopPropagation()}
+              className="text-[12px] font-bold text-white hover:underline"
+            >
+              r/{post.communityId}
+            </Link>
+          </div>
+          
           <span className="text-gray-600 text-[12px]">•</span>
-          <span className="text-[12px] text-gray-500">
-            Posted by{" "}
-            <span className="hover:underline cursor-pointer">
-              u/{post.creatorUsername}
+          
+          <div className="flex items-center gap-1.5">
+            <div className="w-5 h-5 rounded-full overflow-hidden bg-white/10 flex items-center justify-center shrink-0">
+               {post.creatorPhotoURL ? (
+                 <img src={post.creatorPhotoURL} alt="Creator" className="w-full h-full object-cover" />
+               ) : (
+                 <IoPeopleCircleOutline size={18} className="text-gray-500" />
+               )}
+            </div>
+            <span className="text-[12px] text-gray-500">
+              Posted by{" "}
+              <span className="hover:underline cursor-pointer">
+                u/{post.creatorUsername}
+              </span>
             </span>
-          </span>
+          </div>
+
           <span className="text-gray-600 text-[12px]">•</span>
           <span className="text-[12px] text-gray-500">
             {moment(post.createTime).fromNow()}
@@ -152,13 +138,10 @@ const PostCard: React.FC<PostCardProps> = ({
           </div>
         )}
 
+
         {/* Video */}
         {post.videoURL && (
-          <video
-            src={post.videoURL}
-            controls
-            className="max-h-[512px] w-full rounded-[8px] mb-2 object-contain bg-black"
-          />
+          <AutoPlayVideo src={post.videoURL} />
         )}
 
         {/* Link */}

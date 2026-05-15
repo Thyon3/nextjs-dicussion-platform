@@ -56,7 +56,11 @@ const CommentItem: React.FC<CommentItemProps> = ({
         {/* Left Rail (Avatar + Hierarchy Line) */}
         <div className="flex flex-col items-center shrink-0 w-8">
           <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 mb-2 overflow-hidden border border-white/5">
-             <IoPeopleCircleOutline size={28} className="text-gray-400" />
+             {comment.creatorPhotoURL ? (
+               <img src={comment.creatorPhotoURL} alt="Avatar" className="w-full h-full object-cover" />
+             ) : (
+               <IoPeopleCircleOutline size={28} className="text-gray-400" />
+             )}
           </div>
           <div className="flex-1 w-full flex justify-center">
             <button 

@@ -9,4 +9,5 @@ export type Comment = {
   createdAt: Date | string;
   parentId?: string;
   depth: number;
+  creatorPhotoURL?: string;
 };

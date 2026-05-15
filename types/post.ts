@@ -13,6 +13,7 @@ export type Post = {
   linkURL?: string;
   communityImageURL?: string;
   createTime: Date | string;
+  creatorPhotoURL?: string;
 };
 
 /**

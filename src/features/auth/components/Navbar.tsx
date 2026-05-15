@@ -4,9 +4,10 @@ import React from 'react';
 import Link from 'next/link';
 import { useAuth, useAuthModal, AuthModal } from '@/src/features/auth';
 import { IoSearchOutline, IoNotificationsOutline } from 'react-icons/io5';
+import UserMenu from './UserMenu';
 
 const Navbar: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   const { openModal } = useAuthModal();
 
   return (
@@ -42,17 +43,7 @@ const Navbar: React.FC = () => {
         </button>
 
         {user ? (
-          <div className="flex items-center gap-3">
-            <span className="text-[9pt] font-bold text-white hidden lg:block">
-              {user.displayName || user.email?.split('@')[0]}
-            </span>
-            <button
-              className="h-[36px] px-4 rounded-full text-[10pt] font-bold text-white border border-white/30 hover:bg-white/10 transition-colors"
-              onClick={logout}
-            >
-              Log Out
-            </button>
-          </div>
+          <UserMenu />
         ) : (
           <div className="flex gap-3">
             <button

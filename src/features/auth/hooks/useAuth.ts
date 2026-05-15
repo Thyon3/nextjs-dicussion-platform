@@ -33,6 +33,7 @@ export function useAuth() {
     checkAuth: initAuth, // legacy alias
     openModal,
     closeModal,
+    setUser: useAuthStore((s) => s.setUser),
   };
 }
 

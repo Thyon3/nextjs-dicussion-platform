@@ -23,6 +23,7 @@ interface AuthState {
   openModal: (view?: AuthModalState['view']) => void;
   closeModal: () => void;
   setModalView: (view: AuthModalState['view']) => void;
+  setUser: (user: AuthUser | null) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -73,6 +74,8 @@ export const useAuthStore = create<AuthState>()(
 
       setModalView: (view) =>
         set((s) => ({ modal: { ...s.modal, view } }), false, 'auth/setModalView'),
+
+      setUser: (user) => set({ user }, false, 'auth/setUser'),
     }),
     { name: 'AuthStore' }
   )

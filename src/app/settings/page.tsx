@@ -81,13 +81,30 @@ const SettingsPage: React.FC = () => {
 };
 
 /* ── Profile Tab ───────────────────────────────────────────────── */
-const ProfileSettings = ({ settings, onUpdate }: any) => (
-  <div className="space-y-10">
-    <Section title="Profile Information">
-      <SettingItem label="Display name (optional)" sublabel="Set a display name that is shown instead of your username" value="Set name" hasArrow />
-      <SettingItem label="About (optional)" sublabel="A brief description of yourself shown on your profile" value={settings.about || "Set description"} hasArrow />
-      <SettingItem label="Social links" sublabel="Add links to your social media profiles" value={settings.socialLinks?.length || "0"} hasArrow />
-    </Section>
+const ProfileSettings = ({ settings, onUpdate }: any) => {
+  const { user } = useAuth();
+  
+  return (
+    <div className="space-y-10">
+      <Section title="Profile Information">
+        <SettingItem 
+          label="Display name (optional)" 
+          sublabel="Set a display name that is shown instead of your username" 
+          value={user?.displayName || "Set name"} 
+          isEditable
+          onSave={(val) => onUpdate({ displayName: val })} 
+          hasArrow 
+        />
+        <SettingItem 
+          label="About (optional)" 
+          sublabel="A brief description of yourself shown on your profile" 
+          value={settings.about || "Set description"} 
+          isEditable
+          onSave={(val) => onUpdate({ about: val })}
+          hasArrow 
+        />
+        <SettingItem label="Social links" sublabel="Add links to your social media profiles" value={settings.socialLinks?.length || "0"} hasArrow />
+      </Section>
 
     <Section title="Images">
       <SettingItem label="Avatar and banner" sublabel="Images shown on your profile" hasArrow />
@@ -111,7 +128,8 @@ const ProfileSettings = ({ settings, onUpdate }: any) => (
       />
     </Section>
   </div>
-);
+  );
+};
 
 /* ── Account Tab ───────────────────────────────────────────────── */
 const AccountSettings = ({ settings, onUpdate }: any) => (
@@ -265,19 +283,61 @@ const SettingItem: React.FC<{
   value?: string; 
   hasArrow?: boolean;
   action?: React.ReactNode;
-}> = ({ label, sublabel, value, hasArrow, action }) => (
-  <div className="flex items-center justify-between py-4 group cursor-pointer border-b border-transparent hover:border-white/5 transition-all">
-    <div className="flex flex-col min-w-0 pr-4">
-      <span className="text-[14px] font-bold text-white group-hover:text-[#FF5722] transition-colors">{label}</span>
-      {sublabel && <span className="text-[12px] text-gray-500 leading-tight mt-1">{sublabel}</span>}
+  isEditable?: boolean;
+  onSave?: (val: string) => void;
+}> = ({ label, sublabel, value, hasArrow, action, isEditable, onSave }) => {
+  const [editing, setEditing] = useState(false);
+  const [inputValue, setInputValue] = useState(value === "Set name" || value === "Set description" ? "" : value || "");
+
+  const handleSave = () => {
+    if (onSave) onSave(inputValue);
+    setEditing(false);
+  };
+
+  return (
+    <div className={`py-4 border-b border-transparent transition-all ${editing ? '' : 'group cursor-pointer hover:border-white/5'}`}>
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col min-w-0 pr-4 flex-1">
+          <span className="text-[14px] font-bold text-white group-hover:text-[#FF5722] transition-colors">{label}</span>
+          {sublabel && <span className="text-[12px] text-gray-500 leading-tight mt-1">{sublabel}</span>}
+          
+          {editing && (
+            <div className="mt-4 flex items-center gap-2 animate-in fade-in zoom-in duration-200">
+              <input 
+                autoFocus
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="bg-[#1A1D23] text-white text-[14px] px-3 py-2 rounded-[8px] border border-white/10 outline-none focus:border-[#FF5722] w-full max-w-[400px]"
+                placeholder={`Enter ${label}...`}
+              />
+              <button 
+                onClick={handleSave}
+                className="bg-[#FF5722] text-white px-4 py-2 rounded-full text-[13px] font-bold hover:bg-[#E64A19] transition-all"
+              >
+                Save
+              </button>
+              <button 
+                onClick={() => setEditing(false)}
+                className="text-gray-500 text-[13px] hover:text-white px-2"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
+        
+        {!editing && (
+          <div className="flex items-center gap-3 shrink-0" onClick={() => isEditable && setEditing(true)}>
+            {value && <span className="text-[14px] text-gray-400">{value}</span>}
+            {hasArrow && <IoChevronForwardOutline className="text-gray-500" size={18} />}
+            {action && action}
+          </div>
+        )}
+      </div>
     </div>
-    <div className="flex items-center gap-3 shrink-0">
-      {value && <span className="text-[14px] text-gray-400">{value}</span>}
-      {hasArrow && <IoChevronForwardOutline className="text-gray-500" size={18} />}
-      {action && action}
-    </div>
-  </div>
-);
+  );
+};
 
 const Toggle: React.FC<{ active: boolean; disabled?: boolean; onChange?: (val: boolean) => void }> = ({ active, disabled, onChange }) => (
   <div 

@@ -38,7 +38,7 @@ const RecentPosts: React.FC = () => {
 
   return (
     <div className="bg-[#1A1D23] rounded-[16px] border border-white/10 shadow-md overflow-hidden">
-      <div className="p-4 flex items-center justify-between border-b border-white/5">
+      <div className="font-reddit p-4 flex items-center justify-between border-b border-white/5">
         <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wider">
           From your communities
         </span>
@@ -74,10 +74,10 @@ const RecentPosts: React.FC = () => {
                     <FaReddit size={12} />
                   </div>
                 )}
-                <span className="text-[12px] font-bold text-white">r/{post.communityId}</span>
+                <span className="font-reddit text-[12px] font-bold text-white">r/{post.communityId}</span>
                 <span className="text-[12px] text-gray-500">• {moment(post.createTime).fromNow(true)}</span>
               </div>
-              <h4 className="text-[14px] font-medium text-white line-clamp-2 leading-tight">
+              <h4 className="font-reddit text-[14px] font-medium text-white line-clamp-2 leading-tight">
                 {post.title}
               </h4>
               <div className="flex items-center gap-3 mt-1">

@@ -1,14 +1,27 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useAuth, useAuthModal, AuthModal } from '@/src/features/auth';
 import { IoSearchOutline, IoNotificationsOutline } from 'react-icons/io5';
 import UserMenu from './UserMenu';
+import { useRouter } from 'next/navigation';
 
 const Navbar: React.FC = () => {
   const { user } = useAuth();
   const { openModal } = useAuthModal();
+  const router = useRouter();
+  const [search, setSearch] = useState('');
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      if (search.trim()) {
+        router.push(`/communities?search=${encodeURIComponent(search.trim())}`);
+      } else {
+        router.push('/communities');
+      }
+    }
+  };
 
   return (
     <nav className="bg-[#0B0E11] h-[56px] px-6 flex justify-between items-center border-b border-white/10 sticky top-0 z-[100]">
@@ -16,7 +29,7 @@ const Navbar: React.FC = () => {
       <div className="flex items-center gap-8">
         <Link href="/" className="flex items-center cursor-pointer">
           <img src="/images/logo.svg" className="h-[28px]" alt="Circus Logo" />
-          <span className="font-bold text-[16pt] ml-2 text-white tracking-tighter">
+          <span className="font-reddit font-bold text-[16pt] ml-2 text-white tracking-tighter">
             Circus
           </span>
         </Link>
@@ -28,8 +41,11 @@ const Navbar: React.FC = () => {
           <IoSearchOutline className="text-gray-400 text-[20px]" />
         </div>
         <input
-          placeholder="Search communities..."
-          className="w-full text-[10pt] bg-white/10 text-white h-[38px] rounded-full pl-11 pr-4 border border-transparent placeholder:text-gray-500 hover:bg-white/20 hover:border-white/30 focus:outline-none focus:bg-white/20 focus:border-[#FF5722] transition-all"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleSearchKeyDown}
+          placeholder="Search communities... (Press Enter)"
+          className="font-reddit w-full text-[10pt] bg-white/10 text-white h-[38px] rounded-full pl-11 pr-4 border border-transparent placeholder:text-gray-500 hover:bg-white/20 hover:border-white/30 focus:outline-none focus:bg-white/20 focus:border-[#FF5722] transition-all"
         />
       </div>
 

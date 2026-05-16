@@ -69,7 +69,7 @@ const LeftSidebar: React.FC = () => {
       {/* Communities Section */}
       <div className="flex flex-col px-3 mb-2">
         <div className="flex items-center justify-between px-2 py-2">
-          <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+          <span className="font-reddit text-[11px] font-bold text-gray-500 uppercase tracking-wider">
             Communities
           </span>
           {user && (
@@ -122,7 +122,7 @@ const LeftSidebar: React.FC = () => {
       {/* Resources Section */}
       <div className="flex flex-col px-3 pb-4">
         <div className="px-2 py-2">
-          <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+          <span className="font-reddit text-[11px] font-bold text-gray-500 uppercase tracking-wider">
             Resources
           </span>
         </div>
@@ -174,7 +174,7 @@ const CommunityItem: React.FC<CommunityItemProps> = ({ snippet, pathname }) => {
           className={`shrink-0 ${active ? "text-[#FF5722]" : "text-gray-500 group-hover:text-[#FF5722]"} transition-colors`}
         />
       )}
-      <span className="text-[13px] font-medium truncate">
+      <span className="font-reddit text-[13px] font-medium truncate">
         r/{snippet.communityId}
       </span>
       {snippet.isAdmin && (
@@ -216,7 +216,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       >
         {icon}
       </div>
-      <span className="text-[14px] uppercase tracking-wide">{label}</span>
+      <span className="font-reddit text-[14px] uppercase tracking-wide">{label}</span>
     </Link>
   );
 };

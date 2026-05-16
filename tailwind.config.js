@@ -13,7 +13,11 @@ module.exports = {
         brand: {
           100: '#FF5722',
         }
-      }
+      },
+      fontFamily: {
+        sans: ["'IBM Plex Sans'", "Inter", "sans-serif"],
+        reddit: ["'Reddit Sans'", "sans-serif"],
+      },
     },
   },
   plugins: [],

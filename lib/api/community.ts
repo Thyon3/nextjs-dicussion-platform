@@ -7,8 +7,9 @@ export const createCommunity = (communityName: string, communityType: string, us
   });
 };
 
-export const getCommunities = () => {
-  return apiClient('/communities/all');
+export const getCommunities = (search?: string) => {
+  const url = search ? `/communities/all?search=${encodeURIComponent(search)}` : '/communities/all';
+  return apiClient(url);
 };
 
 export const getCommunityData = (communityName: string) => {

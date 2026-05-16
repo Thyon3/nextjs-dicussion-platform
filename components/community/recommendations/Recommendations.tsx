@@ -47,7 +47,7 @@ const Recommendations: React.FC = () => {
             })}
             <div className="p-3">
               <button
-                className="w-full h-[32px] bg-white/10 text-white rounded-full text-[10pt] font-bold hover:bg-white/20 transition-colors"
+                className="font-reddit w-full h-[32px] bg-white/10 text-white rounded-full text-[10pt] font-bold hover:bg-white/20 transition-colors"
               >
                 View All
               </button>

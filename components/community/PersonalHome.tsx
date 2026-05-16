@@ -15,7 +15,7 @@ const PersonalHome: React.FC = () => {
           <div className="bg-white/20 p-2 rounded-lg mr-3 border border-white/30 flex items-center justify-center">
             <AiFillHome className="text-white text-[20px]" />
           </div>
-          <span className="font-bold text-white text-[14pt]">
+          <span className="font-reddit font-bold text-white text-[14pt]">
             Home
           </span>
         </div>
@@ -27,13 +27,13 @@ const PersonalHome: React.FC = () => {
           
           <div className="flex flex-col gap-3">
             <button 
-              className="h-[38px] bg-white text-black hover:bg-gray-200 font-bold rounded-full transition-colors"
+              className="font-reddit h-[38px] bg-white text-black hover:bg-gray-200 font-bold rounded-full transition-colors"
               onClick={onClick}
             >
               Create Post
             </button>
             <button
-              className="h-[38px] text-white border border-white/30 hover:bg-white/10 font-bold rounded-full transition-colors"
+              className="font-reddit h-[38px] text-white border border-white/30 hover:bg-white/10 font-bold rounded-full transition-colors"
               onClick={() => setOpen(true)}
             >
               Create Community

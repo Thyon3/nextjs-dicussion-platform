@@ -17,6 +17,7 @@ import {
   IoChevronUpOutline,
 } from "react-icons/io5";
 import { IoPeopleCircleOutline } from "react-icons/io5";
+import { BsBookmark } from "react-icons/bs";
 import { useAuth } from "@/hooks/useAuth";
 import useCommunityState from "@/hooks/community/useCommunityState";
 
@@ -62,6 +63,14 @@ const LeftSidebar: React.FC = () => {
           href="/all"
           active={pathname === "/all"}
         />
+        {user && (
+          <SidebarItem
+            icon={<BsBookmark size={18} />}
+            label="Saved"
+            href="/saved"
+            active={pathname === "/saved"}
+          />
+        )}
       </div>
 
       <div className="h-[1px] bg-white/10 my-3 mx-3" />

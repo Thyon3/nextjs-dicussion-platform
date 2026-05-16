@@ -12,6 +12,7 @@ export { default as SidebarFooter } from "./community/SidebarFooter";
 export { default as CreatePostLink } from "./community/CreatePostLink";
 export { default as PersonalHome } from "./community/PersonalHome";
 export { default as NotFound } from "./community/NotFound";
+export { default as SavedPostsWidget } from "./community/SavedPostsWidget";
 export { default as RestrictedCommunityBanner } from "./community/RestrictedCommunityBanner";
 export { default as About } from "./community/about/About";
 export { default as AboutHeaderBar } from "./community/about/AboutHeaderBar";

@@ -3,15 +3,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useAuth, useAuthModal, AuthModal } from '@/src/features/auth';
-import { IoSearchOutline, IoNotificationsOutline } from 'react-icons/io5';
+import { IoSearchOutline, IoNotificationsOutline, IoAddOutline } from 'react-icons/io5';
 import UserMenu from './UserMenu';
 import { useRouter } from 'next/navigation';
 import { getCommunities } from '@/lib/api/community';
 import { Community } from '@/types/community';
+import useCallCreatePost from '@/hooks/posts/useCallCreatePost';
 
 const Navbar: React.FC = () => {
   const { user } = useAuth();
   const { openModal } = useAuthModal();
+  const { onClick: handleCreatePost } = useCallCreatePost();
   const router = useRouter();
   const [search, setSearch] = useState('');
   const [suggestions, setSuggestions] = useState<Community[]>([]);
@@ -134,6 +136,15 @@ const Navbar: React.FC = () => {
 
       {/* Right Section: Actions */}
       <div className="flex items-center gap-4">
+        {user && (
+          <button
+            onClick={handleCreatePost}
+            aria-label="Create Post"
+            className="p-1 text-gray-400 hover:bg-white/10 hover:text-white rounded-lg transition-colors"
+          >
+            <IoAddOutline size={28} />
+          </button>
+        )}
         <button
           aria-label="Notifications"
           className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"

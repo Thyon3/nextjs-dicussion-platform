@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  CreatePostLink,
   PageContent,
   PersonalHome,
   Posts,
@@ -16,7 +15,6 @@ export default function Home() {
     <PageContent>
       {/* Center Content: Feed */}
       <div className="flex flex-col gap-5">
-        <CreatePostLink />
         <Posts />
       </div>
 

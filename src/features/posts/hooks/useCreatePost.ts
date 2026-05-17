@@ -35,7 +35,7 @@ export const useCreatePost = (communityId?: string, communityImageURL?: string) 
 
     try {
       const dto: CreatePostDTO = {
-        communityId,
+        communityId: communityId || '',
         communityImageURL: communityImageURL || '',
         username: user.displayName || user.email.split('@')[0],
         postData: {
@@ -53,7 +53,7 @@ export const useCreatePost = (communityId?: string, communityImageURL?: string) 
         status: 'success',
         duration: 3000,
         isClosable: true,
-      });
+      } as any);
 
       // Redirect to the community page where the post was created, or home if global
       if (communityId) {

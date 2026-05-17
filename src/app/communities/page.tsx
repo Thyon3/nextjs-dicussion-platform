@@ -3,14 +3,14 @@
 import { PageContent, RecommendationRow } from "@/components";
 import { getCommunities } from "@/lib/api/community";
 import { Community } from "@/types/community";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import useCommunityMembershipActions from "@/hooks/community/useCommunityMembershipActions";
 import useCommunityState from "@/hooks/community/useCommunityState";
 import { useAuth } from "@/hooks/useAuth";
 import { IoSearchOutline, IoCloseOutline } from "react-icons/io5";
 import { useSearchParams } from "next/navigation";
 
-const CommunitiesPage: React.FC = () => {
+const CommunitiesContent: React.FC = () => {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("search") || "";
   
@@ -26,7 +26,7 @@ const CommunitiesPage: React.FC = () => {
       const fetchCommunities = async () => {
         setLoading(true);
         try {
-          const response = await getCommunities(searchQuery);
+          const response = await getCommunities(searchQuery) as any;
           setCommunities(response);
         } catch (err) {
           console.error("Error fetching all communities", err);
@@ -110,6 +110,18 @@ const CommunitiesPage: React.FC = () => {
         </p>
       </div>
     </PageContent>
+  );
+};
+
+const CommunitiesPage: React.FC = () => {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center p-20">
+        <div className="w-8 h-8 border-4 border-white/20 border-t-[#FF5722] rounded-full animate-spin" />
+      </div>
+    }>
+      <CommunitiesContent />
+    </Suspense>
   );
 };
 

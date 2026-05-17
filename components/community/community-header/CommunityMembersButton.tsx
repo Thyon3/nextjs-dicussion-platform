@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CommunityMembersModal from "../../modal/community-members/CommunityMembersModal";
 import { FiUsers } from "react-icons/fi";
+import { Community } from "@/types/community";
 
 type CommunityMembersButtonProps = {
   communityId: string;
@@ -20,9 +21,9 @@ const CommunityMembersButton: React.FC<CommunityMembersButtonProps> = ({
   return (
     <>
       <CommunityMembersModal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        communityId={communityId}
+        open={isModalOpen}
+        handleClose={() => setModalOpen(false)}
+        communityData={{ id: communityId } as Community}
       />
       <button
         aria-label="View community members"

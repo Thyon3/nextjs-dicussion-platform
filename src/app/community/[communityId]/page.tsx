@@ -25,7 +25,7 @@ const CommunityPage: React.FC = () => {
       setLoading(true);
       setError(false);
       try {
-        const response = await getCommunity(communityId as string);
+        const response = await getCommunity(communityId as string) as any;
         setCommunityData(response);
       } catch (err) {
         console.error("Error fetching community", err);

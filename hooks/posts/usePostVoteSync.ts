@@ -26,7 +26,7 @@ const usePostVoteSync = (setPostStateValue: SetPostState) => {
   const getCommunityPostVotes = async (communityId: string) => {
     if (!user) return;
     try {
-      const response = await getCommunityPostVotesApi(user.id, communityId);
+      const response = await getCommunityPostVotesApi(user.id, communityId) as any;
       setPostStateValue((prev) => ({
         ...prev,
         postVotes: response.postVotes as PostVote[],

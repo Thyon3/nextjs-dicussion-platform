@@ -19,6 +19,16 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   const { comments, loading, createLoading, onCreateComment, onDeleteComment } = 
     useComments(postId, communityId, postTitle);
 
+  const handleCreateComment = async (text: string, parentId?: string) => {
+    const success = await onCreateComment(text, parentId);
+    return !!success;
+  };
+
+  const handleDeleteComment = async (comment: any) => {
+    const success = await onDeleteComment(comment);
+    return !!success;
+  };
+
   // Group comments for hierarchical rendering
   // Top-level comments have no parentId
   const topLevelComments = comments.filter((c) => !c.parentId);
@@ -28,7 +38,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       {/* ── Input Header ──────────────────────────────────── */}
       <div className="flex flex-col gap-4">
         <CommentInput 
-          onCreateComment={(text) => onCreateComment(text)}
+          onCreateComment={handleCreateComment}
           loading={createLoading}
         />
       </div>
@@ -66,8 +76,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                 comment={comment}
                 replies={comments.filter((c) => c.parentId === comment.id)}
                 allComments={comments}
-                onCreateComment={onCreateComment}
-                onDeleteComment={onDeleteComment}
+                onCreateComment={handleCreateComment}
+                onDeleteComment={handleDeleteComment}
                 loading={createLoading}
               />
             ))}

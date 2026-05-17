@@ -11,7 +11,7 @@ const useCommunityMembers = () => {
     setLoading(true);
     setError("");
     try {
-      const response = await fetchCommunityMembers(communityId);
+      const response = await fetchCommunityMembers(communityId) as any;
       // Assuming response is an array of members or an object containing members
       setMembers(response.members || response || []);
     } catch (err: any) {

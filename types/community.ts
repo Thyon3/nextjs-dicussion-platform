@@ -5,6 +5,9 @@ export interface Community {
   privacyType: "public" | "restricted" | "private";
   createdAt?: Date | string;
   imageURL?: string;
+  bannerURL?: string;
+  name?: string;
+  description?: string;
   adminIds?: string[];
 }
 

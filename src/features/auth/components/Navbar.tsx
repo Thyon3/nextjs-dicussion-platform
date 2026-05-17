@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
         return;
       }
       try {
-        const results = await getCommunities(search);
+        const results = (await getCommunities(search)) as any;
         setSuggestions(results.slice(0, 5));
       } catch (error) {
         console.error(error);

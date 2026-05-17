@@ -1,8 +1,7 @@
 export { default as useCustomToast } from "./useCustomToast";
 export { default as useSelectFile } from "./useSelectFile";
 export { useIntersectionObserver } from "./useIntersectionObserver";
-export { default as useAuthState } from "./auth/useAuthState";
-export { default as useCommunityData } from "./community/useCommunityData";
+export { useAuthState } from "./useAuth";
 export { default as useCommunityState } from "./community/useCommunityState";
 export { default as useJoinCommunity } from "./community/useJoinCommunity";
 export { default as useCommunityPermissions } from "./community/useCommunityPermissions";

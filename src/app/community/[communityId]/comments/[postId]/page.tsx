@@ -19,7 +19,7 @@ const PostDetailPage: React.FC = () => {
   const { user } = useAuth();
   const { communityStateValue } = useCommunityState();
   
-  const [post, setPost] = useState<Post | null>(null);
+  const [post, setPost] = useState<any>(null);
   const [communityData, setCommunityData] = useState<Community | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -30,7 +30,7 @@ const PostDetailPage: React.FC = () => {
         const [postRes, communityRes] = await Promise.all([
           getPostById(postId),
           getCommunityData(communityId)
-        ]);
+        ]) as [any, any];
         setPost(postRes);
         setCommunityData(communityRes);
       } catch (error) {
@@ -45,12 +45,12 @@ const PostDetailPage: React.FC = () => {
     }
   }, [postId, communityId]);
 
-  const onVote = async (event: React.MouseEvent, post: Post, vote: number, communityId: string) => {
+  const onVote = async (event: React.MouseEvent, post: any, vote: number, communityId: string) => {
     // Re-use existing vote logic if possible or implement here
     // For now, let's just update local state if we want real-time feel
   };
 
-  const onDeletePost = async (post: Post) => {
+  const onDeletePost = async (post: any) => {
     try {
       await deletePost(post.id!);
       return true;

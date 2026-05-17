@@ -148,7 +148,9 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
             )}
             {activeTab === "danger" && (
               <DangerZone
-                deleteCommunity={() => callDeleteCommunity(communityData.id)}
+                deleteCommunity={async () => {
+                  await callDeleteCommunity(communityData.id);
+                }}
                 loading={loading}
               />
             )}

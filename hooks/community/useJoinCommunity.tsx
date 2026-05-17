@@ -26,13 +26,13 @@ const useJoinCommunity = () => {
     if (!user) return;
     setLoading(true);
     try {
-      const newSnippet = await joinCommunity(
+      const newSnippet = (await joinCommunity(
         user.id,
         communityData.id, // Now always the community NAME
         communityData.imageURL || "",
         user.id === communityData.creatorId ||
           (communityData.adminIds?.includes(user.id || "") ?? false)
-      );
+      )) as any;
 
       // Update Jotai atom immediately (for real-time UI)
       setCommunityStateValue((prev) => ({

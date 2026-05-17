@@ -45,12 +45,12 @@ const usePostVote = (
     }
 
     try {
-      const { voteChange, updatedVote } = await votePost({
+      const { voteChange, updatedVote } = (await votePost({
         userId: user.id,
         postId: post.id!,
         voteValue: vote,
         communityId,
-      });
+      })) as any;
 
       // Update local state
       const updatedPost = { ...post, voteStatus: post.voteStatus + voteChange };
@@ -96,7 +96,7 @@ const usePostVote = (
 
   const getPost = async (postId: string) => {
     try {
-      const response = await getPostById(postId);
+      const response = await getPostById(postId) as any;
       if (response.post) {
         setPostStateValue((prev) => ({
           ...prev,

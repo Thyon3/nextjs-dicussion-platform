@@ -36,5 +36,5 @@ export interface CreatePostDTO {
 export interface TabItem {
   title: string;
   icon: any;
-  type: PostType;
+  type: PostType | 'poll';
 }

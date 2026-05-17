@@ -68,11 +68,11 @@ const SettingsPage: React.FC = () => {
 
         {/* Tab Content */}
         <div className="space-y-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
-          {activeTab === 'Account' && <AccountSettings settings={settings.account} onUpdate={(val) => handleUpdate({ account: val })} />}
-          {activeTab === 'Profile' && <ProfileSettings settings={settings.profile} onUpdate={(val) => handleUpdate({ profile: val })} />}
-          {activeTab === 'Privacy' && <PrivacySettings settings={settings.privacy} onUpdate={(val) => handleUpdate({ privacy: val })} />}
-          {activeTab === 'Preferences' && <PreferencesSettings settings={settings.preferences} onUpdate={(val) => handleUpdate({ preferences: val })} />}
-          {activeTab === 'Notifications' && <NotificationsSettings settings={settings.notifications} onUpdate={(val) => handleUpdate({ notifications: val })} />}
+          {activeTab === 'Account' && <AccountSettings settings={settings.account} onUpdate={(val: any) => handleUpdate({ account: val })} />}
+          {activeTab === 'Profile' && <ProfileSettings settings={settings.profile} onUpdate={(val: any) => handleUpdate({ profile: val })} />}
+          {activeTab === 'Privacy' && <PrivacySettings settings={settings.privacy} onUpdate={(val: any) => handleUpdate({ privacy: val })} />}
+          {activeTab === 'Preferences' && <PreferencesSettings settings={settings.preferences} onUpdate={(val: any) => handleUpdate({ preferences: val })} />}
+          {activeTab === 'Notifications' && <NotificationsSettings settings={settings.notifications} onUpdate={(val: any) => handleUpdate({ notifications: val })} />}
           {activeTab === 'Email' && <div className="text-gray-500 italic py-10">Email settings coming soon...</div>}
         </div>
       </div>

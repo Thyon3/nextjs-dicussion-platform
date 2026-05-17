@@ -26,12 +26,12 @@ const useCommunityImage = (communityData: Community) => {
     setUploadingImage(true);
 
     try {
-      const updatedCommunity = await updateCommunityProfile(
+      const updatedCommunity = (await updateCommunityProfile(
         communityData.id,
         description,
         selectedImageFile,
         selectedBannerFile
-      );
+      )) as any;
 
       setCommunityStateValue((prev) => ({
         ...prev,

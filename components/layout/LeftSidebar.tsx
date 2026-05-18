@@ -20,6 +20,7 @@ import { IoPeopleCircleOutline } from "react-icons/io5";
 import { BsBookmark } from "react-icons/bs";
 import { useAuth } from "@/hooks/useAuth";
 import useCommunityState from "@/hooks/community/useCommunityState";
+import CreateCommunityModal from "../modal/create-community/CreateCommunityModal";
 
 const SKELETON_COUNT = 4;
 
@@ -30,6 +31,7 @@ const LeftSidebar: React.FC = () => {
   const { communityStateValue } = useCommunityState();
   const joinedCommunities = communityStateValue.mySnippets;
   const [showAllCommunities, setShowAllCommunities] = useState(false);
+  const [createCommunityOpen, setCreateCommunityOpen] = useState(false);
 
   const visibleCommunities = showAllCommunities
     ? joinedCommunities
@@ -94,37 +96,57 @@ const LeftSidebar: React.FC = () => {
           <p className="px-2 py-3 text-[12px] text-gray-600 italic">
             Log in to see your communities
           </p>
-        ) : joinedCommunities.length === 0 ? (
-          <p className="px-2 py-3 text-[12px] text-gray-600 italic">
-            You haven&apos;t joined any communities yet
-          </p>
         ) : (
-          <div className="flex flex-col gap-0.5">
-            {visibleCommunities.map((snippet) => (
-              <CommunityItem key={snippet.communityId} snippet={snippet} pathname={pathname} />
-            ))}
+          <>
+            {joinedCommunities.length === 0 ? (
+              <p className="px-2 py-3 text-[12px] text-gray-600 italic">
+                You haven&apos;t joined any communities yet
+              </p>
+            ) : (
+              <div className="flex flex-col gap-0.5">
+                {visibleCommunities.map((snippet) => (
+                  <CommunityItem key={snippet.communityId} snippet={snippet} pathname={pathname} />
+                ))}
 
-            {joinedCommunities.length > 5 && (
-              <button
-                onClick={() => setShowAllCommunities((v) => !v)}
-                className="flex items-center gap-2 px-3 py-2 text-[13px] text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-all"
-              >
-                {showAllCommunities ? (
-                  <>
-                    <IoChevronUpOutline size={16} />
-                    <span>Show less</span>
-                  </>
-                ) : (
-                  <>
-                    <IoChevronDownOutline size={16} />
-                    <span>See {joinedCommunities.length - 5} more</span>
-                  </>
+                {joinedCommunities.length > 5 && (
+                  <button
+                    onClick={() => setShowAllCommunities((v) => !v)}
+                    className="flex items-center gap-2 px-3 py-2 text-[13px] text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+                  >
+                    {showAllCommunities ? (
+                      <>
+                        <IoChevronUpOutline size={16} />
+                        <span>Show less</span>
+                      </>
+                    ) : (
+                      <>
+                        <IoChevronDownOutline size={16} />
+                        <span>See {joinedCommunities.length - 5} more</span>
+                      </>
+                    )}
+                  </button>
                 )}
-              </button>
+              </div>
             )}
-          </div>
+
+            {/* Sleek Dashed Button for Creating Community */}
+            <button
+              onClick={() => setCreateCommunityOpen(true)}
+              className="flex items-center gap-3 w-full px-3 py-2 text-[13px] text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all font-bold mt-2 border border-dashed border-white/10 hover:border-white/20"
+            >
+              <IoAddOutline size={18} className="text-[#FF5722]" />
+              <span>Create a Community</span>
+            </button>
+          </>
         )}
       </div>
+
+      {user && (
+        <CreateCommunityModal
+          open={createCommunityOpen}
+          handleClose={() => setCreateCommunityOpen(false)}
+        />
+      )}
 
       <div className="h-[1px] bg-white/10 my-3 mx-3" />
 

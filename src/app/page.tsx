@@ -2,7 +2,6 @@
 
 import {
   PageContent,
-  PersonalHome,
   Posts,
   Recommendations,
   SidebarFooter,
@@ -22,7 +21,6 @@ export default function Home() {
       <div className="flex flex-col gap-5">
         <RecentPosts />
         <Recommendations />
-        <PersonalHome />
         <SidebarFooter />
       </div>
     </PageContent>

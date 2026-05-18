@@ -60,8 +60,6 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
 
   const communityName = watch("name");
   const communityType = watch("type");
-  const charRemaining = 21 - (communityName?.length || 0);
-
   const onSubmit = async (data: CreateCommunityInput) => {
     const success = await createCommunity(data.name, data.type);
     if (success) {
@@ -94,7 +92,6 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
         <div className="px-6 pb-6">
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
             <CommunityNameSection
-              charRemaining={charRemaining}
               error={errors.name?.message}
               register={register("name")}
             />

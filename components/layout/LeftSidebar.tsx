@@ -38,8 +38,9 @@ const LeftSidebar: React.FC = () => {
     : joinedCommunities.slice(0, 5);
 
   return (
-    <aside className="hidden lg:flex flex-col w-[272px] shrink-0 h-[calc(100vh-56px)] sticky top-[56px] border-r border-white/10 overflow-y-auto bg-[#0B0E11]">
-      {/* Navigation Section */}
+    <>
+      <aside className="hidden lg:flex flex-col w-[272px] shrink-0 h-[calc(100vh-56px)] sticky top-[56px] border-r border-white/10 overflow-y-auto bg-[#0B0E11]">
+        {/* Navigation Section */}
       <div className="flex flex-col gap-1 pt-3 px-3">
         <SidebarItem
           icon={<AiFillHome size={20} />}
@@ -141,13 +142,6 @@ const LeftSidebar: React.FC = () => {
         )}
       </div>
 
-      {user && (
-        <CreateCommunityModal
-          open={createCommunityOpen}
-          handleClose={() => setCreateCommunityOpen(false)}
-        />
-      )}
-
       <div className="h-[1px] bg-white/10 my-3 mx-3" />
 
       {/* Resources Section */}
@@ -171,6 +165,13 @@ const LeftSidebar: React.FC = () => {
         />
       </div>
     </aside>
+    {user && (
+      <CreateCommunityModal
+        open={createCommunityOpen}
+        handleClose={() => setCreateCommunityOpen(false)}
+      />
+    )}
+    </>
   );
 };
 

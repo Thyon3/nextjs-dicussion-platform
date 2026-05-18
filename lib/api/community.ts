@@ -13,7 +13,7 @@ export const getCommunities = (search?: string) => {
 };
 
 export const getCommunityData = (communityName: string) => {
-  return apiClient(`/communities/${communityName}`);
+  return apiClient(`/communities/${encodeURIComponent(communityName)}`);
 };
 
 export const joinCommunity = (userId: string, communityId: string, imageURL: string, isAdmin: boolean) => {
@@ -31,11 +31,11 @@ export const leaveCommunity = (userId: string, communityId: string) => {
 };
 
 export const getCommunity = (communityId: string) => {
-  return apiClient(`/communities/${communityId}`);
+  return apiClient(`/communities/${encodeURIComponent(communityId)}`);
 };
 
 export const deleteCommunity = (communityId: string) => {
-  return apiClient(`/communities/${communityId}`, {
+  return apiClient(`/communities/${encodeURIComponent(communityId)}`, {
     method: 'DELETE',
   });
 };

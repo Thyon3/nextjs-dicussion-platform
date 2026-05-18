@@ -2,13 +2,11 @@ import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface CommunityNameSectionProps {
-  charRemaining?: number;
   error?: string;
   register?: UseFormRegisterReturn;
 }
 
 const CommunityNameSection: React.FC<CommunityNameSectionProps> = ({
-  charRemaining,
   error,
   register,
 }) => {
@@ -29,13 +27,6 @@ const CommunityNameSection: React.FC<CommunityNameSectionProps> = ({
           {...register}
         />
       </div>
-      <p
-        className={`text-[9pt] pt-2 ${
-          charRemaining === 0 ? "text-red-500" : "text-gray-500"
-        }`}
-      >
-        {charRemaining} Characters remaining
-      </p>
       {error && (
         <p className="text-[9pt] text-red-500 font-bold">
           {error}

@@ -14,9 +14,10 @@ import PostItem from "./post-item/PostItem";
 
 type PostsProps = {
   communityData?: Community;
+  sort?: string;
 };
 
-const Posts: React.FC<PostsProps> = ({ communityData }) => {
+const Posts: React.FC<PostsProps> = ({ communityData, sort }) => {
   const { user } = useAuth();
   const { postStateValue, setPostStateValue } = usePostState();
   const { onSelectPost } = usePostSelection(setPostStateValue);
@@ -30,11 +31,12 @@ const Posts: React.FC<PostsProps> = ({ communityData }) => {
 
   const { loading, fetchPosts, ref, noMorePosts } = usePostsFeed({
     communityId: communityData?.id,
+    sort,
   });
 
   useEffect(() => {
     fetchPosts();
-  }, [communityData?.id]);
+  }, [communityData?.id, sort]);
 
   return (
     <div className="flex flex-col gap-4">

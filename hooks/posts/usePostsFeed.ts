@@ -10,6 +10,7 @@ type UsePostsFeedProps = {
   communityId?: string;
   communityIds?: string[];
   isGenericHome?: boolean;
+  sort?: string;
 };
 
 /**
@@ -19,6 +20,7 @@ type UsePostsFeedProps = {
  */
 const usePostsFeed = ({
   communityId,
+  sort,
 }: UsePostsFeedProps) => {
   const setPostStateValue = useSetAtom(postStateAtom);
   const [loading, setLoading] = useState(false);
@@ -33,7 +35,7 @@ const usePostsFeed = ({
 
     setLoading(true);
     try {
-      const posts = await getPostsApi(communityId);
+      const posts = await getPostsApi(communityId, sort);
 
       setNoMorePosts(true); // Backend doesn't support pagination yet, so we assume no more posts
       
@@ -62,7 +64,7 @@ const usePostsFeed = ({
         posts: [],
       }));
     };
-  }, [communityId, setPostStateValue]);
+  }, [communityId, sort, setPostStateValue]);
 
   return {
     loading,

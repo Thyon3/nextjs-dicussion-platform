@@ -9,8 +9,13 @@ import { useRouter } from 'next/navigation';
 import { getCommunities } from '@/lib/api/community';
 import { Community } from '@/types/community';
 import useCallCreatePost from '@/hooks/posts/useCallCreatePost';
+import { IoMenuOutline } from 'react-icons/io5';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  toggleMobileMenu?: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ toggleMobileMenu }) => {
   const { user } = useAuth();
   const { openModal } = useAuthModal();
   const { onClick: handleCreatePost } = useCallCreatePost();
@@ -60,20 +65,28 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-background h-[56px] px-6 flex justify-between items-center border-b border-border sticky top-0 z-[100]">
+    <nav className="bg-background h-[56px] px-3 md:px-6 flex justify-between items-center border-b border-border sticky top-0 z-[100]">
       {/* Left Section: Logo & Links */}
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-2 md:gap-8">
+        {toggleMobileMenu && (
+          <button 
+            className="lg:hidden p-1 text-foreground hover:bg-muted rounded-md transition-colors"
+            onClick={toggleMobileMenu}
+          >
+            <IoMenuOutline size={26} />
+          </button>
+        )}
         <Link href="/" className="flex items-center cursor-pointer">
-          <img src="/images/logo.svg" className="h-[28px]" alt="Circus Logo" />
-          <span className="font-reddit font-bold text-[16pt] ml-2 text-foreground tracking-tighter">
+          <img src="/images/logo.svg" className="h-[24px] md:h-[28px]" alt="Circus Logo" />
+          <span className="hidden sm:block font-reddit font-bold text-[16pt] ml-2 text-foreground tracking-tighter">
             Circus
           </span>
         </Link>
       </div>
 
       {/* Center Section: Search Bar */}
-      <div ref={searchRef} className="flex-1 max-w-[600px] mx-8 relative flex items-center">
-        <div className="absolute left-4 z-10 flex items-center pointer-events-none">
+      <div ref={searchRef} className="flex-1 max-w-[600px] mx-2 md:mx-8 relative flex items-center">
+        <div className="hidden sm:flex absolute left-4 z-10 items-center pointer-events-none">
           <IoSearchOutline className="text-muted-foreground text-[20px]" />
         </div>
         <input
@@ -84,8 +97,8 @@ const Navbar: React.FC = () => {
           }}
           onFocus={() => setShowSuggestions(true)}
           onKeyDown={handleSearchKeyDown}
-          placeholder="Search communities... (Press Enter)"
-          className="font-reddit w-full text-[10pt] bg-muted text-white h-[38px] rounded-full pl-11 pr-4 border border-transparent placeholder:text-muted-foreground hover:bg-white/20 hover:border-white/30 focus:outline-none focus:bg-white/20 focus:border-[#FF5722] transition-all"
+          placeholder="Search..."
+          className="font-reddit w-full text-[10pt] bg-muted text-foreground h-[36px] md:h-[38px] rounded-full pl-4 sm:pl-11 pr-4 border border-transparent placeholder:text-muted-foreground hover:bg-muted/80 hover:border-border/50 focus:outline-none focus:bg-muted focus:border-[#FF5722] transition-all"
         />
 
         {/* Search Suggestions Dropdown */}
@@ -135,7 +148,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Right Section: Actions */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-1 md:gap-4 shrink-0">
         {user && (
           <button
             onClick={handleCreatePost}
@@ -155,15 +168,15 @@ const Navbar: React.FC = () => {
         {user ? (
           <UserMenu />
         ) : (
-          <div className="flex gap-3">
+          <div className="flex gap-1 md:gap-3">
             <button
-              className="px-4 py-2 text-foreground text-[10pt] font-bold hover:bg-muted rounded-full transition-colors"
+              className="px-2 md:px-4 py-2 text-foreground text-[9pt] md:text-[10pt] font-bold hover:bg-muted rounded-full transition-colors"
               onClick={() => openModal('login')}
             >
               Log In
             </button>
             <button
-              className="bg-[#FF5722] text-white h-[36px] px-6 rounded-full text-[10pt] font-bold hover:bg-[#E64A19] transition-colors"
+              className="bg-[#FF5722] text-white h-[32px] md:h-[36px] px-3 md:px-6 rounded-full text-[9pt] md:text-[10pt] font-bold hover:bg-[#E64A19] transition-colors"
               onClick={() => openModal('signup')}
             >
               Sign Up

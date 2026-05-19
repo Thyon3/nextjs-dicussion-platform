@@ -29,7 +29,7 @@ const CreatePostLink: React.FC<CreatePostProps> = () => {
       </div>
       <input
         placeholder="Create Post"
-        className="w-full text-[10pt] bg-muted border border-transparent h-[38px] rounded-lg mr-4 px-4 text-white placeholder:text-muted-foreground hover:bg-white/20 hover:border-white/30 focus:outline-none focus:bg-white/20 focus:border-[#FF5722] transition-all cursor-pointer"
+        className="w-full text-[10pt] bg-muted border border-transparent h-[38px] rounded-lg mr-4 px-4 text-foreground placeholder:text-muted-foreground hover:bg-muted/80 hover:border-border/50 focus:outline-none focus:bg-muted focus:border-[#FF5722] transition-all cursor-pointer"
         onClick={onClick}
       />
       <IoImageOutline

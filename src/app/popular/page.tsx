@@ -32,6 +32,13 @@ export default function PopularPage() {
 
         {/* Posts Feed sorted by popularity */}
         <Posts sort="popular" />
+
+        {/* Mobile-only Sidebar Elements */}
+        <div className="flex lg:hidden flex-col gap-5 mt-4">
+          <RecentPosts />
+          <Recommendations />
+          <SidebarFooter />
+        </div>
       </div>
 
       {/* Right Content: Sidebar */}

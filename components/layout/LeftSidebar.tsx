@@ -24,7 +24,12 @@ import CreateCommunityModal from "../modal/create-community/CreateCommunityModal
 
 const SKELETON_COUNT = 4;
 
-const LeftSidebar: React.FC = () => {
+interface LeftSidebarProps {
+  isOpen?: boolean;
+  closeMenu?: () => void;
+}
+
+const LeftSidebar: React.FC<LeftSidebarProps> = ({ isOpen = false, closeMenu }) => {
   const pathname = usePathname();
   const { user } = useAuth();
   // Read directly from Jotai atom — updates instantly on join/leave with no reload needed
@@ -39,7 +44,15 @@ const LeftSidebar: React.FC = () => {
 
   return (
     <>
-      <aside className="hidden lg:flex flex-col w-[272px] shrink-0 h-[calc(100vh-56px)] sticky top-[56px] border-r border-border overflow-y-auto bg-background">
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 z-[200] lg:hidden"
+          onClick={closeMenu}
+        />
+      )}
+      
+      <aside className={`${isOpen ? 'flex fixed inset-y-0 left-0 z-[250] shadow-2xl' : 'hidden'} lg:flex flex-col w-[272px] shrink-0 h-[calc(100vh-56px)] lg:sticky lg:top-[56px] border-r border-border overflow-y-auto bg-background transition-transform`}>
         {/* Navigation Section */}
       <div className="flex flex-col gap-1 pt-3 px-3">
         <SidebarItem

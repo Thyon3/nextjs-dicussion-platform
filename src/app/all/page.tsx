@@ -30,8 +30,15 @@ export default function AllPage() {
           </div>
         </div>
 
-        {/* Posts Feed sorted by newest */}
-        <Posts />
+        {/* Posts Feed showing all posts */}
+        <Posts sort="all" />
+
+        {/* Mobile-only Sidebar Elements */}
+        <div className="flex lg:hidden flex-col gap-5 mt-4">
+          <RecentPosts />
+          <Recommendations />
+          <SidebarFooter />
+        </div>
       </div>
 
       {/* Right Content: Sidebar */}

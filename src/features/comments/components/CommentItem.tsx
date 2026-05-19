@@ -87,7 +87,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
           </div>
 
           {/* Text */}
-          <div className="text-[14px] text-gray-200 leading-relaxed mb-2 whitespace-pre-wrap">
+          <div className="text-[14px] text-foreground leading-relaxed mb-2 whitespace-pre-wrap break-words">
             {comment.text}
           </div>
 
@@ -97,7 +97,7 @@ const CommentItem: React.FC<CommentItemProps> = ({
                <button className="p-1.5 hover:bg-muted rounded-full text-muted-foreground hover:text-[#FF4500] transition-colors">
                  <IoChevronUpOutline size={16} />
                </button>
-               <span className="text-[12px] font-bold text-gray-300 px-1">0</span>
+               <span className="text-[12px] font-bold text-muted-foreground px-1">0</span>
                <button className="p-1.5 hover:bg-muted rounded-full text-muted-foreground hover:text-[#7193FF] transition-colors">
                  <IoChevronDownOutline size={16} />
                </button>

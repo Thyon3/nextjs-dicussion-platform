@@ -298,7 +298,7 @@ const SettingItem: React.FC<{
     <div className={`py-4 border-b border-transparent transition-all ${editing ? '' : 'group cursor-pointer hover:border-border'}`}>
       <div className="flex items-center justify-between">
         <div className="flex flex-col min-w-0 pr-4 flex-1">
-          <span className="text-[14px] font-bold text-white group-hover:text-[#FF5722] transition-colors">{label}</span>
+          <span className="text-[14px] font-bold text-foreground group-hover:text-[#FF5722] transition-colors">{label}</span>
           {sublabel && <span className="text-[12px] text-muted-foreground leading-tight mt-1">{sublabel}</span>}
           
           {editing && (
@@ -308,7 +308,7 @@ const SettingItem: React.FC<{
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="bg-card text-white text-[14px] px-3 py-2 rounded-[8px] border border-border outline-none focus:border-[#FF5722] w-full max-w-[400px]"
+                className="bg-card text-foreground text-[14px] px-3 py-2 rounded-[8px] border border-border outline-none focus:border-[#FF5722] w-full max-w-[400px]"
                 placeholder={`Enter ${label}...`}
               />
               <button 

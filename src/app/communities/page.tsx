@@ -48,14 +48,14 @@ const CommunitiesContent: React.FC = () => {
         {/* Left Content */}
         <div className="flex flex-col gap-5">
           <div className="p-5 bg-card rounded-[16px] border border-border shadow-md">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-reddit text-xl font-bold text-foreground">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
+              <h2 className="font-reddit text-[18px] sm:text-xl font-bold text-foreground">
                 Discover Communities
               </h2>
               {user && (
                 <button
                   onClick={() => setCreateOpen(true)}
-                  className="font-reddit px-4 py-2 bg-[#FF5722] hover:bg-[#FF7043] text-white text-[12px] font-bold rounded-full transition-colors flex items-center gap-1.5 shadow-md"
+                  className="font-reddit px-4 py-2 bg-[#FF5722] hover:bg-[#FF7043] text-white text-[12px] font-bold rounded-full transition-colors flex items-center gap-1.5 shadow-md w-full sm:w-auto justify-center sm:justify-start"
                 >
                   <IoAddOutline size={16} />
                   <span>Create Community</span>
@@ -71,7 +71,7 @@ const CommunitiesContent: React.FC = () => {
                 placeholder="Search communities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="font-reddit w-full pl-11 pr-10 py-3 bg-muted border border-border rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF5722]/50 focus:border-[#FF5722] transition-all text-[14px]"
+                className="font-reddit w-full pl-11 pr-10 py-3 bg-muted border border-border rounded-full text-foreground placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF5722]/50 focus:border-[#FF5722] transition-all text-[14px]"
               />
               {searchQuery && (
                 <button

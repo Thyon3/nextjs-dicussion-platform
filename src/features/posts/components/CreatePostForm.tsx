@@ -86,11 +86,11 @@ const CreatePostForm: React.FC<CreatePostFormProps> = ({
 
       <div className="bg-card rounded-[12px] border border-border overflow-hidden">
         {/* Tabs */}
-        <div className="flex border-b border-border">
+        <div className="flex border-b border-border overflow-x-auto">
           {tabs.map((tab) => (
             <button
               key={tab.type}
-              className={`flex-1 flex items-center justify-center py-3 font-bold text-[14px] transition-all border-b-2 border-r border-border last:border-r-0 ${
+              className={`flex-1 flex items-center justify-center py-3 px-4 sm:px-0 font-bold text-[13px] sm:text-[14px] whitespace-nowrap transition-all border-b-2 border-r border-border last:border-r-0 ${
                 selectedTab === tab.type
                   ? 'text-[#FF5722] border-b-[#FF5722] bg-muted'
                   : 'text-muted-foreground border-b-transparent hover:bg-muted'

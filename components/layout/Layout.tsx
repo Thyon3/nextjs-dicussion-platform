@@ -14,7 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <Navbar />
       <div className="flex">
         <LeftSidebar />
-        <main className="flex-1 min-h-[calc(100vh-56px)] bg-[#0B0E11]">
+        <main className="flex-1 min-h-[calc(100vh-56px)] bg-background">
           {children}
         </main>
       </div>

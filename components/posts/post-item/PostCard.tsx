@@ -58,7 +58,7 @@ const PostCard: React.FC<PostCardProps> = ({
   return (
     <div
       className={`flex flex-col bg-transparent rounded-[12px] transition-all p-3 ${
-        singlePostPage ? "cursor-default" : "cursor-pointer hover:bg-[#1A1D23]"
+        singlePostPage ? "cursor-default" : "cursor-pointer hover:bg-card"
       }`}
       onClick={() => onSelectPost && onSelectPost(post)}
     >
@@ -79,7 +79,7 @@ const PostCard: React.FC<PostCardProps> = ({
             <Link
               href={`/community/${post.communityId}`}
               onClick={(e) => e.stopPropagation()}
-              className="text-[12px] font-bold text-white hover:underline"
+              className="text-[12px] font-bold text-foreground hover:underline"
             >
               r/{post.communityId}
             </Link>
@@ -88,14 +88,14 @@ const PostCard: React.FC<PostCardProps> = ({
           <span className="text-gray-600 text-[12px]">•</span>
           
           <div className="flex items-center gap-1.5">
-            <div className="w-5 h-5 rounded-full overflow-hidden bg-white/10 flex items-center justify-center shrink-0">
+            <div className="w-5 h-5 rounded-full overflow-hidden bg-muted flex items-center justify-center shrink-0">
                {post.creatorPhotoURL ? (
                  <img src={post.creatorPhotoURL} alt="Creator" className="w-full h-full object-cover" />
                ) : (
-                 <IoPeopleCircleOutline size={18} className="text-gray-500" />
+                 <IoPeopleCircleOutline size={18} className="text-muted-foreground" />
                )}
             </div>
-            <span className="text-[12px] text-gray-500">
+            <span className="text-[12px] text-muted-foreground">
               Posted by{" "}
               <span className="hover:underline cursor-pointer">
                 u/{post.creatorUsername}
@@ -104,19 +104,19 @@ const PostCard: React.FC<PostCardProps> = ({
           </div>
 
           <span className="text-gray-600 text-[12px]">•</span>
-          <span className="text-[12px] text-gray-500">
+          <span className="text-[12px] text-muted-foreground">
             {moment(post.createTime).fromNow()}
           </span>
         </div>
 
         {/* Title */}
-        <h2 className="text-[15px] font-semibold text-white leading-snug mb-1.5">
+        <h2 className="text-[15px] font-semibold text-foreground leading-snug mb-1.5">
           {post.title}
         </h2>
 
         {/* Body text */}
         {post.body && (
-          <p className={`text-[13px] text-gray-400 leading-relaxed mb-2 ${singlePostPage ? "" : "line-clamp-3"}`}>
+          <p className={`text-[13px] text-muted-foreground leading-relaxed mb-2 ${singlePostPage ? "" : "line-clamp-3"}`}>
             {post.body}
           </p>
         )}
@@ -125,7 +125,7 @@ const PostCard: React.FC<PostCardProps> = ({
         {post.imageURL && (
           <div className="relative flex justify-center items-center mb-2 min-h-[100px] max-h-[512px] overflow-hidden rounded-[8px] bg-black/20">
             {loadingImage && (
-              <div className="absolute inset-0 bg-white/5 animate-pulse" />
+              <div className="absolute inset-0 bg-muted animate-pulse" />
             )}
             <img
               src={post.imageURL}
@@ -206,7 +206,7 @@ const ActionBtn: React.FC<{
   className?: string;
 }> = ({ icon, label, onClick, className = "" }) => (
   <button
-    className={`flex items-center gap-1.5 px-2 py-1.5 text-[12px] font-bold text-gray-500 hover:bg-white/10 hover:text-white rounded transition-all ${className}`}
+    className={`flex items-center gap-1.5 px-2 py-1.5 text-[12px] font-bold text-muted-foreground hover:bg-muted hover:text-foreground rounded transition-all ${className}`}
     onClick={(e) => {
       e.stopPropagation();
       onClick(e);

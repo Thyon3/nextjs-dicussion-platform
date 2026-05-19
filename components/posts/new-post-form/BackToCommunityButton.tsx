@@ -14,7 +14,7 @@ const BackToCommunityButton: React.FC<BackToCommunityButtonProps> = ({
 
   return (
     <button
-      className="flex items-center w-fit px-4 h-[36px] mt-4 mx-4 text-[14px] font-bold text-white border border-white/30 rounded-full hover:bg-white/10 transition-all gap-2"
+      className="flex items-center w-fit px-4 h-[36px] mt-4 mx-4 text-[14px] font-bold text-foreground border border-white/30 rounded-full hover:bg-muted transition-all gap-2"
       onClick={() => router.push(communityLink)}
     >
       <MdOutlineArrowBackIos size={14} />

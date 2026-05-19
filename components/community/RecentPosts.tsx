@@ -30,16 +30,16 @@ const RecentPosts: React.FC = () => {
 
   if (!user) {
     return (
-      <div className="bg-[#1A1D23] rounded-[16px] border border-white/10 shadow-md p-6 text-center">
-        <p className="text-[13px] text-gray-500 italic">Log in to see recent posts from your communities</p>
+      <div className="bg-card rounded-[16px] border border-border shadow-md p-6 text-center">
+        <p className="text-[13px] text-muted-foreground italic">Log in to see recent posts from your communities</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#1A1D23] rounded-[16px] border border-white/10 shadow-md overflow-hidden">
-      <div className="font-reddit p-4 flex items-center justify-between border-b border-white/5">
-        <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wider">
+    <div className="bg-card rounded-[16px] border border-border shadow-md overflow-hidden">
+      <div className="font-reddit p-4 flex items-center justify-between border-b border-border">
+        <span className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider">
           From your communities
         </span>
         <button 
@@ -53,36 +53,36 @@ const RecentPosts: React.FC = () => {
       <div className="flex flex-col">
         {loading ? (
           <div className="p-10 flex justify-center">
-            <div className="w-6 h-6 border-2 border-white/10 border-t-[#FF5722] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-2 border-border border-t-[#FF5722] rounded-full animate-spin" />
           </div>
         ) : recentPosts.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="text-[12px] text-gray-500">No recent posts found from your communities</p>
+            <p className="text-[12px] text-muted-foreground">No recent posts found from your communities</p>
           </div>
         ) : (
           recentPosts.map((post) => (
             <Link
               key={post.id}
               href={`/community/${post.communityId}/comments/${post.id}`}
-              className="p-4 hover:bg-white/5 transition-all flex flex-col gap-1 border-b border-white/5 last:border-0"
+              className="p-4 hover:bg-muted transition-all flex flex-col gap-1 border-b border-border last:border-0"
             >
               <div className="flex items-center gap-2 mb-1">
                 {post.communityImageURL ? (
                   <img src={post.communityImageURL} className="w-5 h-5 rounded-full object-cover" />
                 ) : (
-                  <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold">
+                  <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-foreground text-[8px] font-bold">
                     <FaReddit size={12} />
                   </div>
                 )}
-                <span className="font-reddit text-[12px] font-bold text-white">r/{post.communityId}</span>
-                <span className="text-[12px] text-gray-500">• {moment(post.createTime).fromNow(true)}</span>
+                <span className="font-reddit text-[12px] font-bold text-foreground">r/{post.communityId}</span>
+                <span className="text-[12px] text-muted-foreground">• {moment(post.createTime).fromNow(true)}</span>
               </div>
-              <h4 className="font-reddit text-[14px] font-medium text-white line-clamp-2 leading-tight">
+              <h4 className="font-reddit text-[14px] font-medium text-foreground line-clamp-2 leading-tight">
                 {post.title}
               </h4>
               <div className="flex items-center gap-3 mt-1">
-                <span className="text-[11px] text-gray-500">{post.voteStatus || 0} upvotes</span>
-                <span className="text-[11px] text-gray-500">{post.numberOfComments || 0} comments</span>
+                <span className="text-[11px] text-muted-foreground">{post.voteStatus || 0} upvotes</span>
+                <span className="text-[11px] text-muted-foreground">{post.numberOfComments || 0} comments</span>
               </div>
             </Link>
           ))

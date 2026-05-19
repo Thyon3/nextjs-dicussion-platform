@@ -47,9 +47,9 @@ const CommunitiesContent: React.FC = () => {
       <PageContent>
         {/* Left Content */}
         <div className="flex flex-col gap-5">
-          <div className="p-5 bg-[#1A1D23] rounded-[16px] border border-white/10 shadow-md">
+          <div className="p-5 bg-card rounded-[16px] border border-border shadow-md">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-reddit text-xl font-bold text-white">
+              <h2 className="font-reddit text-xl font-bold text-foreground">
                 Discover Communities
               </h2>
               {user && (
@@ -65,18 +65,18 @@ const CommunitiesContent: React.FC = () => {
 
             {/* Premium Search Bar */}
             <div className="relative flex items-center mb-6">
-              <IoSearchOutline className="absolute left-4 text-gray-400 text-[18px]" />
+              <IoSearchOutline className="absolute left-4 text-muted-foreground text-[18px]" />
               <input
                 type="text"
                 placeholder="Search communities..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="font-reddit w-full pl-11 pr-10 py-3 bg-white/5 border border-white/10 rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF5722]/50 focus:border-[#FF5722] transition-all text-[14px]"
+                className="font-reddit w-full pl-11 pr-10 py-3 bg-muted border border-border rounded-full text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF5722]/50 focus:border-[#FF5722] transition-all text-[14px]"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 text-gray-400 hover:text-white transition-colors"
+                  className="absolute right-4 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <IoCloseOutline size={20} />
                 </button>
@@ -89,7 +89,7 @@ const CommunitiesContent: React.FC = () => {
               </div>
             ) : communities.length === 0 ? (
               <div className="text-center py-10">
-                <p className="font-reddit text-gray-500 text-sm">
+                <p className="font-reddit text-muted-foreground text-sm">
                   No communities found matching &quot;{searchQuery}&quot;
                 </p>
               </div>
@@ -118,7 +118,7 @@ const CommunitiesContent: React.FC = () => {
 
         {/* Right Content */}
         <div>
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             Browse all communities on the platform and join the discussions that matter to you.
           </p>
         </div>
@@ -136,7 +136,7 @@ const CommunitiesContent: React.FC = () => {
 const CommunitiesPage: React.FC = () => {
   return (
     <Suspense fallback={
-      <div className="flex justify-center items-center h-screen bg-[#0B0E11]">
+      <div className="flex justify-center items-center h-screen bg-background">
         <div className="w-8 h-8 border-4 border-white/20 border-t-[#FF5722] rounded-full animate-spin" />
       </div>
     }>

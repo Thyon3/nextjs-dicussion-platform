@@ -39,7 +39,7 @@ const LeftSidebar: React.FC = () => {
 
   return (
     <>
-      <aside className="hidden lg:flex flex-col w-[272px] shrink-0 h-[calc(100vh-56px)] sticky top-[56px] border-r border-white/10 overflow-y-auto bg-[#0B0E11]">
+      <aside className="hidden lg:flex flex-col w-[272px] shrink-0 h-[calc(100vh-56px)] sticky top-[56px] border-r border-border overflow-y-auto bg-background">
         {/* Navigation Section */}
       <div className="flex flex-col gap-1 pt-3 px-3">
         <SidebarItem
@@ -76,17 +76,17 @@ const LeftSidebar: React.FC = () => {
         )}
       </div>
 
-      <div className="h-[1px] bg-white/10 my-3 mx-3" />
+      <div className="h-[1px] bg-muted my-3 mx-3" />
 
       {/* Communities Section */}
       <div className="flex flex-col px-3 mb-2">
         <div className="flex items-center justify-between px-2 py-2">
-          <span className="font-reddit text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+          <span className="font-reddit text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
             Communities
           </span>
           {user && (
             <Link href="/communities">
-              <button className="p-1 hover:bg-white/10 rounded transition-colors text-gray-400 hover:text-white">
+              <button className="p-1 hover:bg-muted rounded transition-colors text-muted-foreground hover:text-foreground">
                 <IoAddOutline size={18} />
               </button>
             </Link>
@@ -112,7 +112,7 @@ const LeftSidebar: React.FC = () => {
                 {joinedCommunities.length > 5 && (
                   <button
                     onClick={() => setShowAllCommunities((v) => !v)}
-                    className="flex items-center gap-2 px-3 py-2 text-[13px] text-gray-500 hover:text-white hover:bg-white/5 rounded-lg transition-all"
+                    className="flex items-center gap-2 px-3 py-2 text-[13px] text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all"
                   >
                     {showAllCommunities ? (
                       <>
@@ -133,7 +133,7 @@ const LeftSidebar: React.FC = () => {
             {/* Sleek Dashed Button for Creating Community */}
             <button
               onClick={() => setCreateCommunityOpen(true)}
-              className="flex items-center gap-3 w-full px-3 py-2 text-[13px] text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all font-bold mt-2 border border-dashed border-white/10 hover:border-white/20"
+              className="flex items-center gap-3 w-full px-3 py-2 text-[13px] text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all font-bold mt-2 border border-dashed border-border hover:border-white/20"
             >
               <IoAddOutline size={18} className="text-[#FF5722]" />
               <span>Create a Community</span>
@@ -142,12 +142,12 @@ const LeftSidebar: React.FC = () => {
         )}
       </div>
 
-      <div className="h-[1px] bg-white/10 my-3 mx-3" />
+      <div className="h-[1px] bg-muted my-3 mx-3" />
 
       {/* Resources Section */}
       <div className="flex flex-col px-3 pb-4">
         <div className="px-2 py-2">
-          <span className="font-reddit text-[11px] font-bold text-gray-500 uppercase tracking-wider">
+          <span className="font-reddit text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
             Resources
           </span>
         </div>
@@ -190,8 +190,8 @@ const CommunityItem: React.FC<CommunityItemProps> = ({ snippet, pathname }) => {
       href={href}
       className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all group ${
         active
-          ? "bg-white/10 text-white"
-          : "text-gray-400 hover:bg-white/5 hover:text-white"
+          ? "bg-muted text-foreground"
+          : "text-muted-foreground hover:bg-muted hover:text-foreground"
       }`}
     >
       {snippet.imageURL ? (
@@ -203,7 +203,7 @@ const CommunityItem: React.FC<CommunityItemProps> = ({ snippet, pathname }) => {
       ) : (
         <IoPeopleCircleOutline
           size={24}
-          className={`shrink-0 ${active ? "text-[#FF5722]" : "text-gray-500 group-hover:text-[#FF5722]"} transition-colors`}
+          className={`shrink-0 ${active ? "text-[#FF5722]" : "text-muted-foreground group-hover:text-[#FF5722]"} transition-colors`}
         />
       )}
       <span className="font-reddit text-[13px] font-medium truncate">
@@ -237,13 +237,13 @@ const SidebarItem: React.FC<SidebarItemProps> = ({
       href={href}
       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all group ${
         active
-          ? "bg-white/10 text-white font-bold"
-          : "text-gray-400 hover:bg-white/5 hover:text-white font-bold"
+          ? "bg-muted text-foreground font-bold"
+          : "text-muted-foreground hover:bg-muted hover:text-foreground font-bold"
       }`}
     >
       <div
         className={`${
-          active ? "text-[#FF5722]" : "text-gray-400 group-hover:text-[#FF5722]"
+          active ? "text-[#FF5722]" : "text-muted-foreground group-hover:text-[#FF5722]"
         } transition-colors shrink-0`}
       >
         {icon}

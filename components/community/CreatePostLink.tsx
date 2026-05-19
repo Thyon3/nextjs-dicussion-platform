@@ -23,20 +23,20 @@ const CreatePostLink: React.FC<CreatePostProps> = () => {
   }
 
   return (
-    <div className="flex items-center bg-[#1A1D23] h-[56px] rounded-[12px] border border-white/10 p-3 mb-4">
+    <div className="flex items-center bg-card h-[56px] rounded-[12px] border border-border p-3 mb-4">
       <div className="bg-gray-600 h-[36px] w-[36px] rounded-full flex items-center justify-center mr-3 shrink-0">
-        <FaReddit className="text-[22px] text-white/80" />
+        <FaReddit className="text-[22px] text-foreground/80" />
       </div>
       <input
         placeholder="Create Post"
-        className="w-full text-[10pt] bg-white/10 border border-transparent h-[38px] rounded-lg mr-4 px-4 text-white placeholder:text-gray-500 hover:bg-white/20 hover:border-white/30 focus:outline-none focus:bg-white/20 focus:border-[#FF5722] transition-all cursor-pointer"
+        className="w-full text-[10pt] bg-muted border border-transparent h-[38px] rounded-lg mr-4 px-4 text-white placeholder:text-muted-foreground hover:bg-white/20 hover:border-white/30 focus:outline-none focus:bg-white/20 focus:border-[#FF5722] transition-all cursor-pointer"
         onClick={onClick}
       />
       <IoImageOutline
-        className="text-[24px] mr-4 text-gray-400 cursor-pointer hover:text-white transition-colors shrink-0"
+        className="text-[24px] mr-4 text-muted-foreground cursor-pointer hover:text-foreground transition-colors shrink-0"
       />
       <BsLink45Deg
-        className="text-[24px] text-gray-400 cursor-pointer hover:text-white transition-colors shrink-0"
+        className="text-[24px] text-muted-foreground cursor-pointer hover:text-foreground transition-colors shrink-0"
       />
     </div>
   );

@@ -7,7 +7,7 @@ type PostTitleProps = {
 
 const PostTitle: React.FC<PostTitleProps> = ({ post }) => {
   return (
-    <h3 className="text-[14pt] font-bold text-white mb-2 leading-tight">
+    <h3 className="text-[14pt] font-bold text-foreground mb-2 leading-tight">
       {post.title}
     </h3>
   );

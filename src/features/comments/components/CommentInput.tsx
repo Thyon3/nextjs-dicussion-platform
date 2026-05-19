@@ -32,10 +32,10 @@ const CommentInput: React.FC<CommentInputProps> = ({
 
   if (!user) {
     return (
-      <div className="flex items-center justify-between px-4 py-3 border border-white/10 rounded-full max-w-[750px]">
-        <p className="text-[14px] text-gray-500">Log in or sign up to leave a comment</p>
+      <div className="flex items-center justify-between px-4 py-3 border border-border rounded-full max-w-[750px]">
+        <p className="text-[14px] text-muted-foreground">Log in or sign up to leave a comment</p>
         <div className="flex gap-2">
-          <button className="px-4 py-1.5 text-[13px] font-bold text-white border border-white/20 rounded-full hover:bg-white/5 transition-all">
+          <button className="px-4 py-1.5 text-[13px] font-bold text-foreground border border-white/20 rounded-full hover:bg-muted transition-all">
             Log In
           </button>
           <button className="px-4 py-1.5 text-[13px] font-bold text-white bg-[#FF5722] rounded-full hover:bg-[#E64A19] transition-all">
@@ -54,7 +54,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-transparent px-2 py-3 text-[14px] text-white placeholder-gray-500 focus:outline-none resize-none min-h-[44px]"
+          className="w-full bg-transparent px-2 py-3 text-[14px] text-foreground placeholder-gray-500 focus:outline-none resize-none min-h-[44px]"
           rows={Math.max(1, text.split('\n').length)}
         />
         
@@ -63,7 +63,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
             {onCancel && (
               <button
                 onClick={onCancel}
-                className="px-4 py-1 text-[12px] font-bold text-gray-400 hover:bg-white/5 rounded-full transition-all"
+                className="px-4 py-1 text-[12px] font-bold text-muted-foreground hover:bg-muted rounded-full transition-all"
               >
                 Cancel
               </button>
@@ -71,7 +71,7 @@ const CommentInput: React.FC<CommentInputProps> = ({
             <button
               disabled={!text.trim() || loading}
               onClick={handleSubmit}
-              className={`px-4 py-1 text-[12px] font-bold text-white rounded-full transition-all ${
+              className={`px-4 py-1 text-[12px] font-bold text-foreground rounded-full transition-all ${
                 !text.trim() || loading ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#FF5722] hover:bg-[#E64A19]'
               }`}
             >

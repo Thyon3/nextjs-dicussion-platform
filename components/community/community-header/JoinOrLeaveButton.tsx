@@ -15,7 +15,7 @@ const JoinOrLeaveButton: React.FC<JoinOrLeaveButtonProps> = ({
     <button
       className={`h-[40px] px-6 rounded-full font-bold transition-all shadow-md w-[130px] flex items-center justify-center ${
         isJoined 
-          ? "border border-white/30 text-white hover:bg-white/10" 
+          ? "border border-white/30 text-foreground hover:bg-muted" 
           : "bg-[#FF5722] text-white hover:bg-[#E64A19]"
       } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
       onClick={onClick}

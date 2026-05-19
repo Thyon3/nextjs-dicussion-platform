@@ -72,7 +72,7 @@ const LoginForm: React.FC = () => {
       <button
         type="submit"
         disabled={!isValid || isLoading}
-        className={`w-full h-[40px] rounded-full text-white font-bold transition-all ${
+        className={`w-full h-[40px] rounded-full text-foreground font-bold transition-all ${
           !isValid || isLoading
             ? "bg-gray-600 cursor-not-allowed"
             : "bg-[#FF5722] hover:bg-[#E64A19]"
@@ -82,7 +82,7 @@ const LoginForm: React.FC = () => {
       </button>
 
       <div className="flex flex-col gap-2 pt-2">
-        <div className="flex justify-center text-[9pt] text-gray-400 gap-1">
+        <div className="flex justify-center text-[9pt] text-muted-foreground gap-1">
           <span>Forgot your password?</span>
           <button
             type="button"
@@ -93,7 +93,7 @@ const LoginForm: React.FC = () => {
           </button>
         </div>
 
-        <div className="flex justify-center text-[9pt] text-gray-400 gap-1">
+        <div className="flex justify-center text-[9pt] text-muted-foreground gap-1">
           <span>New here?</span>
           <button
             type="button"

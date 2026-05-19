@@ -72,7 +72,7 @@ const Posts: React.FC<PostsProps> = ({ communityData, sort }) => {
               )}
             </div>
           ) : (
-            <p className="text-center p-4 text-[10pt] text-gray-500">
+            <p className="text-center p-4 text-[10pt] text-muted-foreground">
               No more posts
             </p>
           )}

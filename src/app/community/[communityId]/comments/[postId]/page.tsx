@@ -65,7 +65,7 @@ const PostDetailPage: React.FC = () => {
         {/* ── Left: Post & Comments ──────────────────────── */}
         <div className="flex flex-col flex-1 min-w-0">
           {loading ? (
-             <div className="bg-[#1A1D23] rounded-[4px] p-10 flex justify-center">
+             <div className="bg-card rounded-[4px] p-10 flex justify-center">
                <div className="w-8 h-8 border-4 border-white/20 border-t-[#FF5722] rounded-full animate-spin" />
              </div>
           ) : post ? (
@@ -87,7 +87,7 @@ const PostDetailPage: React.FC = () => {
               </div>
             </>
           ) : (
-            <div className="text-white text-center py-20">Post not found</div>
+            <div className="text-foreground text-center py-20">Post not found</div>
           )}
         </div>
 

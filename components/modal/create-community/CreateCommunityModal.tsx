@@ -78,12 +78,12 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
       />
       
       {/* Modal Content */}
-      <div className="relative bg-[#1A1D23] w-full max-w-[500px] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div className="relative bg-card w-full max-w-[500px] rounded-[16px] border border-border shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between p-6 pb-4">
-          <h2 className="text-xl font-bold text-white">Create Community</h2>
+          <h2 className="text-xl font-bold text-foreground">Create Community</h2>
           <button 
             onClick={handleClose}
-            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             <IoClose size={24} />
           </button>
@@ -96,10 +96,10 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
               register={register("name")}
             />
             
-            <div className="h-[1px] bg-white/10 w-full" />
+            <div className="h-[1px] bg-muted w-full" />
 
             <div>
-              <p className="text-[15px] font-bold text-white mb-3">
+              <p className="text-[15px] font-bold text-foreground mb-3">
                 Community Type
               </p>
               <CommunityTypeOptions
@@ -119,16 +119,16 @@ const CreateCommunityModal: React.FC<CreateCommunityModalProps> = ({
           </form>
         </div>
 
-        <div className="flex justify-end gap-3 p-6 bg-white/5 border-t border-white/10">
+        <div className="flex justify-end gap-3 p-6 bg-muted border-t border-border">
           <button
-            className="px-6 py-1.5 text-white text-[14px] font-bold border border-white/30 rounded-full hover:bg-white/10 transition-all"
+            className="px-6 py-1.5 text-foreground text-[14px] font-bold border border-white/30 rounded-full hover:bg-muted transition-all"
             onClick={handleClose}
             disabled={loading}
           >
             Cancel
           </button>
           <button
-            className={`px-8 py-1.5 text-white text-[14px] font-bold rounded-full transition-all ${
+            className={`px-8 py-1.5 text-foreground text-[14px] font-bold rounded-full transition-all ${
               loading 
                 ? "bg-gray-600 cursor-not-allowed" 
                 : "bg-[#FF5722] hover:bg-[#E64A19]"

@@ -38,27 +38,27 @@ const ImageSettings: React.FC<ImageSettingsProps> = ({
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <label className="text-[12pt] font-bold text-white">
+        <label className="text-[12pt] font-bold text-foreground">
           Community Description
         </label>
         <textarea 
           placeholder="Tell us about your community"
-          className="w-full bg-transparent border border-white/10 rounded-lg p-3 text-[14px] text-white focus:outline-none focus:border-[#FF5722] transition-all min-h-[100px] resize-none"
+          className="w-full bg-transparent border border-border rounded-lg p-3 text-[14px] text-white focus:outline-none focus:border-[#FF5722] transition-all min-h-[100px] resize-none"
           value={description || ""}
           onChange={(e) => setDescription && setDescription(e.target.value)}
           maxLength={500}
         />
-        <p className="text-right text-[10px] text-gray-500">
+        <p className="text-right text-[10px] text-muted-foreground">
           {(description?.length || 0)}/500
         </p>
       </div>
 
       <div className="flex flex-col gap-4">
-        <label className="text-[12pt] font-bold text-white">
+        <label className="text-[12pt] font-bold text-foreground">
           Community Image
         </label>
         <div className="flex flex-col items-center gap-4">
-          <div className="w-[100px] h-[100px] rounded-full border-2 border-dashed border-white/20 overflow-hidden bg-white/5 flex items-center justify-center">
+          <div className="w-[100px] h-[100px] rounded-full border-2 border-dashed border-white/20 overflow-hidden bg-muted flex items-center justify-center">
             {imageToDisplay ? (
               <img
                 src={imageToDisplay}
@@ -80,8 +80,8 @@ const ImageSettings: React.FC<ImageSettingsProps> = ({
               <button
                 className={`px-4 py-1.5 text-[12px] font-bold rounded-full transition-all ${
                   deleteImage 
-                    ? "bg-red-600 text-white hover:bg-red-700" 
-                    : "border border-white/30 text-white hover:bg-white/10"
+                    ? "bg-red-600 text-foreground hover:bg-red-700" 
+                    : "border border-white/30 text-foreground hover:bg-muted"
                 }`}
                 onClick={() => setDeleteImage(!deleteImage)}
               >
@@ -95,11 +95,11 @@ const ImageSettings: React.FC<ImageSettingsProps> = ({
 
       {onSelectBannerFile && selectBannerRef && (
         <div className="flex flex-col gap-4">
-          <label className="text-[12pt] font-bold text-white">
+          <label className="text-[12pt] font-bold text-foreground">
             Community Banner
           </label>
           <div className="flex flex-col items-center gap-4">
-            <div className="w-full h-[120px] rounded-lg border-2 border-dashed border-white/20 overflow-hidden bg-white/5">
+            <div className="w-full h-[120px] rounded-lg border-2 border-dashed border-white/20 overflow-hidden bg-muted">
               {bannerToDisplay ? (
                 <img
                   src={bannerToDisplay}
@@ -121,8 +121,8 @@ const ImageSettings: React.FC<ImageSettingsProps> = ({
                 <button
                   className={`px-4 py-1.5 text-[12px] font-bold rounded-full transition-all ${
                     deleteBanner 
-                      ? "bg-red-600 text-white hover:bg-red-700" 
-                      : "border border-white/30 text-white hover:bg-white/10"
+                      ? "bg-red-600 text-foreground hover:bg-red-700" 
+                      : "border border-white/30 text-foreground hover:bg-muted"
                   }`}
                   onClick={() => setDeleteBanner(!deleteBanner)}
                 >

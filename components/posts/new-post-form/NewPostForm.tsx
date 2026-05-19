@@ -69,16 +69,16 @@ const NewPostForm: React.FC<NewPostFormProps> = ({
   };
 
   return (
-    <div className="flex flex-col bg-[#1A1D23] rounded-[16px] border border-white/10 mt-2 shadow-xl overflow-hidden">
+    <div className="flex flex-col bg-card rounded-[16px] border border-border mt-2 shadow-xl overflow-hidden">
       {/* Tabs Header */}
-      <div className="flex p-2 gap-2 border-b border-white/5">
+      <div className="flex p-2 gap-2 border-b border-border">
         {formTabs.map((item) => (
           <button
             key={item.title}
             className={`flex-1 flex items-center justify-center h-[52px] gap-2 rounded-[10px] font-bold text-[14px] transition-all ${
               selectedTab === item.title
-                ? "text-[#FF5722] border-b-2 border-[#FF5722] bg-white/5"
-                : "text-gray-400 hover:bg-white/5 hover:text-gray-200"
+                ? "text-[#FF5722] border-b-2 border-[#FF5722] bg-muted"
+                : "text-muted-foreground hover:bg-muted hover:text-gray-200"
             }`}
             onClick={() => setSelectedTab(item.title)}
           >

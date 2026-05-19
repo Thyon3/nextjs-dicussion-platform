@@ -28,7 +28,7 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
   return (
     <div className="sticky top-[80px] rounded-[10px] shadow-md overflow-hidden">
       <AboutHeaderBar communityName={communityData.id} />
-      <div className="flex flex-col p-3 bg-[#1A1D23] rounded-b-[10px] border-x border-b border-white/10">
+      <div className="flex flex-col p-3 bg-card rounded-b-[10px] border-x border-b border-border">
         <AboutCommunity communityData={communityData} />
         <div className="flex flex-col gap-3 mt-3">
           {isJoined && (
@@ -43,7 +43,7 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
           )}
           {isJoined && (
             <button
-              className="w-full h-[32px] font-bold text-[10pt] text-white border border-white/30 rounded-full hover:bg-white/10 transition-colors"
+              className="w-full h-[32px] font-bold text-[10pt] text-foreground border border-white/30 rounded-full hover:bg-muted transition-colors"
               onClick={() => setMembersModalOpen(true)}
             >
               View Subscribers

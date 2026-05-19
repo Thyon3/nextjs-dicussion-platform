@@ -33,7 +33,7 @@ const SettingsPage: React.FC = () => {
 
   const tabs: TabType[] = ['Account', 'Profile', 'Privacy', 'Preferences', 'Notifications', 'Email'];
 
-  if (!user) return <div className="min-h-screen bg-[#0B0E11] flex items-center justify-center text-gray-500">Please log in to view settings.</div>;
+  if (!user) return <div className="min-h-screen bg-background flex items-center justify-center text-muted-foreground">Please log in to view settings.</div>;
 
   const settings = user.settings || {
     account: { gender: 'Man', locationCustomization: 'Use approximate location (based on IP)', twoFactorEnabled: false },
@@ -44,18 +44,18 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0E11] text-white pt-8 pb-20">
+    <div className="min-h-screen bg-background text-foreground pt-8 pb-20">
       <div className="max-w-[1000px] mx-auto px-6">
         <h1 className="text-[28px] font-bold mb-6">Settings</h1>
 
         {/* Horizontal Tabs */}
-        <div className="flex items-center gap-8 border-b border-white/10 mb-8 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-8 border-b border-border mb-8 overflow-x-auto no-scrollbar">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`pb-3 text-[14px] font-bold transition-all relative whitespace-nowrap ${
-                activeTab === tab ? 'text-white' : 'text-gray-500 hover:text-gray-300'
+                activeTab === tab ? 'text-foreground' : 'text-muted-foreground hover:text-gray-300'
               }`}
             >
               {tab}
@@ -73,7 +73,7 @@ const SettingsPage: React.FC = () => {
           {activeTab === 'Privacy' && <PrivacySettings settings={settings.privacy} onUpdate={(val: any) => handleUpdate({ privacy: val })} />}
           {activeTab === 'Preferences' && <PreferencesSettings settings={settings.preferences} onUpdate={(val: any) => handleUpdate({ preferences: val })} />}
           {activeTab === 'Notifications' && <NotificationsSettings settings={settings.notifications} onUpdate={(val: any) => handleUpdate({ notifications: val })} />}
-          {activeTab === 'Email' && <div className="text-gray-500 italic py-10">Email settings coming soon...</div>}
+          {activeTab === 'Email' && <div className="text-muted-foreground italic py-10">Email settings coming soon...</div>}
         </div>
       </div>
     </div>
@@ -144,12 +144,12 @@ const AccountSettings = ({ settings, onUpdate }: any) => (
       <SettingItem 
         label="Google" 
         sublabel="Connect to log in with your Google account" 
-        action={<button className="bg-white/10 hover:bg-white/20 text-white px-4 py-1.5 rounded-full text-[13px] font-bold transition-all">Disconnect</button>} 
+        action={<button className="bg-muted hover:bg-white/20 text-foreground px-4 py-1.5 rounded-full text-[13px] font-bold transition-all">Disconnect</button>} 
       />
       <SettingItem 
         label="Apple" 
         sublabel="Connect to log in with your Apple account" 
-        action={<button className="bg-white/10 hover:bg-white/20 text-white px-4 py-1.5 rounded-full text-[13px] font-bold transition-all">Connect</button>} 
+        action={<button className="bg-muted hover:bg-white/20 text-foreground px-4 py-1.5 rounded-full text-[13px] font-bold transition-all">Connect</button>} 
       />
       <SettingItem 
         label="Two-factor authentication" 
@@ -184,11 +184,11 @@ const PrivacySettings = ({ settings, onUpdate }: any) => (
     </Section>
 
     <Section title="Advanced">
-      <SettingItem label="Third-party app authorizations" action={<IoArrowRedoOutline size={18} className="text-gray-500" />} />
+      <SettingItem label="Third-party app authorizations" action={<IoArrowRedoOutline size={18} className="text-muted-foreground" />} />
       <SettingItem 
         label="Clear history" 
         sublabel="Delete your post views history" 
-        action={<button className="bg-white/10 hover:bg-white/20 text-white px-4 py-1.5 rounded-full text-[13px] font-bold transition-all">Clear</button>} 
+        action={<button className="bg-muted hover:bg-white/20 text-foreground px-4 py-1.5 rounded-full text-[13px] font-bold transition-all">Clear</button>} 
       />
     </Section>
   </div>
@@ -272,7 +272,7 @@ const NotificationsSettings = ({ settings, onUpdate }: any) => (
 /* ── Reusable Components ───────────────────────────────────────── */
 const Section: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
   <div className="space-y-2">
-    <h2 className="text-[12px] font-bold text-gray-500 uppercase tracking-widest mb-4">{title}</h2>
+    <h2 className="text-[12px] font-bold text-muted-foreground uppercase tracking-widest mb-4">{title}</h2>
     <div className="flex flex-col">{children}</div>
   </div>
 );
@@ -295,11 +295,11 @@ const SettingItem: React.FC<{
   };
 
   return (
-    <div className={`py-4 border-b border-transparent transition-all ${editing ? '' : 'group cursor-pointer hover:border-white/5'}`}>
+    <div className={`py-4 border-b border-transparent transition-all ${editing ? '' : 'group cursor-pointer hover:border-border'}`}>
       <div className="flex items-center justify-between">
         <div className="flex flex-col min-w-0 pr-4 flex-1">
           <span className="text-[14px] font-bold text-white group-hover:text-[#FF5722] transition-colors">{label}</span>
-          {sublabel && <span className="text-[12px] text-gray-500 leading-tight mt-1">{sublabel}</span>}
+          {sublabel && <span className="text-[12px] text-muted-foreground leading-tight mt-1">{sublabel}</span>}
           
           {editing && (
             <div className="mt-4 flex items-center gap-2 animate-in fade-in zoom-in duration-200">
@@ -308,7 +308,7 @@ const SettingItem: React.FC<{
                 type="text"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
-                className="bg-[#1A1D23] text-white text-[14px] px-3 py-2 rounded-[8px] border border-white/10 outline-none focus:border-[#FF5722] w-full max-w-[400px]"
+                className="bg-card text-white text-[14px] px-3 py-2 rounded-[8px] border border-border outline-none focus:border-[#FF5722] w-full max-w-[400px]"
                 placeholder={`Enter ${label}...`}
               />
               <button 
@@ -319,7 +319,7 @@ const SettingItem: React.FC<{
               </button>
               <button 
                 onClick={() => setEditing(false)}
-                className="text-gray-500 text-[13px] hover:text-white px-2"
+                className="text-muted-foreground text-[13px] hover:text-foreground px-2"
               >
                 Cancel
               </button>
@@ -329,8 +329,8 @@ const SettingItem: React.FC<{
         
         {!editing && (
           <div className="flex items-center gap-3 shrink-0" onClick={() => isEditable && setEditing(true)}>
-            {value && <span className="text-[14px] text-gray-400">{value}</span>}
-            {hasArrow && <IoChevronForwardOutline className="text-gray-500" size={18} />}
+            {value && <span className="text-[14px] text-muted-foreground">{value}</span>}
+            {hasArrow && <IoChevronForwardOutline className="text-muted-foreground" size={18} />}
             {action && action}
           </div>
         )}
@@ -343,8 +343,8 @@ const Toggle: React.FC<{ active: boolean; disabled?: boolean; onChange?: (val: b
   <div 
     onClick={() => !disabled && onChange && onChange(!active)}
     className={`w-[40px] h-[22px] rounded-full relative transition-all ${
-      disabled ? 'bg-white/5 cursor-not-allowed' : 
-      active ? 'bg-[#FF5722] cursor-pointer' : 'bg-white/10 cursor-pointer'
+      disabled ? 'bg-muted cursor-not-allowed' : 
+      active ? 'bg-[#FF5722] cursor-pointer' : 'bg-muted cursor-pointer'
     }`}
   >
     <div className={`absolute top-[3px] w-[16px] h-[16px] rounded-full bg-white transition-all shadow-md flex items-center justify-center ${

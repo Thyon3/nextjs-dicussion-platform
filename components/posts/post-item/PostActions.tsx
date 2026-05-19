@@ -38,16 +38,16 @@ const PostActions: React.FC<PostActionsProps> = ({
   };
 
   return (
-    <div className="flex flex-row gap-1 p-2 ml-1 mb-1 font-bold text-gray-500">
+    <div className="flex flex-row gap-1 p-2 ml-1 mb-1 font-bold text-muted-foreground">
       <button
-        className="flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-white/10 hover:text-white transition-all text-[9pt]"
+        className="flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-muted hover:text-foreground transition-all text-[9pt]"
       >
         <FaRegCommentAlt className="text-[16px]" />
         <span>Comments</span>
       </button>
 
       <button
-        className="flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-white/10 hover:text-white transition-all text-[9pt]"
+        className="flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-muted hover:text-foreground transition-all text-[9pt]"
         onClick={copyToClipboard}
       >
         <FiShare2 className="text-[18px]" />
@@ -55,8 +55,8 @@ const PostActions: React.FC<PostActionsProps> = ({
       </button>
 
       <button
-        className={`flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-white/10 transition-all text-[9pt] ${
-          isSaved ? "text-[#FF8A65]" : "hover:text-white"
+        className={`flex items-center gap-2 h-[32px] px-3 rounded-md hover:bg-muted transition-all text-[9pt] ${
+          isSaved ? "text-[#FF8A65]" : "hover:text-foreground"
         }`}
         onClick={handleSave}
       >

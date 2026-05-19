@@ -44,7 +44,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
       </div>
 
       {/* ── Sort / Divider ────────────────────────────────── */}
-      <div className="h-[1px] bg-white/10 w-full my-2" />
+      <div className="h-[1px] bg-muted w-full my-2" />
 
       {/* ── Comment List ─────────────────────────────────── */}
       <div className="flex flex-col">
@@ -52,10 +52,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           <div className="flex flex-col gap-6">
             {Array(3).fill(0).map((_, i) => (
               <div key={i} className="flex gap-3 animate-pulse">
-                <div className="w-8 h-8 rounded-full bg-white/5" />
+                <div className="w-8 h-8 rounded-full bg-muted" />
                 <div className="flex flex-col gap-2 flex-1">
-                  <div className="h-4 w-32 bg-white/5 rounded" />
-                  <div className="h-20 w-full bg-white/5 rounded" />
+                  <div className="h-4 w-32 bg-muted rounded" />
+                  <div className="h-20 w-full bg-muted rounded" />
                 </div>
               </div>
             ))}
@@ -65,7 +65,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
             <div className="w-16 h-16 rounded-full border-2 border-dashed border-white/20 flex items-center justify-center">
                <span className="text-2xl">💬</span>
             </div>
-            <p className="text-[16px] font-bold text-gray-500">No comments yet</p>
+            <p className="text-[16px] font-bold text-muted-foreground">No comments yet</p>
             <p className="text-[13px] text-gray-600">Be the first to share what you think!</p>
           </div>
         ) : (

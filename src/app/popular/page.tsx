@@ -16,15 +16,15 @@ export default function PopularPage() {
       {/* Center Content: Feed */}
       <div className="flex flex-col gap-5">
         {/* Page Header */}
-        <div className="flex items-center gap-3 p-4 bg-[#1A1D23] rounded-[16px] border border-white/10 shadow-md">
+        <div className="flex items-center gap-3 p-4 bg-card rounded-[16px] border border-border shadow-md">
           <div className="w-10 h-10 rounded-full bg-[#FF5722]/10 flex items-center justify-center text-[#FF5722]">
             <AiOutlineLineChart size={22} />
           </div>
           <div>
-            <h1 className="font-reddit text-[18px] font-bold text-white leading-tight">
+            <h1 className="font-reddit text-[18px] font-bold text-foreground leading-tight">
               Popular
             </h1>
-            <p className="font-reddit text-[12px] text-gray-500">
+            <p className="font-reddit text-[12px] text-muted-foreground">
               The most popular posts on Circus right now
             </p>
           </div>

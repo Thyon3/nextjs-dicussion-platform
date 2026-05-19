@@ -10,18 +10,18 @@ const PersonalHome: React.FC = () => {
   return (
     <>
       <CreateCommunityModal open={open} handleClose={() => setOpen(false)} />
-      <div className="flex flex-col bg-[#1A1D23] rounded-[12px] border border-white/10 sticky top-[60px]">
+      <div className="flex flex-col bg-card rounded-[12px] border border-border sticky top-[60px]">
         <div className="flex items-center p-3 px-4 bg-gradient-to-r from-[#FF8A65] to-[#FF5722] h-[50px] rounded-t-[12px]">
           <div className="bg-white/20 p-2 rounded-lg mr-3 border border-white/30 flex items-center justify-center">
-            <AiFillHome className="text-white text-[20px]" />
+            <AiFillHome className="text-foreground text-[20px]" />
           </div>
-          <span className="font-reddit font-bold text-white text-[14pt]">
+          <span className="font-reddit font-bold text-foreground text-[14pt]">
             Home
           </span>
         </div>
         
         <div className="flex flex-col p-4">
-          <p className="text-[10pt] text-gray-400 mb-6">
+          <p className="text-[10pt] text-muted-foreground mb-6">
             Home page personalized based on your subscribed communities. Circus represents a shift back to intentional spaces.
           </p>
           
@@ -33,7 +33,7 @@ const PersonalHome: React.FC = () => {
               Create Post
             </button>
             <button
-              className="font-reddit h-[38px] text-white border border-white/30 hover:bg-white/10 font-bold rounded-full transition-colors"
+              className="font-reddit h-[38px] text-foreground border border-white/30 hover:bg-muted font-bold rounded-full transition-colors"
               onClick={() => setOpen(true)}
             >
               Create Community

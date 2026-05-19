@@ -15,10 +15,10 @@ const SavedPostsWidget: React.FC = () => {
   const visiblePosts = [...savedPostState.savedPosts].reverse().slice(0, 5);
 
   return (
-    <div className="bg-[#1A1D23] rounded-[16px] border border-white/10 shadow-md overflow-hidden">
-      <div className="font-reddit p-4 flex items-center gap-2 border-b border-white/5">
+    <div className="bg-card rounded-[16px] border border-border shadow-md overflow-hidden">
+      <div className="font-reddit p-4 flex items-center gap-2 border-b border-border">
         <BsBookmarkFill className="text-[#FF8A65]" />
-        <span className="text-[12px] font-bold text-gray-500 uppercase tracking-wider">
+        <span className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider">
           Saved Posts
         </span>
       </div>
@@ -28,19 +28,19 @@ const SavedPostsWidget: React.FC = () => {
           <Link
             key={post.postId}
             href={`/community/${post.communityId}/comments/${post.postId}`}
-            className="p-4 hover:bg-white/5 transition-all flex flex-col gap-1 border-b border-white/5 last:border-0"
+            className="p-4 hover:bg-muted transition-all flex flex-col gap-1 border-b border-border last:border-0"
           >
             <div className="flex items-center gap-2 mb-1">
               {post.communityImageURL ? (
                 <img src={post.communityImageURL} alt="" className="w-5 h-5 rounded-full object-cover" />
               ) : (
-                <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-white text-[8px] font-bold">
+                <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-foreground text-[8px] font-bold">
                   <FaReddit size={12} />
                 </div>
               )}
-              <span className="font-reddit text-[12px] font-bold text-white">r/{post.communityId}</span>
+              <span className="font-reddit text-[12px] font-bold text-foreground">r/{post.communityId}</span>
             </div>
-            <h4 className="font-reddit text-[14px] font-medium text-white line-clamp-2 leading-tight">
+            <h4 className="font-reddit text-[14px] font-medium text-foreground line-clamp-2 leading-tight">
               {post.postTitle}
             </h4>
           </Link>

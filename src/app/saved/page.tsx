@@ -42,10 +42,10 @@ export default function SavedPostsPage() {
     <PageContent>
       {/* Center Content */}
       <div className="flex flex-col gap-5">
-        <div className="p-5 bg-[#1A1D23] rounded-[16px] border border-white/10 shadow-md">
+        <div className="p-5 bg-card rounded-[16px] border border-border shadow-md">
           <div className="flex items-center gap-3 mb-6">
             <BsBookmarkFill className="text-[#FF8A65] text-2xl" />
-            <h2 className="font-reddit text-xl font-bold text-white">
+            <h2 className="font-reddit text-xl font-bold text-foreground">
               Saved Posts
             </h2>
           </div>
@@ -55,9 +55,9 @@ export default function SavedPostsPage() {
                <div className="w-8 h-8 border-4 border-white/20 border-t-[#FF5722] rounded-full animate-spin" />
              </div>
           ) : !user ? (
-             <p className="font-reddit text-gray-500 text-center py-10">Please log in to see your saved posts.</p>
+             <p className="font-reddit text-muted-foreground text-center py-10">Please log in to see your saved posts.</p>
           ) : postStateValue.posts.length === 0 ? (
-             <p className="font-reddit text-gray-500 text-center py-10">You haven&apos;t saved any posts yet.</p>
+             <p className="font-reddit text-muted-foreground text-center py-10">You haven&apos;t saved any posts yet.</p>
           ) : (
              <div className="flex flex-col gap-4">
                {postStateValue.posts.map((item) => (

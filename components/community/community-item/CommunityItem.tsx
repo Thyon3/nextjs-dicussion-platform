@@ -19,7 +19,7 @@ const CommunityItem: React.FC<CommunityItemProps> = ({
 
   return (
     <div
-      className="flex items-center p-4 bg-[#1A1D23] border border-white/10 rounded-[12px] shadow-md hover:border-white/30 transition-all cursor-pointer"
+      className="flex items-center p-4 bg-card border border-border rounded-[12px] shadow-md hover:border-white/30 transition-all cursor-pointer"
       onClick={() => {
         router.push(`/community/${community.id}`);
       }}

@@ -12,17 +12,17 @@ const CommunityNameSection: React.FC<CommunityNameSectionProps> = ({
 }) => {
   return (
     <div className="flex flex-col gap-1">
-      <p className="text-[15px] font-bold text-white">Name</p>
-      <p className="text-[11px] text-gray-500">
+      <p className="text-[15px] font-bold text-foreground">Name</p>
+      <p className="text-[11px] text-muted-foreground">
         Community names cannot be changed
       </p>
       <div className="relative mt-2">
         <input
           placeholder="Community Name"
-          className={`w-full h-[40px] px-4 text-[14px] bg-white/5 border rounded-full text-white placeholder:text-gray-500 focus:outline-none transition-all ${
+          className={`w-full h-[40px] px-4 text-[14px] bg-muted border rounded-full text-foreground placeholder:text-muted-foreground focus:outline-none transition-all ${
             error 
               ? "border-red-500" 
-              : "border-white/10 focus:border-[#FF5722] focus:bg-white/10"
+              : "border-border focus:border-[#FF5722] focus:bg-muted"
           }`}
           {...register}
         />

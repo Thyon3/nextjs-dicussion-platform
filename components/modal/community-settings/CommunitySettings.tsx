@@ -86,12 +86,12 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
       />
       
       {/* Modal Content */}
-      <div className="relative bg-[#1A1D23] w-full max-w-[600px] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div className="relative bg-card w-full max-w-[600px] rounded-[16px] border border-border shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between p-6 pb-2">
-          <h2 className="text-xl font-bold text-white">Community Settings</h2>
+          <h2 className="text-xl font-bold text-foreground">Community Settings</h2>
           <button 
             onClick={closeModal}
-            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             <IoClose size={24} />
           </button>
@@ -99,14 +99,14 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
 
         <div className="flex flex-col">
           {/* Tabs List */}
-          <div className="flex border-b border-white/10 px-6">
+          <div className="flex border-b border-border px-6">
             {["profile", "privacy", "admins", "danger"].map((tab) => (
               <button
                 key={tab}
                 className={`px-4 py-3 text-[14px] font-bold capitalize transition-all border-b-2 ${
                   activeTab === tab 
                     ? "text-[#FF5722] border-b-[#FF5722]" 
-                    : "text-gray-500 border-b-transparent hover:text-gray-300"
+                    : "text-muted-foreground border-b-transparent hover:text-gray-300"
                 }`}
                 onClick={() => setActiveTab(tab)}
               >

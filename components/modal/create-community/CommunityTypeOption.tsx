@@ -22,8 +22,8 @@ const CommunityTypeOption: FC<CommunityTypeOptionProps> = ({
     <div
       className={`flex items-center gap-3 p-3 rounded-[12px] border cursor-pointer transition-all ${
         isChecked 
-          ? "border-[#FF5722] bg-white/5" 
-          : "border-white/10 hover:border-white/20 hover:bg-white/5"
+          ? "border-[#FF5722] bg-muted" 
+          : "border-border hover:border-white/20 hover:bg-muted"
       }`}
       onClick={() => onChange(name)}
     >
@@ -33,13 +33,13 @@ const CommunityTypeOption: FC<CommunityTypeOptionProps> = ({
         {isChecked && <div className="w-2 h-2 bg-white rounded-full" />}
       </div>
       
-      <Icon className="text-[20px] text-gray-400" />
+      <Icon className="text-[20px] text-muted-foreground" />
       
       <div className="flex flex-col flex-1">
-        <span className="text-[14px] font-bold text-white leading-tight">
+        <span className="text-[14px] font-bold text-foreground leading-tight">
           {label}
         </span>
-        <span className="text-[11px] text-gray-500">
+        <span className="text-[11px] text-muted-foreground">
           {description}
         </span>
       </div>

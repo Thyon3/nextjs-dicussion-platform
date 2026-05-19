@@ -13,7 +13,7 @@ const Recommendations: React.FC = () => {
   const { user } = useAuth();
 
   return (
-    <div className="flex flex-col bg-[#1A1D23] rounded-[12px] border border-white/10 overflow-hidden">
+    <div className="flex flex-col bg-card rounded-[12px] border border-border overflow-hidden">
       <SuggestionsHeader />
       <div className="flex flex-col p-1">
         {loading ? (
@@ -22,8 +22,8 @@ const Recommendations: React.FC = () => {
               .fill(0)
               .map((_, index) => (
                 <div key={index} className="flex items-center gap-3 animate-pulse">
-                  <div className="w-6 h-6 bg-white/10 rounded-full" />
-                  <div className="h-4 bg-white/10 rounded flex-1" />
+                  <div className="w-6 h-6 bg-muted rounded-full" />
+                  <div className="h-4 bg-muted rounded flex-1" />
                 </div>
               ))}
           </div>
@@ -47,7 +47,7 @@ const Recommendations: React.FC = () => {
             })}
             <div className="p-3">
               <button
-                className="font-reddit w-full h-[32px] bg-white/10 text-white rounded-full text-[10pt] font-bold hover:bg-white/20 transition-colors"
+                className="font-reddit w-full h-[32px] bg-muted text-foreground rounded-full text-[10pt] font-bold hover:bg-white/20 transition-colors"
               >
                 View All
               </button>

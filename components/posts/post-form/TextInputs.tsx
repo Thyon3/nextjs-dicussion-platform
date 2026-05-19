@@ -20,7 +20,7 @@ const TextInputs: React.FC<TextInputsProps> = ({
       <div className="flex flex-col gap-1">
         <input
           placeholder="Title"
-          className="w-full h-[40px] px-4 text-[14px] text-white bg-[#1A1D23] border border-white/10 rounded-[10px] focus:outline-none focus:border-[#FF5722] transition-all placeholder:text-gray-500 hover:border-white/30"
+          className="w-full h-[40px] px-4 text-[14px] text-white bg-card border border-border rounded-[10px] focus:outline-none focus:border-[#FF5722] transition-all placeholder:text-muted-foreground hover:border-white/30"
           {...register("title")}
         />
         {errors.title && (
@@ -32,13 +32,13 @@ const TextInputs: React.FC<TextInputsProps> = ({
 
       <textarea
         placeholder="Text (Optional)"
-        className="w-full min-h-[120px] p-4 text-[14px] text-white bg-[#1A1D23] border border-white/10 rounded-[10px] focus:outline-none focus:border-[#FF5722] transition-all placeholder:text-gray-500 hover:border-white/30 resize-none"
+        className="w-full min-h-[120px] p-4 text-[14px] text-white bg-card border border-border rounded-[10px] focus:outline-none focus:border-[#FF5722] transition-all placeholder:text-muted-foreground hover:border-white/30 resize-none"
         {...register("body")}
       />
 
       <div className="flex justify-end pt-2">
         <button
-          className={`h-[34px] px-8 text-[14px] font-bold text-white rounded-full transition-all shadow-md ${
+          className={`h-[34px] px-8 text-[14px] font-bold text-foreground rounded-full transition-all shadow-md ${
             loading 
               ? "bg-gray-600 cursor-not-allowed" 
               : "bg-[#FF5722] hover:bg-[#E64A19]"

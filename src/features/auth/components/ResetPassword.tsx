@@ -39,7 +39,7 @@ const ResetPassword: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <h3 className="text-lg font-bold text-white mb-4">
+      <h3 className="text-lg font-bold text-foreground mb-4">
         Reset your password
       </h3>
       {success ? (
@@ -49,7 +49,7 @@ const ResetPassword: React.FC = () => {
         </p>
       ) : (
         <>
-          <p className="text-[10pt] text-gray-400 text-center mb-6">
+          <p className="text-[10pt] text-muted-foreground text-center mb-6">
             Enter the email associated with your account and we will send you a reset link.
           </p>
           <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
@@ -68,7 +68,7 @@ const ResetPassword: React.FC = () => {
             <button
               type="submit"
               disabled={!isValid || loading}
-              className={`w-full h-[40px] rounded-full text-white font-bold transition-all ${
+              className={`w-full h-[40px] rounded-full text-foreground font-bold transition-all ${
                 !isValid || loading
                   ? "bg-gray-600 cursor-not-allowed"
                   : "bg-[#FF5722] hover:bg-[#E64A19]"
@@ -89,7 +89,7 @@ const ResetPassword: React.FC = () => {
         >
           Login
         </button>
-        <BsDot className="text-gray-500 text-xl" />
+        <BsDot className="text-muted-foreground text-xl" />
         <button 
           type="button" 
           className="hover:underline uppercase"

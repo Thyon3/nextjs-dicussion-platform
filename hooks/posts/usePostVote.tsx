@@ -7,13 +7,7 @@ import { votePost, getPostById } from "@/lib/api/posts";
 import { useAuth } from "../useAuth";
 import { useAuthStore } from "@/src/features/auth";
 
-type SetPostState = React.Dispatch<
-  React.SetStateAction<{
-    selectedPost: Post | null;
-    posts: Post[];
-    postVotes: PostVote[];
-  }>
->;
+import { SetPostState } from "@/atoms/postsAtom";
 
 /**
  * A custom hook that manages voting logic for posts.

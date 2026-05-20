@@ -7,12 +7,14 @@ import { Post, PostVote } from "@/types/post";
  * @property posts - all the posts
  * @property postVotes - all the post votes
  */
-interface PostState {
+export interface PostState {
   selectedPost: Post | null;
   posts: Post[];
   postVotes: PostVote[];
   feedCache: Record<string, { posts: Post[]; fetchedAt: number }>;
 }
+
+export type SetPostState = React.Dispatch<React.SetStateAction<PostState>>;
 
 /**
  * Represents the default state of the atom.

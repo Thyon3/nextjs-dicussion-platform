@@ -1,7 +1,8 @@
+import { useAtom, useSetAtom } from "jotai";
 import { postStateAtom } from "@/atoms/postsAtom";
 import { savedPostStateAtom } from "@/atoms/savedPostsAtom";
 import { Post, PostVote } from "@/types/post";
-import { useAtom, useSetAtom } from "jotai";
+import { SetPostState } from "@/atoms/postsAtom";
 import React from "react";
 import { deletePost } from "@/lib/api/posts";
 
@@ -12,15 +13,7 @@ import { deletePost } from "@/lib/api/posts";
  * @param setPostStateValue - A state setter function to update the global post state.
  * @returns An object containing `onDeletePost` function and current post state value.
  */
-const usePostDeletion = (
-  setPostStateValue: React.Dispatch<
-    React.SetStateAction<{
-      selectedPost: Post | null;
-      posts: Post[];
-      postVotes: PostVote[];
-    }>
-  >
-) => {
+const usePostDeletion = (setPostStateValue: SetPostState) => {
   const [postStateValue] = useAtom(postStateAtom);
   const setSavedPostState = useSetAtom(savedPostStateAtom);
 

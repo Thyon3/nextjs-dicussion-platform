@@ -1,4 +1,5 @@
-import { Post, PostVote } from "@/types/post";
+import { SetPostState } from "@/atoms/postsAtom";
+import { Post } from "@/types/post";
 import { useRouter } from "next/navigation";
 
 /**
@@ -7,15 +8,7 @@ import { useRouter } from "next/navigation";
  * @param setPostStateValue - A state setter function to update the global post state.
  * @returns An object containing `onSelectPost` function.
  */
-const usePostSelection = (
-  setPostStateValue: React.Dispatch<
-    React.SetStateAction<{
-      selectedPost: Post | null;
-      posts: Post[];
-      postVotes: PostVote[];
-    }>
-  >
-) => {
+const usePostSelection = (setPostStateValue: SetPostState) => {
   const router = useRouter();
 
   const onSelectPost = (post: Post, scrollToComments?: boolean) => {

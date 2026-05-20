@@ -45,6 +45,18 @@ const PostDetailPage: React.FC = () => {
     }
   }, [postId, communityId]);
 
+  useEffect(() => {
+    if (!loading && post && typeof window !== 'undefined' && window.location.hash === '#comments') {
+      const timer = setTimeout(() => {
+        const element = document.getElementById('comments');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, post]);
+
   const onVote = async (event: React.MouseEvent, post: any, vote: number, communityId: string) => {
     // Re-use existing vote logic if possible or implement here
     // For now, let's just update local state if we want real-time feel
@@ -78,7 +90,7 @@ const PostDetailPage: React.FC = () => {
                 userVoteValue={0}
               />
               
-              <div className="p-4 lg:p-6 mt-4">
+              <div id="comments" className="p-4 lg:p-6 mt-4">
                  <CommentSection 
                    postId={post.id!} 
                    communityId={post.communityId} 

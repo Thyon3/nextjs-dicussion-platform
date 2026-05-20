@@ -10,7 +10,7 @@ const AboutCommunity: React.FC<AboutCommunityProps> = ({ communityData }) => {
   return (
     <div className="flex flex-col w-full p-2 text-[10pt] text-foreground">
       {communityData.description && (
-        <p className="mb-4 text-[14px] leading-[1.5] text-gray-300">
+        <p className="mb-4 text-[14px] leading-[1.5] text-slate-900 dark:text-gray-300">
           {communityData.description}
         </p>
       )}

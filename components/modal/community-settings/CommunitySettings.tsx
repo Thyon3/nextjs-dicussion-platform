@@ -27,7 +27,7 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
   handleClose,
   communityData,
 }) => {
-  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile(300, 300);
+  const { selectedFile, setSelectedFile, onSelectFile } = useSelectFile(300, 300, false);
   const selectFileRef = useRef<HTMLInputElement>(null);
   const selectBannerRef = useRef<HTMLInputElement>(null);
   const [communityStateValue] = useAtom(communityStateAtom);
@@ -38,7 +38,7 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
   const [activeTab, setActiveTab] = useState("profile");
   const showToast = useCustomToast();
 
-  const { selectedFile: selectedBannerFile, setSelectedFile: setSelectedBannerFile, onSelectFile: onSelectBannerFile } = useSelectFile(1200, 300);
+  const { selectedFile: selectedBannerFile, setSelectedFile: setSelectedBannerFile, onSelectFile: onSelectBannerFile } = useSelectFile(1200, 300, false);
 
   const { updateProfile, deleteCommunityImage } = useCommunityImage(communityData);
   const { updatePrivacyType } = useCommunityPrivacy(communityData);

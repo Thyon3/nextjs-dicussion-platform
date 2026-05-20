@@ -78,7 +78,7 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityData }) => {
               </button>
               {isJoined && (
                 <button
-                  className="h-[32px] px-4 sm:px-6 rounded-full font-bold text-[12px] sm:text-[14px] border border-white/30 text-foreground hover:bg-muted transition-all flex-1 sm:flex-none"
+                  className="h-[32px] px-4 sm:px-6 rounded-full font-bold text-[12px] sm:text-[14px] border border-border text-foreground hover:bg-muted transition-all flex-1 sm:flex-none"
                   onClick={() => router.push(`/community/${communityData.id}/submit`)}
                 >
                   Create Post
@@ -86,7 +86,7 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityData }) => {
               )}
               {isAdmin && (
                 <button
-                  className="h-[32px] px-4 sm:px-6 rounded-full font-bold text-[12px] sm:text-[14px] border border-white/30 text-foreground hover:bg-muted transition-all flex-1 sm:flex-none"
+                  className="h-[32px] px-4 sm:px-6 rounded-full font-bold text-[12px] sm:text-[14px] border border-border text-foreground hover:bg-muted transition-all flex-1 sm:flex-none"
                   onClick={() => setSettingsModalOpen(true)}
                 >
                   Mod Tools

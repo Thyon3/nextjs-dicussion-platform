@@ -24,7 +24,7 @@ const AdminSectionAbout: React.FC<AdminSectionAboutProps> = ({
             communityData={communityData}
           />
           <button
-            className="w-full h-[32px] text-[10pt] font-bold border border-white/30 text-foreground rounded-full hover:bg-muted transition-colors"
+            className="w-full h-[32px] text-[10pt] font-bold border border-border text-foreground rounded-full hover:bg-muted transition-colors"
             onClick={() => setCommunitySettingsModalOpen(true)}
           >
             Community Settings

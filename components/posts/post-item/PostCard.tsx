@@ -25,7 +25,7 @@ interface PostCardProps {
     vote: number,
     communityId: string
   ) => void;
-  onSelectPost?: (post: Post) => void;
+  onSelectPost?: (post: Post, scrollToComments?: boolean) => void;
   onSave: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onDelete: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   onShare: (event: React.MouseEvent) => void;
@@ -163,7 +163,10 @@ const PostCard: React.FC<PostCardProps> = ({
           <ActionBtn 
             icon={<FaRegCommentAlt size={14} />} 
             label={`${post.numberOfComments || 0} ${post.numberOfComments === 1 ? 'Comment' : 'Comments'}`} 
-            onClick={(e) => e.stopPropagation()} 
+            onClick={(e) => {
+              e.stopPropagation();
+              if (onSelectPost) onSelectPost(post, true);
+            }} 
           />
 
           {/* Share */}

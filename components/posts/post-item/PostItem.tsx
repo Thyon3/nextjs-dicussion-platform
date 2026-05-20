@@ -18,7 +18,7 @@ type PostItemProps = {
     communityId: string
   ) => void;
   onDeletePost: (post: Post) => Promise<boolean>;
-  onSelectPost?: (post: Post) => void;
+  onSelectPost?: (post: Post, scrollToComments?: boolean) => void;
   showCommunityImage?: boolean;
   votingDisabled?: boolean;
 };

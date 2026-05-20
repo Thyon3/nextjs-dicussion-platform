@@ -30,6 +30,8 @@ const CommentInput: React.FC<CommentInputProps> = ({
     }
   };
 
+  const [isFocused, setIsFocused] = useState(false);
+
   if (!user) {
     return (
       <div className="flex items-center justify-between px-4 py-3 border border-border rounded-full max-w-[750px]">
@@ -48,37 +50,47 @@ const CommentInput: React.FC<CommentInputProps> = ({
 
   return (
     <div className="flex flex-col gap-2 w-full max-w-[750px]">
-      <div className="relative border-b border-white/20 transition-all overflow-hidden">
+      <div 
+        className={`relative border rounded-[10px] bg-card transition-all overflow-hidden ${
+          isFocused ? 'border-[#FF5722] ring-1 ring-[#FF5722]/10 shadow-sm' : 'border-border hover:border-white/30'
+        }`}
+      >
         <textarea
           autoFocus={autoFocus}
           value={text}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           onChange={(e) => setText(e.target.value)}
           placeholder={placeholder}
-          className="w-full bg-transparent px-2 py-3 text-[14px] text-foreground placeholder-gray-500 focus:outline-none resize-none min-h-[44px]"
+          className="w-full bg-transparent px-4 py-3 text-[14px] text-foreground placeholder:text-muted-foreground focus:outline-none resize-none min-h-[44px]"
           rows={Math.max(1, text.split('\n').length)}
         />
         
-        <div className={`flex justify-end p-2 ${text.trim() ? 'opacity-100' : 'opacity-0'} transition-opacity`}>
-          <div className="flex gap-2">
-            {onCancel && (
+        {(text.trim() || isFocused || onCancel) && (
+          <div className="flex justify-end p-2 border-t border-border bg-muted/20 animate-in fade-in duration-200">
+            <div className="flex gap-2">
+              {onCancel && (
+                <button
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={onCancel}
+                  className="px-4 py-1 text-[12px] font-bold text-muted-foreground hover:bg-muted rounded-full transition-all"
+                >
+                  Cancel
+                </button>
+              )}
               <button
-                onClick={onCancel}
-                className="px-4 py-1 text-[12px] font-bold text-muted-foreground hover:bg-muted rounded-full transition-all"
+                disabled={!text.trim() || loading}
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={handleSubmit}
+                className={`px-4 py-1 text-[12px] font-bold text-foreground rounded-full transition-all ${
+                  !text.trim() || loading ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#FF5722] hover:bg-[#E64A19]'
+                }`}
               >
-                Cancel
+                {loading ? 'Posting...' : 'Comment'}
               </button>
-            )}
-            <button
-              disabled={!text.trim() || loading}
-              onClick={handleSubmit}
-              className={`px-4 py-1 text-[12px] font-bold text-foreground rounded-full transition-all ${
-                !text.trim() || loading ? 'bg-gray-600 cursor-not-allowed' : 'bg-[#FF5722] hover:bg-[#E64A19]'
-              }`}
-            >
-              {loading ? 'Posting...' : 'Comment'}
-            </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

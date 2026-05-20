@@ -33,7 +33,7 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
         <div className="flex flex-col gap-3 mt-3">
           {isJoined && (
             <button
-              className="w-full h-[32px] bg-white text-black font-bold text-[10pt] rounded-full hover:bg-gray-200 transition-colors"
+              className="w-full h-[32px] font-bold text-[10pt] text-foreground border border-border rounded-full hover:bg-muted transition-colors"
               onClick={() => {
                 router.push(`/community/${communityData.id}/submit`);
               }}
@@ -43,7 +43,7 @@ const About: React.FC<AboutProps> = ({ communityData }) => {
           )}
           {isJoined && (
             <button
-              className="w-full h-[32px] font-bold text-[10pt] text-foreground border border-white/30 rounded-full hover:bg-muted transition-colors"
+              className="w-full h-[32px] font-bold text-[10pt] text-foreground border border-border rounded-full hover:bg-muted transition-colors"
               onClick={() => setMembersModalOpen(true)}
             >
               View Subscribers

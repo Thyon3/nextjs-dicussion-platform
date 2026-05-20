@@ -43,7 +43,7 @@ const ImageSettings: React.FC<ImageSettingsProps> = ({
         </label>
         <textarea 
           placeholder="Tell us about your community"
-          className="w-full bg-transparent border border-border rounded-lg p-3 text-[14px] text-white focus:outline-none focus:border-[#FF5722] transition-all min-h-[100px] resize-none"
+          className="w-full bg-transparent border border-border rounded-lg p-3 text-[14px] text-foreground focus:outline-none focus:border-[#FF5722] transition-all min-h-[100px] resize-none"
           value={description || ""}
           onChange={(e) => setDescription && setDescription(e.target.value)}
           maxLength={500}

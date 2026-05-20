@@ -158,12 +158,14 @@ const Navbar: React.FC<NavbarProps> = ({ toggleMobileMenu }) => {
             <IoAddOutline size={28} />
           </button>
         )}
-        <button
+        <Link
+          href="/notifications"
           aria-label="Notifications"
-          className="p-2 text-foreground hover:bg-muted rounded-lg transition-colors"
+          className="p-2 text-foreground hover:bg-muted rounded-lg transition-colors relative"
         >
           <IoNotificationsOutline size={22} />
-        </button>
+          <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#FF5722] rounded-full border-2 border-background animate-pulse" />
+        </Link>
 
         {isLoadingUser ? (
           <div className="w-[100px] h-[36px] bg-muted animate-pulse rounded-full" />

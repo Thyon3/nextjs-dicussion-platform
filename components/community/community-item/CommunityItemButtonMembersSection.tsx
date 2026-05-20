@@ -13,14 +13,14 @@ const CommunityItemButtonMembersSection: React.FC<
 > = ({ community, onJoinOrLeaveCommunity, isJoined }) => {
   return (
     <div className="flex items-center justify-between gap-4">
-      <div className="flex items-center text-gray-500 gap-1.5">
+      <div className="flex items-center text-muted-foreground gap-1.5">
         <BsFillPeopleFill className="text-[18px]" />
         <span className="text-[14px] font-medium">{community.numberOfMembers}</span>
       </div>
       <button
         className={`h-[32px] w-[130px] text-[10pt] font-bold rounded-full transition-all ${
           isJoined 
-            ? "border border-white/30 text-white hover:bg-white/10" 
+            ? "border border-white/30 text-foreground hover:bg-muted" 
             : "bg-[#FF5722] text-white hover:bg-[#E64A19]"
         }`}
         onClick={(event) => {

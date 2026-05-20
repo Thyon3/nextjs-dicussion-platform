@@ -23,10 +23,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             <img
               src={selectedFile}
               alt="Uploaded image for post"
-              className="max-w-full max-h-[400px] rounded-[12px] border border-white/10 shadow-xl object-contain"
+              className="max-w-full max-h-[400px] rounded-[12px] border border-border shadow-xl object-contain"
             />
             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity rounded-[12px] flex items-center justify-center pointer-events-none">
-              <span className="text-white font-bold">Preview</span>
+              <span className="text-foreground font-bold">Preview</span>
             </div>
           </div>
           
@@ -38,7 +38,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               Back to Post
             </button>
             <button
-              className="flex-1 h-[40px] border border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all shadow-lg"
+              className="flex-1 h-[40px] border border-white/30 text-foreground font-bold rounded-full hover:bg-muted transition-all shadow-lg"
               onClick={() => setSelectedFile("")}
             >
               Remove
@@ -47,13 +47,13 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         </div>
       ) : (
         <div 
-          className="flex flex-col items-center justify-center w-full min-h-[300px] border-2 border-dashed border-white/10 rounded-[12px] bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all cursor-pointer group"
+          className="flex flex-col items-center justify-center w-full min-h-[300px] border-2 border-dashed border-border rounded-[12px] bg-muted hover:bg-muted hover:border-white/20 transition-all cursor-pointer group"
           onClick={() => selectedFileRef.current?.click()}
         >
           <div className="p-10 flex flex-col items-center gap-4">
-            <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-white/10">
+            <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center group-hover:scale-110 transition-transform border border-border">
               <svg 
-                className="w-8 h-8 text-gray-400 group-hover:text-white transition-colors" 
+                className="w-8 h-8 text-muted-foreground group-hover:text-foreground transition-colors" 
                 fill="none" 
                 viewBox="0 0 24 24" 
                 stroke="currentColor"
@@ -66,7 +66,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
             >
               Upload Content
             </button>
-            <p className="text-gray-500 text-[12px] font-medium">PNG, JPG, or GIF</p>
+            <p className="text-muted-foreground text-[12px] font-medium">PNG, JPG, or GIF</p>
           </div>
           <input
             type="file"

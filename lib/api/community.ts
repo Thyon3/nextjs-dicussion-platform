@@ -13,7 +13,7 @@ export const getCommunities = (search?: string) => {
 };
 
 export const getCommunityData = (communityName: string) => {
-  return apiClient(`/communities/${communityName}`);
+  return apiClient(`/communities/${encodeURIComponent(communityName)}`);
 };
 
 export const joinCommunity = (userId: string, communityId: string, imageURL: string, isAdmin: boolean) => {
@@ -31,11 +31,11 @@ export const leaveCommunity = (userId: string, communityId: string) => {
 };
 
 export const getCommunity = (communityId: string) => {
-  return apiClient(`/communities/${communityId}`);
+  return apiClient(`/communities/${encodeURIComponent(communityId)}`);
 };
 
 export const deleteCommunity = (communityId: string) => {
-  return apiClient(`/communities/${communityId}`, {
+  return apiClient(`/communities/${encodeURIComponent(communityId)}`, {
     method: 'DELETE',
   });
 };
@@ -60,12 +60,20 @@ export const updateCommunityProfile = (
   communityId: string, 
   description?: string, 
   imageFileString?: string, 
-  bannerFileString?: string
+  bannerFileString?: string,
+  deleteImage?: boolean,
+  deleteBanner?: boolean
 ) => {
   const formData = new FormData();
   formData.append('communityId', communityId);
   if (description !== undefined) {
     formData.append('description', description);
+  }
+  if (deleteImage !== undefined) {
+    formData.append('deleteImage', String(deleteImage));
+  }
+  if (deleteBanner !== undefined) {
+    formData.append('deleteBanner', String(deleteBanner));
   }
 
   const appendFileFromB64 = (b64String: string, fieldName: string) => {

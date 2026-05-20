@@ -15,7 +15,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({
 }) => {
   return (
     <button
-      className={`flex items-center justify-center flex-1 h-[40px] px-4 border border-white/20 rounded-full text-white font-bold text-[14px] hover:bg-white/5 transition-all gap-2 ${
+      className={`flex items-center justify-center flex-1 h-[40px] px-4 border border-white/20 rounded-full text-foreground font-bold text-[14px] hover:bg-muted transition-all gap-2 ${
         loading ? "opacity-50 cursor-not-allowed" : ""
       }`}
       onClick={onClick}

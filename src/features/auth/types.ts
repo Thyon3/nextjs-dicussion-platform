@@ -31,6 +31,7 @@ export interface AuthUser {
   communitySnippets: CommunitySnippet[];
   postVotes: PostVote[];
   savedPosts: SavedPost[];
+  createdAt?: string;
   settings?: {
     account: {
       gender: string;

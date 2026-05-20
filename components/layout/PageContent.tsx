@@ -13,7 +13,7 @@ const PageContent: React.FC<PageContentProps> = ({ children }) => {
 
   return (
     <div className="flex justify-center w-full min-h-screen pt-5 pb-10">
-      <div className="flex w-full max-w-[1100px] px-4">
+      <div className="flex w-full max-w-[1100px] px-0 md:px-4">
         {/* Center/Left Feed Column */}
         <div className="flex flex-col w-full lg:w-[640px] xl:w-[740px] shrink-0">
           {childrenArray[0]}

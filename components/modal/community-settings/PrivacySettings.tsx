@@ -36,7 +36,7 @@ const PrivacySettings: React.FC<PrivacySettingsProps> = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <h3 className="text-[12pt] font-bold text-white">
+      <h3 className="text-[12pt] font-bold text-foreground">
         Community Type
       </h3>
       <div className="flex flex-col gap-3">
@@ -47,17 +47,17 @@ const PrivacySettings: React.FC<PrivacySettingsProps> = ({
               key={type.value}
               className={`p-4 rounded-[12px] border cursor-pointer transition-all ${
                 isSelected 
-                  ? "border-[#FF5722] bg-white/5" 
-                  : "border-white/10 hover:border-white/30"
+                  ? "border-[#FF5722] bg-muted" 
+                  : "border-border hover:border-white/30"
               }`}
               onClick={() => handlePrivacyTypeChange({ value: type.value })}
             >
               <div className="flex justify-between items-center">
                 <div className="flex flex-col">
-                  <span className="text-[14px] font-bold text-white">
+                  <span className="text-[14px] font-bold text-foreground">
                     {type.label}
                   </span>
-                  <span className="text-[12px] text-gray-500">
+                  <span className="text-[12px] text-muted-foreground">
                     {type.description}
                   </span>
                 </div>

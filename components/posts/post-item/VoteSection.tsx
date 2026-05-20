@@ -24,7 +24,7 @@ const VoteSection: React.FC<VoteSectionProps> = ({
     <>
       <button
         className={`p-1 rounded-md transition-all ${
-          userVoteValue === 1 ? "text-[#FF4500]" : "text-gray-400 hover:text-[#FF4500] hover:bg-white/10"
+          userVoteValue === 1 ? "text-[#FF4500]" : "text-muted-foreground hover:text-[#FF4500] hover:bg-muted"
         } ${votingDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
         onClick={(event) =>
           !votingDisabled && onVote(event, post, 1, post.communityId)
@@ -38,14 +38,14 @@ const VoteSection: React.FC<VoteSectionProps> = ({
           ? "text-[#FF4500]" 
           : userVoteValue === -1 
           ? "#7193FF" 
-          : "text-white"
+          : "text-foreground"
         }`}
       >
         {post.voteStatus || 0}
       </span>
       <button
         className={`p-1 rounded-md transition-all ${
-          userVoteValue === -1 ? "text-[#7193FF]" : "text-gray-400 hover:text-[#7193FF] hover:bg-white/10"
+          userVoteValue === -1 ? "text-[#7193FF]" : "text-muted-foreground hover:text-[#7193FF] hover:bg-muted"
         } ${votingDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
         onClick={(event) =>
           !votingDisabled && onVote(event, post, -1, post.communityId)

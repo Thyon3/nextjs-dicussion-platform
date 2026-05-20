@@ -54,6 +54,9 @@ const CommunityPage: React.FC = () => {
       <PageContent>
         {/* Left Content */}
         <div className="flex flex-col gap-5">
+          <div className="block lg:hidden">
+            <About communityData={communityData} />
+          </div>
           <CreatePostLink />
           <Posts communityData={communityData} />
         </div>

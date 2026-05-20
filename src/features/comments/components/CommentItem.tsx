@@ -38,13 +38,13 @@ const CommentItem: React.FC<CommentItemProps> = ({
       <div className="flex items-center gap-2 py-2">
         <button 
           onClick={() => setIsCollapsed(false)}
-          className="text-gray-500 hover:text-white transition-colors"
+          className="text-muted-foreground hover:text-foreground transition-colors"
         >
           <div className="w-5 h-5 flex items-center justify-center border border-gray-600 rounded-sm">
             <span className="text-[14px] font-bold">+</span>
           </div>
         </button>
-        <span className="text-[12px] font-bold text-gray-500">u/{comment.creatorDisplayText}</span>
+        <span className="text-[12px] font-bold text-muted-foreground">u/{comment.creatorDisplayText}</span>
       </div>
     );
   }
@@ -55,18 +55,18 @@ const CommentItem: React.FC<CommentItemProps> = ({
       <div className="flex gap-3 py-3">
         {/* Left Rail (Avatar + Hierarchy Line) */}
         <div className="flex flex-col items-center shrink-0 w-8">
-          <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0 mb-2 overflow-hidden border border-white/5">
+          <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0 mb-2 overflow-hidden border border-border">
              {comment.creatorPhotoURL ? (
                <img src={comment.creatorPhotoURL} alt="Avatar" className="w-full h-full object-cover" />
              ) : (
-               <IoPeopleCircleOutline size={28} className="text-gray-400" />
+               <IoPeopleCircleOutline size={28} className="text-muted-foreground" />
              )}
           </div>
           <div className="flex-1 w-full flex justify-center">
             <button 
               onClick={() => setIsCollapsed(true)}
               title="Collapse thread"
-              className="group w-[2px] bg-white/10 hover:bg-[#FF5722]/50 transition-colors relative cursor-pointer"
+              className="group w-[2px] bg-muted hover:bg-[#FF5722]/50 transition-colors relative cursor-pointer"
             >
               <div className="absolute top-0 bottom-0 left-[-8px] right-[-8px]" />
             </button>
@@ -77,41 +77,41 @@ const CommentItem: React.FC<CommentItemProps> = ({
         <div className="flex flex-col flex-1 min-w-0">
           {/* Header */}
           <div className="flex items-center gap-2 mb-1.5">
-            <span className="text-[13px] font-bold text-white hover:underline cursor-pointer">
+            <span className="text-[13px] font-bold text-foreground hover:underline cursor-pointer">
               u/{comment.creatorDisplayText}
             </span>
             <span className="text-gray-600 text-[12px]">•</span>
-            <span className="text-[12px] text-gray-500">
+            <span className="text-[12px] text-muted-foreground">
               {moment(comment.createdAt).fromNow()}
             </span>
           </div>
 
           {/* Text */}
-          <div className="text-[14px] text-gray-200 leading-relaxed mb-2 whitespace-pre-wrap">
+          <div className="text-[14px] text-foreground leading-relaxed mb-2 whitespace-pre-wrap break-words">
             {comment.text}
           </div>
 
           {/* Action Bar */}
           <div className="flex items-center gap-4">
-            <div className="flex items-center bg-white/5 rounded-full px-1">
-               <button className="p-1.5 hover:bg-white/10 rounded-full text-gray-400 hover:text-[#FF4500] transition-colors">
+            <div className="flex items-center bg-muted rounded-full px-1">
+               <button className="p-1.5 hover:bg-muted rounded-full text-muted-foreground hover:text-[#FF4500] transition-colors">
                  <IoChevronUpOutline size={16} />
                </button>
-               <span className="text-[12px] font-bold text-gray-300 px-1">0</span>
-               <button className="p-1.5 hover:bg-white/10 rounded-full text-gray-400 hover:text-[#7193FF] transition-colors">
+               <span className="text-[12px] font-bold text-muted-foreground px-1">0</span>
+               <button className="p-1.5 hover:bg-muted rounded-full text-muted-foreground hover:text-[#7193FF] transition-colors">
                  <IoChevronDownOutline size={16} />
                </button>
             </div>
 
             <button 
               onClick={() => setIsReplying(!isReplying)}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-bold text-gray-500 hover:bg-white/5 rounded-full transition-all"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-[12px] font-bold text-muted-foreground hover:bg-muted rounded-full transition-all"
             >
               <FaRegCommentAlt size={12} />
               <span>Reply</span>
             </button>
             
-            <button className="px-3 py-1.5 text-[12px] font-bold text-gray-500 hover:bg-white/5 rounded-full transition-all">
+            <button className="px-3 py-1.5 text-[12px] font-bold text-muted-foreground hover:bg-muted rounded-full transition-all">
               Share
             </button>
           </div>

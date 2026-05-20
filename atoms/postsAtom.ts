@@ -11,6 +11,7 @@ interface PostState {
   selectedPost: Post | null;
   posts: Post[];
   postVotes: PostVote[];
+  feedCache: Record<string, { posts: Post[]; fetchedAt: number }>;
 }
 
 /**
@@ -22,6 +23,7 @@ interface PostState {
  * @property selectedPost - null as no post is selected
  * @property posts - empty array as there are no posts
  * @property postVotes - empty array as posts have not been voted on
+ * @property feedCache - empty object as no feed data is cached
  *
  * @requires PostState - default state type
  */
@@ -29,6 +31,7 @@ const defaultPostState: PostState = {
   selectedPost: null,
   posts: [],
   postVotes: [],
+  feedCache: {},
 };
 
 /**

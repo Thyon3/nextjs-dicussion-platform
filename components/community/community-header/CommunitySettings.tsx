@@ -26,7 +26,7 @@ const CommunitySettings: React.FC<CommunitySettingsProps> = ({
       />
       <button
         aria-label="Community settings"
-        className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-all"
+        className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all"
         onClick={() => setCommunitySettingsModalOpen(true)}
       >
         <FiSettings size={20} />

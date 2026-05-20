@@ -69,13 +69,13 @@ const AdminManager: React.FC<AdminManagerProps> = ({ communityData }) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <h3 className="text-lg font-bold text-white">Manage Admins</h3>
+      <h3 className="text-lg font-bold text-foreground">Manage Admins</h3>
 
       <div className="flex flex-col gap-3">
         <div className="flex gap-2">
           <input
             placeholder="Enter email to add admin"
-            className="flex-1 bg-transparent border border-white/10 rounded-full h-[40px] px-4 text-[14px] text-white focus:outline-none focus:border-[#FF5722] transition-all"
+            className="flex-1 bg-transparent border border-border rounded-full h-[40px] px-4 text-[14px] text-white focus:outline-none focus:border-[#FF5722] transition-all"
             {...register("email")}
           />
           <button
@@ -105,26 +105,26 @@ const AdminManager: React.FC<AdminManagerProps> = ({ communityData }) => {
             <div className="w-6 h-6 border-2 border-white/20 border-t-[#FF5722] rounded-full animate-spin" />
           </div>
         ) : admins.length === 0 ? (
-          <p className="text-gray-500 text-[12px] italic text-center p-4">
+          <p className="text-muted-foreground text-[12px] italic text-center p-4">
             No additional admins found.
           </p>
         ) : (
           admins.map((admin) => (
             <div
               key={admin.uid}
-              className="flex items-center justify-between p-3 border border-white/10 rounded-[12px] bg-white/5"
+              className="flex items-center justify-between p-3 border border-border rounded-[12px] bg-muted"
             >
               <div className="flex flex-col">
-                <span className="text-[14px] font-bold text-white">
+                <span className="text-[14px] font-bold text-foreground">
                   {admin.displayName || "No Name"}
                 </span>
-                <span className="text-[12px] text-gray-500">
+                <span className="text-[12px] text-muted-foreground">
                   {admin.email}
                 </span>
               </div>
               
               {admin.uid === communityData.creatorId ? (
-                <span className="text-[10px] text-gray-500 italic font-medium bg-white/5 px-2 py-0.5 rounded-full">
+                <span className="text-[10px] text-muted-foreground italic font-medium bg-muted px-2 py-0.5 rounded-full">
                   Creator
                 </span>
               ) : admin.uid !== user?.id ? (

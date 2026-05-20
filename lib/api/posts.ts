@@ -64,8 +64,11 @@ export const createPost = async (postData: any) => {
   });
 };
 
-export const getPosts = (communityId?: string) => {
-  const query = communityId ? `?communityId=${communityId}` : '';
+export const getPosts = (communityId?: string, sort?: string) => {
+  const params = new URLSearchParams();
+  if (communityId) params.append('communityId', communityId);
+  if (sort) params.append('sort', sort);
+  const query = params.toString() ? `?${params.toString()}` : '';
   return apiClient(`/posts/all${query}`);
 };
 

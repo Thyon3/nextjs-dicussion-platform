@@ -7,11 +7,11 @@ const SidebarFooter: React.FC = () => {
   return (
     <div className="font-reddit flex flex-col p-4 mt-2">
       <div className="flex flex-wrap gap-x-4 gap-y-2 mb-4">
-        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">About</Link>
-        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">Careers</Link>
-        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">Terms</Link>
-        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">Content Policy</Link>
-        <Link href="#" className="text-[8pt] text-gray-500 hover:text-white transition-colors">Privacy Policy</Link>
+        <Link href="#" className="text-[8pt] text-muted-foreground hover:text-foreground transition-colors">About</Link>
+        <Link href="#" className="text-[8pt] text-muted-foreground hover:text-foreground transition-colors">Careers</Link>
+        <Link href="#" className="text-[8pt] text-muted-foreground hover:text-foreground transition-colors">Terms</Link>
+        <Link href="#" className="text-[8pt] text-muted-foreground hover:text-foreground transition-colors">Content Policy</Link>
+        <Link href="#" className="text-[8pt] text-muted-foreground hover:text-foreground transition-colors">Privacy Policy</Link>
       </div>
       <p className="text-[8pt] text-gray-600">
         © {currentYear} Circus Inc. All rights reserved.

@@ -8,7 +8,7 @@ import useCustomToast from "./useCustomToast";
  * @param maxWidth - The maximum allowed width for the selected image.
  * @returns An object containing selected file data and functions for handling file selection.
  */
-const useSelectFile = (maxHeight: number, maxWidth: number) => {
+const useSelectFile = (maxHeight: number, maxWidth: number, checkDimensions: boolean = true) => {
   const [selectedFile, setSelectedFile] = useState<string>();
   const showToast = useCustomToast();
 
@@ -42,7 +42,7 @@ const useSelectFile = (maxHeight: number, maxWidth: number) => {
       const image = new Image();
       image.src = URL.createObjectURL(file);
       image.onload = () => {
-        if (image.width > maxWidth || image.height > maxHeight) {
+        if (checkDimensions && (image.width > maxWidth || image.height > maxHeight)) {
           showToast({
             title: "Image dimensions are too large",
             description: `Maximum dimensions are ${maxWidth}x${maxHeight}.`,

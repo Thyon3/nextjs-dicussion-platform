@@ -20,9 +20,9 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
 }) => {
   return (
     <Link href={`/community/${item.id}`}>
-      <div className="flex items-center text-[10pt] p-2 px-4 hover:bg-white/5 transition-all cursor-pointer">
+      <div className="flex items-center text-[10pt] p-2 px-4 hover:bg-muted transition-all cursor-pointer">
         <div className="flex items-center gap-3 min-w-0 flex-1">
-          <span className="font-bold text-gray-500 w-[14px]">{index + 1}</span>
+          <span className="font-bold text-muted-foreground w-[14px]">{index + 1}</span>
 
           <div className="flex items-center min-w-0 gap-3">
             {item.imageURL ? (
@@ -35,10 +35,10 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
               <IoPeopleCircleOutline className="text-[24pt] text-[#FF5722] shrink-0" />
             )}
             <div className="flex flex-col min-w-0">
-              <span className="font-bold text-white text-[10pt] overflow-hidden text-ellipsis whitespace-nowrap">
+              <span className="font-bold text-foreground text-[10pt] overflow-hidden text-ellipsis whitespace-nowrap">
                 r/{item.id}
               </span>
-              <span className="text-[8pt] text-gray-500">
+              <span className="text-[8pt] text-muted-foreground">
                 {item.numberOfMembers || 0} members
               </span>
             </div>
@@ -49,7 +49,7 @@ const RecommendationRow: React.FC<RecommendationRowProps> = ({
         {!joinDisabled && (
           <>
             {isJoined ? (
-              <span className="h-[30px] text-[9pt] px-3 flex items-center font-semibold text-gray-500 shrink-0">
+              <span className="h-[30px] text-[9pt] px-3 flex items-center font-semibold text-muted-foreground shrink-0">
                 ✓ Joined
               </span>
             ) : (

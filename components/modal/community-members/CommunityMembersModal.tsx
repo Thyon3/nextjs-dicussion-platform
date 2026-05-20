@@ -62,14 +62,14 @@ const CommunityMembersModal: React.FC<CommunityMembersModalProps> = ({
       />
       
       {/* Modal Content */}
-      <div className="relative bg-[#1A1D23] w-full max-w-[500px] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[70vh]">
+      <div className="relative bg-card w-full max-w-[500px] rounded-[16px] border border-border shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 flex flex-col max-h-[70vh]">
         <div className="flex items-center justify-between p-6 pb-4">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-foreground">
             {memberCount} Community Member{memberCount === 1 ? "" : "s"}
           </h2>
           <button 
             onClick={handleClose}
-            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             <IoClose size={24} />
           </button>
@@ -82,7 +82,7 @@ const CommunityMembersModal: React.FC<CommunityMembersModalProps> = ({
             </div>
           ) : !members.length ? (
             <div className="flex justify-center py-10 px-4 text-center">
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 {error ? "Failed to load subscribers." : "No subscribers found."}
               </p>
             </div>
@@ -91,13 +91,13 @@ const CommunityMembersModal: React.FC<CommunityMembersModalProps> = ({
               {members.map((member: CommunityMember) => (
                 <div
                   key={member.uid}
-                  className="flex items-center justify-between p-4 border border-white/10 rounded-[12px] bg-white/5 transition-all hover:bg-white/10"
+                  className="flex items-center justify-between p-4 border border-border rounded-[12px] bg-muted transition-all hover:bg-muted"
                 >
                   <div className="flex flex-col">
-                    <span className="text-[14px] font-bold text-white">
+                    <span className="text-[14px] font-bold text-foreground">
                       {member.displayName?.trim() ? member.displayName : "No Name"}
                     </span>
-                    <span className="text-[12px] text-gray-500">
+                    <span className="text-[12px] text-muted-foreground">
                       {member.email}
                     </span>
                   </div>

@@ -30,7 +30,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({
           )}
           <Link href={`/community/${post.communityId}`}>
             <span
-              className="font-bold text-white hover:underline mr-1 cursor-pointer"
+              className="font-bold text-foreground hover:underline mr-1 cursor-pointer"
               onClick={(event) => event.stopPropagation()}
             >
               r/{post.communityId}
@@ -38,7 +38,7 @@ const PostDetails: React.FC<PostDetailsProps> = ({
           </Link>
         </div>
       )}
-      <div className="flex items-center text-gray-500 gap-1">
+      <div className="flex items-center text-muted-foreground gap-1">
         <span>•</span>
         <span>By {post.creatorUsername}</span>
         <span>•</span>

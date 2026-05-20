@@ -36,7 +36,7 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityData }) => {
       />
       
       {/* Profile Info Section */}
-      <div className="flex justify-center bg-[#1A1D23] flex-grow">
+      <div className="flex justify-center bg-card flex-grow">
         <div className="flex w-[95%] max-w-[1000px] pb-4">
           {/* Overlapping Icon */}
           <div className="mt-[-20px] mr-4">
@@ -54,21 +54,21 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityData }) => {
           </div>
           
           {/* Community Name & Actions */}
-          <div className="flex flex-1 justify-between items-center mt-2">
+          <div className="flex flex-col sm:flex-row flex-1 justify-between items-start sm:items-center mt-2 gap-4">
             <div className="flex flex-col">
-              <h1 className="text-[28px] font-bold text-white">
+              <h1 className="text-[20px] sm:text-[28px] font-bold text-foreground">
                 {communityData.name || communityData.id}
               </h1>
-              <p className="text-[14px] font-semibold text-gray-400">
+              <p className="text-[12px] sm:text-[14px] font-semibold text-muted-foreground">
                 r/{communityData.id}
               </p>
             </div>
             
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3 w-full sm:w-auto">
               <button
-                className={`h-[32px] px-6 rounded-full font-bold transition-all ${
+                className={`h-[32px] px-4 sm:px-6 rounded-full font-bold text-[12px] sm:text-[14px] transition-all flex-1 sm:flex-none ${
                   isJoined 
-                  ? "bg-transparent text-white border border-white/30 hover:bg-white/10" 
+                  ? "bg-transparent text-foreground border border-white/30 hover:bg-muted" 
                   : "bg-white text-black hover:bg-gray-200"
                 } ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 onClick={() => onJoinOrLeaveCommunity(communityData, isJoined)}
@@ -78,7 +78,7 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityData }) => {
               </button>
               {isJoined && (
                 <button
-                  className="h-[32px] px-6 rounded-full font-bold border border-white/30 text-white hover:bg-white/10 transition-all"
+                  className="h-[32px] px-4 sm:px-6 rounded-full font-bold text-[12px] sm:text-[14px] border border-border text-foreground hover:bg-muted transition-all flex-1 sm:flex-none"
                   onClick={() => router.push(`/community/${communityData.id}/submit`)}
                 >
                   Create Post
@@ -86,7 +86,7 @@ const CommunityHeader: React.FC<CommunityHeaderProps> = ({ communityData }) => {
               )}
               {isAdmin && (
                 <button
-                  className="h-[32px] px-6 rounded-full font-bold border border-white/30 text-white hover:bg-white/10 transition-all"
+                  className="h-[32px] px-4 sm:px-6 rounded-full font-bold text-[12px] sm:text-[14px] border border-border text-foreground hover:bg-muted transition-all flex-1 sm:flex-none"
                   onClick={() => setSettingsModalOpen(true)}
                 >
                   Mod Tools

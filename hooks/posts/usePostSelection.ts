@@ -18,12 +18,12 @@ const usePostSelection = (
 ) => {
   const router = useRouter();
 
-  const onSelectPost = (post: Post) => {
+  const onSelectPost = (post: Post, scrollToComments?: boolean) => {
     setPostStateValue((prev) => ({
       ...prev,
       selectedPost: post,
     }));
-    router.push(`/community/${post.communityId}/comments/${post.id}`);
+    router.push(`/community/${post.communityId}/comments/${post.id}${scrollToComments ? "#comments" : ""}`);
   };
 
   return { onSelectPost };

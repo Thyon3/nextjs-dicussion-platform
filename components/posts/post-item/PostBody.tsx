@@ -23,12 +23,12 @@ const PostBody: React.FC<PostBodyProps> = ({
       {post.imageURL && (
         <div className="flex justify-center items-center mt-3 relative min-h-[100px]">
           {loadingImage && (
-            <div className="absolute inset-0 bg-white/5 animate-pulse rounded-[12px]" />
+            <div className="absolute inset-0 bg-muted animate-pulse rounded-[12px]" />
           )}
           <img
             src={post.imageURL}
             alt="Post image"
-            className={`max-h-[500px] max-w-full rounded-[12px] border border-white/10 ${
+            className={`max-h-[500px] max-w-full rounded-[12px] border border-border ${
               loadingImage ? "invisible" : "visible"
             }`}
             onLoad={() => setLoadingImage(false)}
@@ -40,12 +40,12 @@ const PostBody: React.FC<PostBodyProps> = ({
           <video 
             src={post.videoURL} 
             controls 
-            className="max-h-[500px] max-w-full rounded-[12px] border border-white/10"
+            className="max-h-[500px] max-w-full rounded-[12px] border border-border"
           />
         </div>
       )}
       {post.linkURL && (
-        <div className="mt-3 p-2 bg-white/5 rounded-md border border-white/10">
+        <div className="mt-3 p-2 bg-muted rounded-md border border-border">
           <a 
             href={post.linkURL} 
             target="_blank" 

@@ -27,16 +27,16 @@ const AuthModal: React.FC = () => {
       />
       
       {/* Modal Content */}
-      <div className="relative bg-[#1A1D23] w-full max-w-[400px] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div className="relative bg-card w-full max-w-[400px] rounded-[16px] border border-border shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between p-6 pb-4">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-foreground">
             {modal.view === 'login' && 'Log In'}
             {modal.view === 'signup' && 'Sign Up'}
             {modal.view === 'resetPassword' && 'Reset Password'}
           </h2>
           <button 
             onClick={closeModal}
-            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             <IoClose size={24} />
           </button>

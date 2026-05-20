@@ -9,9 +9,14 @@ import { useRouter } from 'next/navigation';
 import { getCommunities } from '@/lib/api/community';
 import { Community } from '@/types/community';
 import useCallCreatePost from '@/hooks/posts/useCallCreatePost';
+import { IoMenuOutline } from 'react-icons/io5';
 
-const Navbar: React.FC = () => {
-  const { user } = useAuth();
+interface NavbarProps {
+  toggleMobileMenu?: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ toggleMobileMenu }) => {
+  const { user, isLoadingUser } = useAuth();
   const { openModal } = useAuthModal();
   const { onClick: handleCreatePost } = useCallCreatePost();
   const router = useRouter();
@@ -60,21 +65,29 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-[#0B0E11] h-[56px] px-6 flex justify-between items-center border-b border-white/10 sticky top-0 z-[100]">
+    <nav className="bg-background h-[56px] px-3 md:px-6 flex justify-between items-center border-b border-border sticky top-0 z-[100]">
       {/* Left Section: Logo & Links */}
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-2 md:gap-8">
+        {toggleMobileMenu && (
+          <button 
+            className="lg:hidden p-1 text-foreground hover:bg-muted rounded-md transition-colors"
+            onClick={toggleMobileMenu}
+          >
+            <IoMenuOutline size={26} />
+          </button>
+        )}
         <Link href="/" className="flex items-center cursor-pointer">
-          <img src="/images/logo.svg" className="h-[28px]" alt="Circus Logo" />
-          <span className="font-reddit font-bold text-[16pt] ml-2 text-white tracking-tighter">
+          <img src="/images/logo.svg" className="h-[24px] md:h-[28px]" alt="Circus Logo" />
+          <span className="hidden sm:block font-reddit font-bold text-[16pt] ml-2 text-foreground tracking-tighter">
             Circus
           </span>
         </Link>
       </div>
 
       {/* Center Section: Search Bar */}
-      <div ref={searchRef} className="flex-1 max-w-[600px] mx-8 relative flex items-center">
-        <div className="absolute left-4 z-10 flex items-center pointer-events-none">
-          <IoSearchOutline className="text-gray-400 text-[20px]" />
+      <div ref={searchRef} className="flex-1 max-w-[600px] mx-2 md:mx-8 relative flex items-center">
+        <div className="hidden sm:flex absolute left-4 z-10 items-center pointer-events-none">
+          <IoSearchOutline className="text-muted-foreground text-[20px]" />
         </div>
         <input
           value={search}
@@ -84,13 +97,13 @@ const Navbar: React.FC = () => {
           }}
           onFocus={() => setShowSuggestions(true)}
           onKeyDown={handleSearchKeyDown}
-          placeholder="Search communities... (Press Enter)"
-          className="font-reddit w-full text-[10pt] bg-white/10 text-white h-[38px] rounded-full pl-11 pr-4 border border-transparent placeholder:text-gray-500 hover:bg-white/20 hover:border-white/30 focus:outline-none focus:bg-white/20 focus:border-[#FF5722] transition-all"
+          placeholder="Search..."
+          className="font-reddit w-full text-[10pt] bg-muted text-foreground h-[36px] md:h-[38px] rounded-full pl-4 sm:pl-11 pr-4 border border-transparent placeholder:text-muted-foreground hover:bg-muted/80 hover:border-border/50 focus:outline-none focus:bg-muted focus:border-[#FF5722] transition-all"
         />
 
         {/* Search Suggestions Dropdown */}
         {showSuggestions && search.trim() && (
-          <div className="absolute top-[44px] left-0 w-full bg-[#1A1D23] border border-white/10 rounded-[12px] shadow-lg py-2 z-50">
+          <div className="absolute top-[44px] left-0 w-full bg-card border border-border rounded-[12px] shadow-lg py-2 z-50">
             {suggestions.length > 0 ? (
               suggestions.map((community) => (
                 <div
@@ -100,22 +113,22 @@ const Navbar: React.FC = () => {
                     setSearch("");
                     router.push(`/community/${community.id}`);
                   }}
-                  className="flex items-center gap-3 px-4 py-2 hover:bg-white/5 cursor-pointer transition-colors"
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-muted cursor-pointer transition-colors"
                 >
                   {community.imageURL ? (
                     <img src={community.imageURL} alt="" className="w-6 h-6 rounded-full object-cover" />
                   ) : (
-                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-[10px] font-bold">
+                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-foreground text-[10px] font-bold">
                       r/
                     </div>
                   )}
-                  <span className="font-reddit text-[13px] font-medium text-white">
+                  <span className="font-reddit text-[13px] font-medium text-foreground">
                     r/{community.id}
                   </span>
                 </div>
               ))
             ) : (
-              <div className="px-4 py-3 text-[13px] text-gray-500 text-center font-reddit">
+              <div className="px-4 py-3 text-[13px] text-muted-foreground text-center font-reddit">
                 No communities found
               </div>
             )}
@@ -125,7 +138,7 @@ const Navbar: React.FC = () => {
                   setShowSuggestions(false);
                   router.push(`/communities?search=${encodeURIComponent(search.trim())}`);
                 }}
-                className="px-4 py-2 border-t border-white/5 text-[12px] text-blue-400 font-bold hover:bg-white/5 cursor-pointer font-reddit"
+                className="px-4 py-2 border-t border-border text-[12px] text-blue-400 font-bold hover:bg-muted cursor-pointer font-reddit"
               >
                 Search all for &quot;{search}&quot;
               </div>
@@ -135,35 +148,39 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Right Section: Actions */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-1 md:gap-4 shrink-0">
         {user && (
           <button
             onClick={handleCreatePost}
             aria-label="Create Post"
-            className="p-1 text-gray-400 hover:bg-white/10 hover:text-white rounded-lg transition-colors"
+            className="p-1 text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg transition-colors"
           >
             <IoAddOutline size={28} />
           </button>
         )}
-        <button
+        <Link
+          href="/notifications"
           aria-label="Notifications"
-          className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+          className="p-2 text-foreground hover:bg-muted rounded-lg transition-colors relative"
         >
           <IoNotificationsOutline size={22} />
-        </button>
+          <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#FF5722] rounded-full border-2 border-background animate-pulse" />
+        </Link>
 
-        {user ? (
+        {isLoadingUser ? (
+          <div className="w-[100px] h-[36px] bg-muted animate-pulse rounded-full" />
+        ) : user ? (
           <UserMenu />
         ) : (
-          <div className="flex gap-3">
+          <div className="flex gap-1 md:gap-3">
             <button
-              className="px-4 py-2 text-white text-[10pt] font-bold hover:bg-white/10 rounded-full transition-colors"
+              className="px-2 md:px-4 py-2 text-foreground text-[9pt] md:text-[10pt] font-bold hover:bg-muted rounded-full transition-colors"
               onClick={() => openModal('login')}
             >
               Log In
             </button>
             <button
-              className="bg-[#FF5722] text-white h-[36px] px-6 rounded-full text-[10pt] font-bold hover:bg-[#E64A19] transition-colors"
+              className="bg-[#FF5722] text-white h-[32px] md:h-[36px] px-3 md:px-6 rounded-full text-[9pt] md:text-[10pt] font-bold hover:bg-[#E64A19] transition-colors"
               onClick={() => openModal('signup')}
             >
               Sign Up

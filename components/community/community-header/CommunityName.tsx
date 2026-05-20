@@ -7,7 +7,7 @@ type CommunityNameProps = {
 const CommunityName: React.FC<CommunityNameProps> = ({ id }) => {
   return (
     <div className="flex flex-col mr-6">
-      <h1 className="font-extrabold text-[24px] text-white leading-tight">
+      <h1 className="font-extrabold text-[24px] text-foreground leading-tight">
         {id}
       </h1>
     </div>

@@ -125,7 +125,7 @@ function ToastItem({
 }) {
   return (
     <div
-      className={`${COLOR_MAP[toast.status]} border text-white px-4 py-3 rounded-[10px] shadow-2xl min-w-[300px] max-w-[400px] flex items-start gap-3 pointer-events-auto animate-in slide-in-from-right duration-300`}
+      className={`${COLOR_MAP[toast.status]} border text-foreground px-4 py-3 rounded-[10px] shadow-2xl min-w-[300px] max-w-[400px] flex items-start gap-3 pointer-events-auto animate-in slide-in-from-right duration-300`}
     >
       <div className="mt-0.5">{ICON_MAP[toast.status]}</div>
       <div className="flex-1 min-w-0">

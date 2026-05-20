@@ -4,7 +4,7 @@ import Link from "next/link";
 const CommunityNotFound: React.FC = () => {
   return (
     <div className="flex flex-col justify-center items-center min-h-[60vh] gap-4">
-      <h2 className="text-2xl font-bold text-gray-400">
+      <h2 className="text-2xl font-bold text-muted-foreground">
         Sorry, this community does not exist!
       </h2>
       <div className="flex gap-4">
@@ -14,7 +14,7 @@ const CommunityNotFound: React.FC = () => {
           </button>
         </Link>
         <Link href="/communities">
-          <button className="w-[150px] h-[36px] border border-white/30 text-white font-bold rounded-full hover:bg-white/10 transition-all">
+          <button className="w-[150px] h-[36px] border border-white/30 text-foreground font-bold rounded-full hover:bg-muted transition-all">
             All Communities
           </button>
         </Link>

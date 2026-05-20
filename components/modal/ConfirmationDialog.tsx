@@ -36,9 +36,9 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
       />
       
       {/* Modal Content */}
-      <div className="relative bg-[#1A1D23] w-full max-w-[400px] rounded-[16px] border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
+      <div className="relative bg-card w-full max-w-[400px] rounded-[16px] border border-border shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         <div className="flex items-center justify-between p-6 pb-4">
-          <h2 className="text-xl font-bold text-white">
+          <h2 className="text-xl font-bold text-foreground">
             {title}
           </h2>
           <button 
@@ -46,7 +46,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
               e.stopPropagation();
               onClose();
             }}
-            className="p-1 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+            className="p-1 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
           >
             <IoClose size={24} />
           </button>
@@ -58,7 +58,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
         <div className="flex justify-end gap-3 p-6 pt-2">
           <button
-            className="px-4 py-2 text-white text-[10pt] font-bold border border-white/20 rounded-full hover:bg-white/10 transition-colors"
+            className="px-4 py-2 text-foreground text-[10pt] font-bold border border-white/20 rounded-full hover:bg-muted transition-colors"
             onClick={(e) => {
               e.stopPropagation();
               onClose();
@@ -68,7 +68,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             {cancelButtonText}
           </button>
           <button
-            className={`px-6 py-2 bg-red-600 text-white text-[10pt] font-bold rounded-full hover:bg-red-700 transition-colors ${
+            className={`px-6 py-2 bg-red-600 text-foreground text-[10pt] font-bold rounded-full hover:bg-red-700 transition-colors ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}
             onClick={(e) => {

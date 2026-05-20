@@ -45,6 +45,18 @@ const PostDetailPage: React.FC = () => {
     }
   }, [postId, communityId]);
 
+  useEffect(() => {
+    if (!loading && post && typeof window !== 'undefined' && window.location.hash === '#comments') {
+      const timer = setTimeout(() => {
+        const element = document.getElementById('comments');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, post]);
+
   const onVote = async (event: React.MouseEvent, post: any, vote: number, communityId: string) => {
     // Re-use existing vote logic if possible or implement here
     // For now, let's just update local state if we want real-time feel
@@ -65,7 +77,7 @@ const PostDetailPage: React.FC = () => {
         {/* ── Left: Post & Comments ──────────────────────── */}
         <div className="flex flex-col flex-1 min-w-0">
           {loading ? (
-             <div className="bg-[#1A1D23] rounded-[4px] p-10 flex justify-center">
+             <div className="bg-card rounded-[4px] p-10 flex justify-center">
                <div className="w-8 h-8 border-4 border-white/20 border-t-[#FF5722] rounded-full animate-spin" />
              </div>
           ) : post ? (
@@ -78,7 +90,7 @@ const PostDetailPage: React.FC = () => {
                 userVoteValue={0}
               />
               
-              <div className="p-4 lg:p-6 mt-4">
+              <div id="comments" className="p-4 lg:p-6 mt-4">
                  <CommentSection 
                    postId={post.id!} 
                    communityId={post.communityId} 
@@ -87,7 +99,7 @@ const PostDetailPage: React.FC = () => {
               </div>
             </>
           ) : (
-            <div className="text-white text-center py-20">Post not found</div>
+            <div className="text-foreground text-center py-20">Post not found</div>
           )}
         </div>
 

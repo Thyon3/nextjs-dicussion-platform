@@ -24,3 +24,16 @@ export async function updateUserSettings(settings: Partial<AuthUser['settings']>
     body: JSON.stringify({ settings }),
   });
 }
+
+export async function getUserProfileByUsername(username: string): Promise<AuthUser> {
+  return apiClient<AuthUser>(`/users/profile/${username}`);
+}
+
+export async function getUserPosts(username: string): Promise<any[]> {
+  return apiClient<any[]>(`/users/profile/${username}/posts`);
+}
+
+export async function getUserComments(username: string): Promise<any[]> {
+  return apiClient<any[]>(`/users/profile/${username}/comments`);
+}
+

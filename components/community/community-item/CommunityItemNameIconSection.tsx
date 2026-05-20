@@ -22,7 +22,7 @@ const CommunityItemNameIconSection: React.FC<
           className="text-[38px] text-[#FF5722]"
         />
       )}
-      <span className="text-[16px] font-bold text-white">
+      <span className="text-[16px] font-bold text-foreground">
         {community.id}
       </span>
     </div>

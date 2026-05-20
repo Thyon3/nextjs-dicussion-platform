@@ -16,7 +16,7 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ toggleMobileMenu }) => {
-  const { user } = useAuth();
+  const { user, isLoadingUser } = useAuth();
   const { openModal } = useAuthModal();
   const { onClick: handleCreatePost } = useCallCreatePost();
   const router = useRouter();
@@ -165,7 +165,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleMobileMenu }) => {
           <IoNotificationsOutline size={22} />
         </button>
 
-        {user ? (
+        {isLoadingUser ? (
+          <div className="w-[100px] h-[36px] bg-muted animate-pulse rounded-full" />
+        ) : user ? (
           <UserMenu />
         ) : (
           <div className="flex gap-1 md:gap-3">

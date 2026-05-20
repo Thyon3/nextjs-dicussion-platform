@@ -21,7 +21,9 @@ const useCommunityImage = (communityData: Community) => {
   const onUpdateProfile = async (
     selectedImageFile?: string,
     selectedBannerFile?: string,
-    description?: string
+    description?: string,
+    deleteImage?: boolean,
+    deleteBanner?: boolean
   ) => {
     setUploadingImage(true);
 
@@ -30,7 +32,9 @@ const useCommunityImage = (communityData: Community) => {
         communityData.id,
         description,
         selectedImageFile,
-        selectedBannerFile
+        selectedBannerFile,
+        deleteImage,
+        deleteBanner
       )) as any;
 
       setCommunityStateValue((prev) => ({

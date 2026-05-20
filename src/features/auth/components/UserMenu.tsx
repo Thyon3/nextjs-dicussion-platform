@@ -17,6 +17,7 @@ import { CgProfile } from 'react-icons/cg';
 import { updateProfileImage } from '../api/userApi';
 import useCustomToast from '@/hooks/useCustomToast';
 import { useColorMode } from '@/components/ui/color-mode';
+import { useRouter } from 'next/navigation';
 
 const UserMenu: React.FC = () => {
   const { user, logout, setUser } = useAuth();
@@ -26,6 +27,7 @@ const UserMenu: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const showToast = useCustomToast();
   const { colorMode, toggleColorMode } = useColorMode();
+  const router = useRouter();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -103,7 +105,14 @@ const UserMenu: React.FC = () => {
 
           {/* Menu Items */}
           <div className="flex flex-col">
-            <MenuBtn icon={<CgProfile size={20} />} label="View Profile" onClick={() => {}} />
+            <MenuBtn 
+              icon={<CgProfile size={20} />} 
+              label="View Profile" 
+              onClick={() => {
+                setIsOpen(false);
+                router.push(`/user/${user.email?.split('@')[0]}`);
+              }} 
+            />
             
             <button 
               onClick={() => fileInputRef.current?.click()}

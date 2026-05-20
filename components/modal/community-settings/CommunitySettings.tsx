@@ -49,15 +49,24 @@ const CommunitySettingsModal: React.FC<CommunitySettingsModalProps> = ({
       await updatePrivacyType(selectedPrivacyType);
     }
     
-    if (selectedFile || selectedBannerFile || description !== communityData?.description) {
-      await updateProfile(selectedFile || undefined, selectedBannerFile || undefined, description);
+    if (
+      selectedFile || 
+      selectedBannerFile || 
+      description !== communityData?.description ||
+      deleteImage ||
+      deleteBanner
+    ) {
+      await updateProfile(
+        selectedFile || undefined, 
+        selectedBannerFile || undefined, 
+        description,
+        deleteImage,
+        deleteBanner
+      );
       setSelectedFile("");
       setSelectedBannerFile("");
     }
     
-    if (deleteImage) {
-      await deleteCommunityImage();
-    }
     showToast({
       title: "Settings Updated",
       description: "Your settings have been updated",

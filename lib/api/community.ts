@@ -60,12 +60,20 @@ export const updateCommunityProfile = (
   communityId: string, 
   description?: string, 
   imageFileString?: string, 
-  bannerFileString?: string
+  bannerFileString?: string,
+  deleteImage?: boolean,
+  deleteBanner?: boolean
 ) => {
   const formData = new FormData();
   formData.append('communityId', communityId);
   if (description !== undefined) {
     formData.append('description', description);
+  }
+  if (deleteImage !== undefined) {
+    formData.append('deleteImage', String(deleteImage));
+  }
+  if (deleteBanner !== undefined) {
+    formData.append('deleteBanner', String(deleteBanner));
   }
 
   const appendFileFromB64 = (b64String: string, fieldName: string) => {

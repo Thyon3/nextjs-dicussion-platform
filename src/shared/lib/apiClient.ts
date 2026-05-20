@@ -29,7 +29,7 @@ function getToken(): string | null {
 }
 
 export function setToken(token: string): void {
-  Cookies.set('authToken', token, { expires: 7, path: '/' });
+  Cookies.set('authToken', token, { expires: 30, path: '/' });
 }
 
 export function clearToken(): void {

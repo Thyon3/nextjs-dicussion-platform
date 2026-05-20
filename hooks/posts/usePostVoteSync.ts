@@ -5,13 +5,7 @@ import { Post, PostVote } from "@/types/post";
 import { getCommunityPostVotes as getCommunityPostVotesApi } from "@/lib/api/posts";
 import { useAuth } from "../useAuth";
 
-type SetPostState = React.Dispatch<
-  React.SetStateAction<{
-    selectedPost: Post | null;
-    posts: Post[];
-    postVotes: PostVote[];
-  }>
->;
+import { SetPostState } from "@/atoms/postsAtom";
 
 /**
  * A custom hook that synchronizes local post vote cache with authenticated user's votes for current community.
